@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Šoljica · Specialty coffee and tea bar</title>
+<meta name="description" content="Šoljica: specialty coffee, roasted in-house. Belgrade and Užice." data-content-en="Šoljica: specialty coffee, roasted in-house. Belgrade and Užice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Kaushan+Script&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================================
+     Šoljica: quiet luxe editorial register (rebuild T2, 2026-08-11)
+     Cream and ink, ONE ember accent pulled from the logotype, generous air.
+     joejuice.com's structure only; none of its voice. Spec:
+     brainstorms/2026-08-11-soljica-rebuild-spec.md, criterion 3.
+
+     ONE RULE holds this file together: every colour in the stylesheet is a
+     var(), and every one of those vars is declared on bare :root below. The
+     themes remap SEVEN role tokens and nothing else, which is why forced light,
+     forced dark and the un-stamped system default each resolve to a COMPLETE
+     palette instead of half of one. The single keyword exception is
+     `transparent`, which has no theme to belong to.
+     Grep that keeps it true: no oklch( / rgb( / hsl( / # outside :root.
+     ============================================================================ */
+  :root {
+    color-scheme: light;
+
+    /* ---- families: the logotype's own, unchanged ---- */
+    --display: "Abril Fatface", Georgia, serif;  /* fat serif, ball terminals */
+    --script: "Kaushan Script", cursive;         /* the logo's brush script */
+    --body: "Archivo", system-ui, sans-serif;
+
+    /* ---- the ramp: absolute values, never themed ---- */
+    --cream:      oklch(0.967 0.014 84);   /* the ground: warm oat paper */
+    --cream-lift: oklch(0.988 0.007 84);   /* cards standing off the ground */
+    --cream-sink: oklch(0.936 0.020 82);   /* wells pressed into it */
+
+    --ink-void:  oklch(0.108 0.013 62);    /* the floor of every scrim */
+    --ink-abyss: oklch(0.146 0.017 62);    /* hero, and the dark ground */
+    --ink:       oklch(0.196 0.019 60);    /* body text on cream, band on cream */
+    --ink-lift:  oklch(0.256 0.019 58);    /* panels standing off a dark ground */
+
+    --milk:  oklch(0.985 0.006 78);        /* also the cine cup's strokes */
+    --crema: oklch(0.884 0.056 82);        /* also the cine cup's crema */
+
+    --ember:      oklch(0.706 0.163 52);   /* THE accent, the logotype orange */
+    --ember-deep: oklch(0.545 0.146 46);   /* the accent when it carries text on cream */
+    --ember-lift: oklch(0.806 0.128 62);   /* the accent when it carries text on ink */
+
+    /* ---- roles: bare :root IS the light theme ---- */
+    --ground:      var(--cream);
+    --ground-lift: var(--cream-lift);
+    --band:        var(--ink);         /* strip + menu board */
+    --band-deep:   var(--ink-abyss);   /* hero */
+    --band-floor:  var(--ink-void);    /* the cine hero's bottom */
+    --text:        var(--ink);
+    --on-band:     var(--milk);
+    --accent:      var(--ember);
+    --accent-text: var(--ember-deep);
+    --on-accent:   var(--ink-abyss);
+    --coin-plate:  var(--ink-void);    /* the Š-coin's disc: painted by CSS, so it can leave in dark */
+
+    /* ---- derived: written once, follows whatever the roles resolve to ---- */
+    --text-soft:  color-mix(in oklch, var(--text) 74%, var(--ground));
+    --text-faint: color-mix(in oklch, var(--text) 52%, var(--ground));
+    --rule:       color-mix(in oklch, var(--text) 16%, transparent);
+    --rule-firm:  color-mix(in oklch, var(--text) 30%, transparent);
+
+    --on-band-soft:   color-mix(in oklch, var(--on-band) 70%, var(--band));
+    --on-band-faint:  color-mix(in oklch, var(--on-band) 50%, var(--band));
+    --rule-band:      color-mix(in oklch, var(--on-band) 18%, transparent);
+    --rule-band-firm: color-mix(in oklch, var(--on-band) 32%, transparent);
+
+    /* photography sits on the same floor in both themes, so its scrims and its
+       loading ground are theme-invariant by design, not by omission */
+    --scrim-soft: color-mix(in oklch, var(--ink-void) 28%, transparent);
+    --scrim-mid:  color-mix(in oklch, var(--ink-void) 58%, transparent);
+    --scrim-firm: color-mix(in oklch, var(--ink-void) 74%, transparent);
+    --scrim-deep: color-mix(in oklch, var(--ink-void) 88%, transparent);
+    --photo-warm: color-mix(in oklch, var(--ink-lift) 84%, var(--ember));
+    --photo-cool: color-mix(in oklch, var(--ink-abyss) 90%, var(--ember));
+
+    /* ---- editorial type scale ---- */
+    --t-micro: 0.75rem;                                    /* 12px tracked label */
+    --t-fine:  0.9375rem;                                  /* 15px notes + prices */
+    --t-body:  clamp(1rem, 0.28vw + 0.94rem, 1.125rem);    /* 16 -> 18 */
+    --t-lead:  clamp(1.125rem, 0.6vw + 1rem, 1.375rem);    /* intros */
+    --t-h4:    clamp(1.2rem, 0.5vw + 1.05rem, 1.45rem);    /* list rows */
+    --t-h3:    clamp(1.5rem, 0.9vw + 1.25rem, 2rem);       /* card names */
+    --t-h2:    clamp(2.5rem, 5vw, 4.5rem);                 /* section headings */
+    --t-h1:    clamp(2.9rem, 6vw, 5.5rem);                 /* the two statements */
+
+    /* ---- air ---- */
+    --gutter: clamp(20px, 5vw, 72px);
+    --band-y: clamp(5rem, 9vw, 10rem);
+    --measure: 42ch;
+    --nav-h: 56px;   /* the thin nav is sticky, so the hero and the cine stage both subtract it */
+
+    /* ---- shape + motion ---- */
+    --r-tile: 2px;
+    --r-pill: 999px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur: 300ms;
+  }
+
+  /* Dark. Seven remaps, no new colours: every value here is a ramp token already
+     declared above, or `transparent`. Guarded so an explicit light choice still wins. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:      var(--ink-abyss);
+      --ground-lift: var(--ink);
+      --band:        var(--ink-lift);
+      --text:        var(--cream);
+      --accent-text: var(--ember-lift);
+      --on-accent:   var(--ink-void);
+      --coin-plate:  transparent;   /* an ink disc on an ink page is a disc nobody can see */
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:      var(--ink-abyss);
+    --ground-lift: var(--ink);
+    --band:        var(--ink-lift);
+    --text:        var(--cream);
+    --accent-text: var(--ember-lift);
+    --on-accent:   var(--ink-void);
+    --coin-plate:  transparent;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: var(--t-body);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: var(--on-accent); }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .micro {
+    font: 600 var(--t-micro)/1.3 var(--body);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .script { font-family: var(--script); font-weight: 400; }
+
+  /* ---------- the thin nav: all of the page chrome, and it outlives the hero ----------
+     Sticky at the top of the PAGE (it is a sibling of the hero, not a child), so it
+     survives the 250svh cine track without the fixed-then-hide hack the old topbar
+     needed. Cream ground, hairline rule: it reads as a masthead, not a toolbar. */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 0 var(--gutter);
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .nav-mark .coin { width: 32px; }
+
+  /* The Š-coin, assembled rather than baked. The disc is a CSS circle in
+     --coin-plate (ink on cream, `transparent` in dark, where an ink disc on an
+     ink page is a disc nobody can see), and the mark on top is
+     assets/monogram-mark.svg, which is the traced monogram with its own disc
+     deleted. Percentages are the traced circle's own geometry: cx 130.7, cy
+     126.1, r 117 in the 259x251 box, so the CSS disc lands exactly where the
+     baked one did. */
+  .coin { position: relative; display: block; aspect-ratio: 259 / 251; }
+  .coin::before {
+    content: ""; position: absolute;
+    left: 5.29%; top: 3.63%; width: 90.35%; height: 93.23%;
+    border-radius: 50%; background: var(--coin-plate);
+  }
+  .coin img { position: relative; width: 100%; height: auto; }  /* height:auto or the width/height attributes squash the mark against the plate */
+  .nav-links { display: flex; gap: clamp(1rem, 2.6vw, 2.4rem); }
+  .nav-links a {
+    display: inline-flex; align-items: center; min-height: 44px;
+    color: var(--text-soft); text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+  .nav-links a:hover { color: var(--accent-text); }
+
+  /* ---------- hero: the mark on ink, one line, two flat actions ----------
+     Stays dark on purpose: assets/logo.svg is the real traced mark and its
+     letterforms are WHITE, near enough --milk. On cream it would be invisible, and
+     recolouring a brand mark to suit a background is not a design call this
+     rebuild gets to make. The cream starts one band below. */
+  .hero {
+    position: relative;
+    padding: 0;   /* it is a <section>, and the generic section rule would give it 160px of band padding */
+    min-height: calc(100svh - var(--nav-h));
+    background: linear-gradient(180deg, var(--band-deep) 0%, var(--band-floor) 100%);
+    color: var(--on-band);
+    display: grid; grid-template-rows: 1fr auto;
+    overflow: hidden;
+    text-align: center;
+  }
+  .ph-chip { display: none; }
+
+  .hero-core {
+    display: grid; place-content: center; justify-items: center;
+    gap: clamp(1.8rem, 5svh, 3.2rem);
+    padding: var(--gutter);
+  }
+  .wordmark { position: relative; }
+  .wm-img { /* the REAL logo, traced to a true vector (assets/logo.svg) */
+    display: block;
+    width: clamp(240px, 32vw, 460px);
+    max-width: none; /* the global img max-width:100% collapses the auto grid track at 390px */
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  .hero-foot {
+    position: relative; z-index: 1; align-self: end;
+    display: grid; justify-items: center;
+    padding: 0 var(--gutter) clamp(22px, 4svh, 46px);
+  }
+  .hero-say { display: grid; justify-items: center; gap: clamp(1rem, 2.4vw, 1.6rem); }
+  .tagline { max-width: 34ch; font-size: var(--t-lead); line-height: 1.4; color: var(--on-band-soft); text-wrap: balance; }
+  .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(1.2rem, 4vw, 2.6rem); }
+  .hero-link {
+    display: inline-flex; align-items: center; min-height: 44px;
+    color: var(--on-band); text-decoration: none;
+    border-bottom: 1.5px solid var(--accent);
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .hero-link:hover { color: var(--crema); border-color: var(--crema); }
+  .scroll-hint { color: var(--on-band-faint); white-space: nowrap; }
+
+  /* ---------- cine: Š-coin -> šoljica -> the o becomes a DRAWN cup (all vector) ----------
+     html.cine is set by a tiny head script only when JS runs AND the visitor does
+     not prefer reduced motion. Without it the hero is exactly the static 100svh
+     default: the whole layer is pure enhancement, never a gate on content.
+     assets/monogram-mark.svg + assets/logo.svg are TRUE vectors (potrace-traced from
+     the real marks); the cup's top-view ring is the logotype's own o-ring path,
+     so the dock and the birth are seamless at any size. No photos, no video. */
+  .cine-track { display: none; }
+  /* overflow:hidden would kill the sticky stage. The wordmark and the scrub
+     track share ONE grid row and both stick to the top of it, so the mark is
+     pinned for the whole scrub and released by the row ending, with no fixed
+     positioning, no JS teardown. Row 2 is the arrival. */
+  html.cine .hero { min-height: 250svh; overflow: visible; }
+  html.cine .hero-core, html.cine .cine-track { grid-area: 1 / 1; }
+  html.cine .hero-core {
+    position: sticky; top: var(--nav-h);
+    height: calc(100svh - var(--nav-h));
+    place-content: start center;
+    padding-top: clamp(1.5rem, 7svh, 5rem);
+    z-index: 2; pointer-events: none;
+  }
+  /* the cluster splits for the scrub: the mark holds the top of the pinned
+     frame, its line waits at the foot of the same frame so the cup owns the
+     middle. Static keeps them together as one block. */
+  html.cine .hero-say {
+    position: absolute; left: 0; right: 0; bottom: clamp(1.5rem, 7svh, 4.5rem);
+    pointer-events: auto;
+  }
+  html.cine .hero-foot { /* a quiet floor under the arrival words */
+    background: linear-gradient(0deg, var(--scrim-mid), transparent);
+    padding-top: 60px;
+  }
+  html.cine .cine-track { display: block; }
+  html.cine .wm-img, html.cine .hero-say { opacity: 0; } /* the scrub JS reveals on cue */
+  .cine-stage {
+    position: sticky; top: var(--nav-h); height: calc(100svh - var(--nav-h));
+    display: grid; place-items: center;
+    pointer-events: none;
+  }
+  .cine-mono { grid-area: 1 / 1; will-change: transform, opacity; }
+  .cine-mono img { display: block; width: min(38svmin, 290px); }
+  .cine-cup {
+    grid-area: 1 / 1;
+    width: min(66svmin, 58svh, 620px); height: min(66svmin, 58svh, 620px);
+    opacity: 0; will-change: transform, opacity;
+  }
+  .cine-cup svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  #cupTop, #cupFront path, #cupSteam path { will-change: transform, opacity; }
+  #cupTop { transform-origin: 200px 190px; }
+  .cine-hint {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+    color: var(--crema);
+  }
+
+  /* ---------- brand strip: the first line of cream after the ink hero ---------- */
+  .strip {
+    background: var(--ground);
+    color: var(--text-faint);
+    text-align: center;
+    padding: 18px var(--gutter);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ---------- section scaffolding ---------- */
+  section { padding: var(--band-y) var(--gutter); }
+  .sec-label { text-align: center; margin-bottom: clamp(2.6rem, 5vw, 4.5rem); }
+  .sec-label .big {
+    display: block;
+    margin-top: 0.6rem;
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h2);
+    letter-spacing: -0.015em; line-height: 1.06;
+    text-wrap: balance;
+    text-transform: none;
+  }
+  .sec-label .micro { color: var(--text-faint); }
+  .uvod {
+    max-width: var(--measure); margin: 0 auto clamp(2.8rem, 5vw, 4.4rem);
+    text-align: center; font-size: var(--t-lead); line-height: 1.5;
+    color: var(--text-soft); text-wrap: pretty;
+  }
+  /* ---------- napomena: the provisional marker (T6, spec criterion 11) ----------
+     Every figure on this page that did NOT come off his Wolt menu says so here.
+     TEMPLATE-owned on purpose, not a slot: it disclaims values a chat op can
+     edit, so a chat op must not be able to delete the disclaimer and leave the
+     invented price standing. The cost of that choice is that clearing a marker
+     once the owner confirms a figure is a code edit, not a chat edit. */
+  .napomena {
+    max-width: 60ch; margin: clamp(1.8rem, 3vw, 2.6rem) auto 0;
+    text-align: center; font-size: var(--t-fine); line-height: 1.5;
+    color: var(--text-faint); text-wrap: pretty;
+  }
+  .menu .napomena { color: var(--on-band-faint); }
+  .ritual .napomena { color: var(--on-band-faint); margin-top: clamp(2rem, 3.5vw, 3rem); }
+
+  /* ---------- rail: the page's engine, his drinks at his prices ----------
+     joejuice's "most popular products" row with the claim removed: nobody has
+     told us what sells, so the row is just five items off his own Wolt menu,
+     named and priced as he lists them. No ordering action lives here on
+     purpose; spec criterion 6 gives the one order link to Sarajevska.
+
+     PHOTO BINDING (the decision T4 was asked to settle): the tile is
+     TEMPLATE-owned and bound by nth-child, not a content field. cms/engine.mjs
+     clones item 1 as the prototype and substitutes data-slot TEXT only, so a
+     photo could only ride along as a filename in a text field that some script
+     then has to resolve: a new failure mode, for a value the owner has no way
+     to upload anyway. Any card without a photograph of its own falls back to
+     the Š-coin on ink, which is also what a sixth item added through the CMS
+     gets. Card 5 uses that fallback deliberately: the KAFE harvest has no plain
+     espresso, so no fifth product frame was shot. */
+  .rail {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: clamp(12px, 1.6vw, 26px);
+    max-width: 1320px; margin: 0 auto;
+  }
+  .rail-card { display: grid; align-content: start; gap: 0.3rem; }
+  .rail-shot {
+    aspect-ratio: 4 / 5; margin-bottom: 0.9rem;
+    border-radius: var(--r-tile);
+    background-color: var(--band);   /* --band, not --band-deep: in dark the hero's ink IS the page ground, and a tile the colour of the page is not a tile */
+    background-image: url("assets/monogram-mark.svg");
+    background-repeat: no-repeat; background-position: center; background-size: 34%;
+  }
+  .rail-card:nth-child(1) .rail-shot { background-image: url("assets/rail-cappuccino.webp"); }
+  .rail-card:nth-child(2) .rail-shot { background-image: url("assets/rail-latte-xl.webp"); }
+  .rail-card:nth-child(3) .rail-shot { background-image: url("assets/rail-ice-coffee.webp"); }
+  .rail-card:nth-child(4) .rail-shot { background-image: url("assets/rail-espresso-martini.webp"); }
+  .rail-card:nth-child(-n+4) .rail-shot { background-size: cover; background-color: var(--photo-cool); }
+  .rail-card h3 {
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h4); line-height: 1.14; letter-spacing: 0;
+    min-height: 2.28em;   /* two lines: his longest name wraps, and the prices should still line up */
+    text-wrap: balance;
+  }
+  .rail-price { font-size: var(--t-fine); font-weight: 600; color: var(--text-soft); }
+
+  /* ---------- shop: editorial grid ---------- */
+  .mix-list {
+    display: grid; gap: clamp(12px, 1.4vw, 24px);
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1320px; margin: 0 auto;
+  }
+  .tile-photo {
+    position: relative; border-radius: var(--r-tile); overflow: hidden; min-height: 620px;
+    background-color: var(--photo-cool);
+    background-image: radial-gradient(80% 60% at 50% 40%, var(--photo-warm) 0%, var(--photo-cool) 100%);
+    background-size: cover; background-position: center;
+  }
+  .tile-photo.t-tin   { background-image: url("assets/tin.webp"); background-size: 175%; background-position: 50% 42%; }
+  .tile-photo.t-latte { background-image: url("assets/latte.webp"); }
+  /* night.webp left the page here (T4, spec criterion 10): its two cups are
+     part-poured and a hand is in frame. It is still in assets/, off the site. */
+  .tile-photo.t-night { background-image: url("assets/rail-espresso.webp"); }
+  .tile-photo.t-pour  { background-image: url("assets/rail-latte-xl.webp"); }
+  .tile-photo .ph-chip { left: 12px; bottom: 12px; }
+  .mix { /* card anatomy: origin stamp top, name+price center, notes at the foot */
+    background: var(--ground-lift);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-tile);
+    min-height: 620px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: clamp(1.8rem, 2.6vw, 2.6rem) 1.6rem;
+  }
+  .stamp-origin {
+    width: 46px; height: 46px; flex: 0 0 auto;
+    border: 1px solid var(--rule-firm);
+    border-radius: 50%; display: grid; place-items: center;
+    font: 600 10px var(--body); letter-spacing: 0.14em;
+    color: var(--text-faint);
+  }
+  .mix-mid { margin: auto 0; display: flex; flex-direction: column; align-items: center; gap: 0.85rem; }
+  .mix .notes { margin-top: auto; padding-top: 1rem; }
+  .mix h3 {
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h3); letter-spacing: 0; line-height: 1.12;
+    color: var(--text);
+  }
+  .mix .price { color: var(--text-soft); }
+  .mix .notes { color: var(--text-faint); font-size: var(--t-fine); max-width: 28ch; }
+  .order {
+    margin-top: 0.6rem;
+    border: 1.5px solid var(--text); border-radius: var(--r-pill);
+    color: var(--text); font: 600 var(--t-micro)/1 var(--body); letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 13px 24px; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center;
+    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .order:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .shop .kanali { text-align: center; margin-top: clamp(2.4rem, 4vw, 3.6rem); font-size: var(--t-fine); color: var(--text-faint); }
+  .shop .kanali a {
+    color: var(--accent-text); font-weight: 600; text-underline-offset: 3px;
+    padding-block: 14px;   /* inline padding grows the hit box to 44px without moving the line box */
+  }
+
+  /* ---------- beans: quiet tasting list ---------- */
+  .beans { padding-top: 0; }
+  .bean-list { display: grid; gap: clamp(1.2rem, 2vw, 1.8rem); max-width: 760px; margin: 0 auto; }
+  .bean {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1.4rem;
+    border-bottom: 1px solid var(--rule); padding-bottom: 0.9rem;
+  }
+  .bean b { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); }
+  .bean .notes { color: var(--text-faint); font-size: var(--t-fine); }
+  .bean .price { font-weight: 600; font-size: var(--t-fine); white-space: nowrap; color: var(--text-soft); }
+
+  /* ---------- jelovnik: dark menu board, two quiet columns ---------- */
+  .menu { background: var(--band); color: var(--on-band); }
+  .menu .sec-label { color: var(--on-band); }
+  .menu .sec-label .micro { color: var(--on-band-faint); }
+  .menu .uvod { color: var(--on-band-soft); }
+  .menu-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.6rem, 6vw, 6rem);
+    max-width: 1140px; margin: 0 auto;
+    align-items: start;
+  }
+  .menu-col-title {
+    font-family: var(--script); font-weight: 400;
+    font-size: clamp(1.8rem, 3vw, 2.4rem); color: var(--crema);
+    transform: rotate(-1.5deg);
+    margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+  }
+  .dish { border-bottom: 1px solid var(--rule-band); padding: 1.1rem 0; }
+  .dish b { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); line-height: 1.2; }
+  .dish .notes { color: var(--on-band-soft); font-size: var(--t-fine); margin-top: 0.3rem; text-wrap: pretty; }
+  .drink {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1.2rem;
+    border-bottom: 1px solid var(--rule-band); padding: 1rem 0;
+  }
+  .drink .price { color: var(--on-band-soft); font-weight: 600; font-size: var(--t-fine); white-space: nowrap; }
+
+  /* ---------- slogan: editorial split + stamp ---------- */
+  .slogan {
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center; max-width: 1240px; margin: 0 auto;
+  }
+  .slogan-display {
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h1);
+    line-height: 0.98; letter-spacing: -0.025em; color: var(--text);
+    text-wrap: balance;
+  }
+  .slogan-script {
+    display: block;
+    font-family: var(--script); font-weight: 400; font-style: normal;
+    font-size: clamp(2.2rem, 4.6vw, 3.9rem); line-height: 1.12;
+    color: var(--accent-text);
+    transform: rotate(-2.5deg);
+    margin: 0.05em 0 0 clamp(0.5rem, 6vw, 4rem);
+  }
+  .slogan-copy { max-width: 38ch; margin-top: 1.6rem; font-size: var(--t-lead); line-height: 1.5; color: var(--text-soft); text-wrap: pretty; }
+  .slogan-link {
+    display: inline-block; position: relative; margin-top: 1.6rem;
+    color: var(--text); text-decoration: none;
+    border-bottom: 1.5px solid var(--accent); padding-bottom: 4px;
+    transition: color var(--dur) var(--ease);
+  }
+  /* The rule has to sit tight under the words, so padding cannot be what makes this
+     link thumb-sized: it would drag the underline away from the text. The hit area
+     grows instead, invisibly, centred on a 21px link. Measure it with
+     elementFromPoint, not getBoundingClientRect, which still reports the 21px box. */
+  .slogan-link::after {
+    content: ""; position: absolute; left: 0; right: 0;
+    top: 50%; height: 44px; transform: translateY(-50%);
+  }
+  .slogan-link:hover { color: var(--accent-text); }
+  .slogan-media { position: relative; margin-right: calc(-1 * var(--gutter)); } /* photo runs full-bleed to the edge */
+  .slogan .tile-photo { min-height: 660px; border-radius: 0; }
+  .stamp {
+    position: absolute; top: -48px; left: -48px; width: 128px; height: 128px;
+    color: var(--text);
+    animation: spin 60s linear infinite;
+  }
+  .stamp text { font: 600 10.5px var(--body); letter-spacing: 0.3em; text-transform: uppercase; fill: currentColor; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- ritual: ONE full-bleed photo carries the statement, locations, and footer ---------- */
+  .ritual {
+    background:
+      linear-gradient(0deg, var(--scrim-firm), var(--scrim-firm)),
+      url("assets/tin.webp") center 8% / cover no-repeat,   /* the top of the frame: dark wood grain. Lower crops centre the tin's lid, and a big dark disc behind the words reads as the ring motif this project retired */
+      var(--band-deep);
+    color: var(--on-band);
+  }
+  .ritual-head { max-width: 1240px; margin: 0 auto clamp(3rem, 6vw, 5.5rem); }
+  .ritual-display {
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h1); line-height: 1.0; letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  .ritual-display .script { color: var(--crema); font-style: normal; font-size: 0.82em; }
+  /* three locations, three jobs (T5): Sarajevska leads and owns the one ordering
+     action, Trg Nikole Pašića is the coffee bar beside it, Užice is a mention on
+     its own hairline strip. Venue names and role lines are template-owned
+     (data-i18n-en), never slot text: wrapping a slot's text demotes that key. */
+  .spots {
+    max-width: 1240px; margin: 0 auto;
+    display: grid; gap: clamp(1.8rem, 3vw, 3rem) clamp(2rem, 5vw, 5.5rem);
+    grid-template-columns: 1.15fr 1fr;
+    align-items: start;
+    border-top: 1px solid var(--rule-band); padding-top: clamp(1.8rem, 3vw, 2.8rem);
+  }
+  .spot h3 { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); color: var(--crema); }
+  .spot p { margin-top: 0.35rem; font-size: var(--t-fine); color: var(--on-band-soft); }
+  .spot a {
+    color: var(--accent); font-weight: 600; text-decoration: none;
+    display: inline-flex; align-items: center; min-height: 44px;
+    transition: color var(--dur) var(--ease);
+  }
+  .spot a:hover { color: var(--crema); }
+  .spot-role { display: block; color: var(--on-band-faint); margin-bottom: 0.7rem; }
+  .spot-note { max-width: 34ch; text-wrap: pretty; }
+  .spot-lead h3 { font-size: var(--t-h3); }
+  /* the micro line above each city is the VENUE NAME, not a role: Sarajevska trades as
+     "Šoljica Specialty Coffee & Gastro Bar", Trg Nikole Pašića as plain "Šoljica".
+     The ROLE moved down to the .spot-note line under the hours, which is what carries
+     criterion 7 now. Sarajevska's name is the long one, hence the measure. */
+  .spot-lead .spot-role { color: var(--crema); max-width: 30ch; line-height: 1.5; }
+  .spot-lead .spot-note { margin-top: 0.9rem; color: var(--on-band); }
+  .spot .wolt {   /* .spot a is (0,1,1); this has to outrank it to keep its own colour */
+    display: flex; width: fit-content; margin-top: 0.9rem;
+    background: var(--accent); color: var(--on-accent);
+    border-radius: var(--r-pill); padding: 13px 26px;
+    font: 600 var(--t-fine)/1.2 var(--body); letter-spacing: 0.01em;
+    text-align: center;
+  }
+  .spot .wolt:hover { background: var(--crema); color: var(--band); }
+  .spot-brief {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule-band); padding-top: clamp(1.4rem, 2.4vw, 2rem);
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1.6rem;
+  }
+  .spot-brief .spot-role { margin-bottom: 0; flex-basis: 100%; }
+  .spot-brief p { margin-top: 0; }
+
+  /* ---------- footer: light, and short. One coffee bar, not a chain ---------- */
+  .site-foot {
+    background: var(--ground);
+    border-top: 1px solid var(--rule);
+    padding: clamp(2.2rem, 4vw, 3.4rem) var(--gutter);
+    display: flex; flex-wrap: wrap; gap: 1.2rem 2rem;
+    justify-content: space-between; align-items: center;
+    font-size: var(--t-fine); color: var(--text-faint);
+  }
+  .foot-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .foot-mark .coin { width: 40px; }
+  .foot-line { color: var(--text-soft); }
+  .foot-side { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 1.8rem); }
+  .foot-ig {
+    display: inline-flex; align-items: center; min-height: 44px;
+    color: var(--text-soft); text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+  .foot-ig:hover { color: var(--accent-text); }
+  .lang-toggle {
+    border: 1.5px solid var(--rule-firm); background: none; color: var(--text);
+    font: 600 var(--t-micro) var(--body); letter-spacing: 0.16em;
+    padding: 11px 18px; border-radius: var(--r-pill); cursor: pointer; min-height: 44px;
+    text-decoration: none; display: inline-flex; align-items: center;
+    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .lang-toggle:hover { border-color: var(--accent); color: var(--accent-text); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    /* the rail stops being a row of five and becomes a swipe, bleeding to both
+       edges so it reads as one. It scrolls INSIDE itself: its own box is still
+       exactly the viewport, which is what keeps the 390px gate honest. */
+    .rail {
+      grid-template-columns: none; grid-auto-flow: column;
+      grid-auto-columns: clamp(200px, 62vw, 300px);
+      max-width: none; margin-inline: calc(-1 * var(--gutter));
+      padding: 0 var(--gutter) 10px;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);   /* without it the first snap eats the left gutter and card 1 sits flush to the edge */
+      overscroll-behavior-x: contain;
+    }
+    .rail-card { scroll-snap-align: start; }
+    .mix-list { grid-template-columns: 1fr 1fr; }
+    .t-latte { display: none; }
+    .slogan, .ritual-head, .menu-cols { grid-template-columns: 1fr; }
+    .spots { grid-template-columns: 1fr; }
+    .spot-second { border-top: 1px solid var(--rule-band); padding-top: clamp(1.4rem, 2.4vw, 2rem); }
+    .spot .wolt { width: 100%; }   /* stacked, the one action should be reachable without aiming */
+    .stamp { top: auto; bottom: -40px; left: auto; right: 4px; width: 104px; height: 104px; }
+  }
+  @media (max-width: 560px) {
+    .mix-list { grid-template-columns: 1fr; }
+    .tile-photo { min-height: 300px; }
+    /* One column, so there is no neighbouring photo to stand level with, and the
+       620px card carried 328px of empty middle. 300px matches the photo tiles above,
+       which keeps the alternating rhythm the desktop grid has. */
+    .mix { min-height: 300px; }
+    .t-latte { display: block; }
+    .site-foot { justify-content: center; text-align: center; }
+  }
+  @media (pointer: coarse) {
+    .order, .lang-toggle { padding: 14px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stamp { animation: none; }
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+<script>
+  /* cine opt-in before first paint; reduced-motion visitors keep the static hero */
+  if (typeof matchMedia === 'function' && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('cine');
+  }
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="nav-mark" href="#vrh" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="32" height="31"></span></a>
+  <nav class="nav-links micro"><!-- no aria-label: it is the only nav, and a label here would stay Serbian on the EN render -->
+    <a href="#ponuda" data-i18n-en="Shop">Shop</a>
+    <a href="#jelovnik" data-i18n-en="Menu">Menu</a>
+    <a href="#gde" data-i18n-en="Find us">Find us</a>
+  </nav>
+</header>
+
+<section class="hero" id="vrh">
+  <div class="hero-core">
+    <h1 class="wordmark" data-slot="hero.title"><img class="wm-img" src="assets/logo.svg" alt="šoljica" fetchpriority="high"><em class="sr-only" data-slot="hero.title.accent">Specialty coffee and tea bar</em></h1>
+    <div class="hero-say">
+      <p class="tagline" data-slot="hero.tagline">Life is too short to drink bad espresso.</p>
+      <div class="hero-actions micro">
+        <a class="hero-link" href="#jelovnik" data-i18n-en="See the menu">See the menu</a>
+        <a class="hero-link" href="#gde" data-i18n-en="Find us">Find us</a>
+      </div>
+    </div>
+  </div>
+  <div class="cine-track" aria-hidden="true">
+    <div class="cine-stage">
+      <div class="cine-mono" id="cineMono"><img src="assets/monogram-mark.svg" alt=""></div>
+      <div class="cine-cup" id="cineCup">
+        <!-- the drawn cup: its top-view ring IS the logotype's o-ring path (same vector) -->
+        <svg viewBox="0 -30 400 400" overflow="visible">
+          <g id="cupTop">
+            <circle cx="200" cy="190" r="150" fill="var(--crema)"/>
+            <g id="cupRosetta" fill="none" stroke="var(--milk)" stroke-width="12" stroke-linecap="round" opacity="0.9">
+              <path d="M 200,268 C 193,230 207,214 200,150"/>
+              <path d="M 162,192 C 180,212 220,212 238,192"/>
+              <path d="M 168,160 C 184,177 216,177 232,160"/>
+              <path d="M 176,129 C 189,143 211,143 224,129"/>
+            </g>
+            <g id="cupRing" transform="translate(-246.7,-141.6) scale(3.038)" fill="var(--ember)" fill-rule="evenodd">
+              <path d="M 132.653 51.529 C 112.232 55.787, 92.917 79.111, 89.350 103.821 L 87.769 114.772 93.534 125.636 C 100.796 139.322, 102.832 142.053, 109.562 147.134 C 112.553 149.393, 115.003 151.974, 115.006 152.870 C 115.017 156.099, 117.024 161.649, 118.916 163.680 C 121.319 166.258, 125.265 165.731, 129.414 162.278 C 131.450 160.584, 132.957 160.061, 134.414 160.544 C 135.561 160.924, 140.100 161.452, 144.500 161.718 C 151.682 162.151, 152.793 162.497, 155.369 165.100 C 158.809 168.578, 160.236 168.789, 159.813 165.756 C 159.542 163.815, 160.319 163.240, 165.555 161.506 C 184.134 155.351, 198.602 137.407, 202.110 116.166 C 206.293 90.836, 186.472 58.745, 164.678 55.560 C 161.989 55.168, 158.980 53.980, 157.876 52.876 C 155.225 50.225, 142.233 49.532, 132.653 51.529 M 141.500 58.698 C 121.686 61.325, 105.217 74.602, 99.953 92.190 L 97.951 98.879 100.026 110.647 C 103.311 129.283, 108.738 136.726, 124.380 144.057 C 134.544 148.820, 139.596 150.001, 145.181 148.922 C 147.557 148.463, 149.857 148.068, 150.293 148.044 C 152.049 147.947, 161 138.600, 161 136.863 C 161 134.210, 164.253 134.500, 167.779 137.468 L 170.712 139.935 172.955 137.548 C 174.188 136.235, 176.391 134.632, 177.849 133.987 C 181.675 132.292, 188.752 123.649, 189.907 119.259 C 191.218 114.275, 191.725 94.385, 190.648 90.148 L 189.796 86.796 191.935 88.935 C 193.111 90.111, 194.507 90.805, 195.036 90.477 C 195.619 90.117, 196 92.623, 196 96.816 C 196 106.519, 196.825 110, 199.125 110 C 202.619 110, 200.547 94.296, 195.751 84.424 C 193.133 79.035, 189.466 78.388, 189.546 83.329 L 189.591 86.159 187.631 83.329 C 183.380 77.195, 170.362 65.411, 165 62.843 C 160.658 60.764, 146.298 57.426, 144.808 58.150 C 144.639 58.232, 143.150 58.479, 141.500 58.698 M 196.667 112.667 C 196.300 113.033, 196 114.438, 196 115.789 C 196 117.859, 196.236 118.049, 197.500 117 C 198.325 116.315, 199 114.910, 199 113.878 C 199 111.991, 197.908 111.425, 196.667 112.667 M 191.089 127.250 C 190.183 129.660, 191.105 130.557, 193.533 129.626 C 195.490 128.875, 195.435 125, 193.468 125 C 192.625 125, 191.555 126.013, 191.089 127.250 M 187.725 133.752 C 185.157 136.589, 183.740 141.143, 185.030 142.413 C 186.568 143.928, 192 137.749, 192 134.484 C 192 131.575, 190.004 131.233, 187.725 133.752 M 163.345 139.543 C 163.019 140.392, 163.032 141.365, 163.372 141.706 C 164.341 142.674, 169.187 140.112, 168.497 138.996 C 167.541 137.448, 164.005 137.824, 163.345 139.543 M 180.667 158.667 C 179.570 159.763, 179.904 160.749, 181.590 161.396 C 183.916 162.289, 185.322 161.093, 183.926 159.411 C 182.641 157.863, 181.688 157.645, 180.667 158.667"/>
+            </g>
+          </g>
+          <g id="cupFront" fill="none" stroke="var(--milk)" stroke-width="9" stroke-linecap="round">
+            <path pathLength="1" d="M 88,102 C 90,175 118,232 200,236 C 282,232 310,175 312,102"/>
+            <path pathLength="1" d="M 312,128 C 352,122 362,168 322,196"/>
+            <path pathLength="1" stroke="var(--crema)" d="M 60,262 Q 200,296 340,262"/>
+          </g>
+          <g id="cupSteam" fill="none" stroke="var(--crema)" stroke-width="7" stroke-linecap="round" opacity="0.9">
+            <path pathLength="1" d="M 172,76 C 152,42 192,18 176,-14"/>
+            <path pathLength="1" d="M 226,78 C 246,44 206,22 229,-18"/>
+          </g>
+        </svg>
+      </div>
+      <span class="micro cine-hint" data-i18n-en="scroll ↓">scroll ↓</span>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <span class="scroll-hint micro" data-i18n-en="coffee below ↓">coffee below ↓</span>
+  </div>
+</section>
+
+<div class="strip micro" aria-hidden="true">
+  <span data-slot="marquee.text">Freshly roasted · specialty coffee · Belgrade · Užice</span>
+</div>
+
+<section class="rail-sec" id="kafa">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Coffee">Coffee</span>
+    <h2 class="big" data-slot="rail.heading">What we pour</h2>
+  </div>
+  <p class="uvod" data-slot="rail.intro">Names and prices come from our Wolt menu for Sarajevska 14. They can differ at the other two.</p>
+  <div class="rail" data-slot-list="rail.items" data-item-template="rail-card">
+    <article class="rail-card" data-slot-item>
+      <figure class="rail-shot" aria-hidden="true"></figure>
+      <h3 data-slot="name">Cappuccino</h3>
+      <span class="rail-price" data-slot="price">380 din</span>
+    </article>
+    <article class="rail-card" data-slot-item>
+      <figure class="rail-shot" aria-hidden="true"></figure>
+      <h3 data-slot="name">Latte XL</h3>
+      <span class="rail-price" data-slot="price">410 din</span>
+    </article>
+    <article class="rail-card" data-slot-item>
+      <figure class="rail-shot" aria-hidden="true"></figure>
+      <h3 data-slot="name">Ice coffee 0,3</h3>
+      <span class="rail-price" data-slot="price">590 din</span>
+    </article>
+    <article class="rail-card" data-slot-item>
+      <figure class="rail-shot" aria-hidden="true"></figure>
+      <h3 data-slot="name">Espresso Martini</h3>
+      <span class="rail-price" data-slot="price">660 din</span>
+    </article>
+    <article class="rail-card" data-slot-item>
+      <figure class="rail-shot" aria-hidden="true"></figure>
+      <h3 data-slot="name">Late Classic coffee šoljica</h3>
+      <span class="rail-price" data-slot="price">240 din</span>
+    </article>
+  </div>
+</section>
+
+<section class="shop" id="ponuda">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Shop">Shop</span>
+    <h2 class="big" data-slot="shop.heading">Take Šoljica home</h2>
+  </div>
+  <p class="uvod" data-slot="shop.intro">Our blends, roasted in-house. Whole bean or freshly ground, your call. Ask us what is on the shelf right now.</p>
+  <div class="mix-list" data-slot-list="shop.items" data-item-template="mix">
+    <figure class="tile-photo t-tin" aria-hidden="true"></figure>
+    <div class="mix" data-slot-item>
+      <span class="stamp-origin" aria-hidden="true">SRB</span>
+      <div class="mix-mid">
+        <h3 data-slot="name">Kućna mešavina</h3>
+        <span class="price micro" data-slot="price">1.290 din / 250 g</span>
+        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+      </div>
+      <span class="notes" data-slot="notes">every day, in every cup: chocolate, hazelnut, mild acidity</span>
+    </div>
+    <figure class="tile-photo t-latte" aria-hidden="true"></figure>
+    <div class="mix" data-slot-item>
+      <span class="stamp-origin" aria-hidden="true">SRB</span>
+      <div class="mix-mid">
+        <h3 data-slot="name">Beogradska kaldrma</h3>
+        <span class="price micro" data-slot="price">1.390 din / 250 g</span>
+        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+      </div>
+      <span class="notes" data-slot="notes">strong as cobblestone: a dark-roast espresso blend, cocoa and smoke</span>
+    </div>
+    <figure class="tile-photo t-night" aria-hidden="true"></figure>
+    <div class="mix" data-slot-item>
+      <span class="stamp-origin" aria-hidden="true">SRB</span>
+      <div class="mix-mid">
+        <h3 data-slot="name">Prva šoljica</h3>
+        <span class="price micro" data-slot="price">1.450 din / 250 g</span>
+        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+      </div>
+      <span class="notes" data-slot="notes">for the morning: light roast, citrus and honey, filter or moka</span>
+    </div>
+  </div>
+  <p class="napomena" data-i18n-en="Provisional: the blend names, notes and prices are not confirmed yet.">Provisional: the blend names, notes and prices are not confirmed yet.</p>
+  <p class="kanali" data-slot="shop.channels"><span data-i18n-en="Ask us by message on ">Ask us by message on </span><a href="https://www.instagram.com/soljicacom/" data-i18n-en="Instagram">Instagram</a><span data-i18n-en=" or call "> or call </span><a href="tel:+381116300563">+381 11 630 0563</a>.</p>
+</section>
+
+<section class="beans" id="zrna">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="This week in the bars">This week in the bars</span>
+    <h2 class="big" data-slot="beans.heading">Beans of the week</h2>
+  </div>
+  <div class="bean-list" data-slot-list="beans.items" data-item-template="bean">
+    <div class="bean" data-slot-item>
+      <span><b data-slot="name">Ethiopia Yirgacheffe</b><br><span class="notes" data-slot="notes">floral, citrus, light roast</span></span>
+      <span class="price" data-slot="price">1.450 din / 250 g</span>
+    </div>
+    <div class="bean" data-slot-item>
+      <span><b data-slot="name">Brazil Cerrado</b><br><span class="notes" data-slot="notes">chocolate, hazelnut, medium roast</span></span>
+      <span class="price" data-slot="price">1.190 din / 250 g</span>
+    </div>
+    <div class="bean" data-slot-item>
+      <span><b data-slot="name">Colombia Huila</b><br><span class="notes" data-slot="notes">caramel, red fruit</span></span>
+      <span class="price" data-slot="price">1.290 din / 250 g</span>
+    </div>
+  </div>
+  <p class="napomena" data-i18n-en="The same goes for the beans of the week: this list is a placeholder until we confirm what is on the shelf.">The same goes for the beans of the week: this list is a placeholder until we confirm what is on the shelf.</p>
+</section>
+
+<section class="menu" id="jelovnik">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="At the bar">At the bar</span>
+    <h2 class="big" data-slot="menu.heading">The menu</h2>
+  </div>
+  <p class="uvod" data-slot="menu.intro">A short pick of what we eat and drink around here. The full menu is waiting at the bar.</p>
+  <div class="menu-cols">
+    <div class="menu-col">
+      <h3 class="menu-col-title" data-slot="menu.kitchen.title">From the kitchen</h3>
+      <div data-slot-list="menu.dishes" data-item-template="dish">
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Šoljica breakfast</b>
+          <p class="notes" data-slot="notes">2 eggs, bacon, sausage, house-made cheese and sesame pastries, crostini with avocado feta and sunflower seeds, cherry tomatoes, arugula and a honey-mustard dressing.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Scrambled eggs on avocado</b>
+          <p class="notes" data-slot="notes">Creamy scrambled eggs, avocado and crispy smoked pork neck (or without it) on toasted bread.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Croque madame</b>
+          <p class="notes" data-slot="notes">Buđola on rustic bread with clarified butter, covered in an aromatic béchamel, baked with cheddar and organic eggs, fresh chives.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Danish sandwich</b>
+          <p class="notes" data-slot="notes">Smoked salmon in a garlic-and-dill cheese spread, on our rye bread, with avocado, cucumber, capers, orange, fermented red onion and sunflower seeds.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Club sandwich</b>
+          <p class="notes" data-slot="notes">Chicken, our special mayo-based spread, tomato, cheese, lettuce and three slices of toast.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Šoljica Smash Burger</b>
+          <p class="notes" data-slot="notes">Beef burger in a brioche bun with cheddar, burger sauce, coleslaw, red onion, jalapeño, tomato, pickles and bacon, served with fries, onion rings, cheddar sauce and ketchup.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Caesar salad</b>
+          <p class="notes" data-slot="notes">Chicken, butterhead lettuce, Caesar dressing, croutons, mushrooms, bacon, parmesan, cherry tomatoes.</p>
+        </div>
+        <div class="dish" data-slot-item>
+          <b data-slot="name">Šoljica Waffle</b>
+          <p class="notes" data-slot="notes">A single or double waffle with our vanilla cream and forest fruit, apricot, white and dark chocolate toppings.</p>
+        </div>
+      </div>
+    </div>
+    <div class="menu-col">
+      <h3 class="menu-col-title" data-slot="menu.bar.title">From the bar</h3>
+      <div data-slot-list="menu.drinks" data-item-template="drink">
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Cappuccino doppio</span>
+          <span class="price" data-slot="price">490 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Cappuccino Classic coffee šoljica</span>
+          <span class="price" data-slot="price">340 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Late XL Classic coffee šoljica</span>
+          <span class="price" data-slot="price">410 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Latte XL soya Classic coffee šoljica</span>
+          <span class="price" data-slot="price">490 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Speciality nes</span>
+          <span class="price" data-slot="price">360 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Cappuccino Ice coffee</span>
+          <span class="price" data-slot="price">340 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Latte XL Ice coffee</span>
+          <span class="price" data-slot="price">410 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Mocha Ice coffee</span>
+          <span class="price" data-slot="price">430 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Ice forzeccino 0,3</span>
+          <span class="price" data-slot="price">560 din</span>
+        </div>
+        <div class="drink" data-slot-item>
+          <span data-slot="name">Baileys + espresso</span>
+          <span class="price" data-slot="price">590 din</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="napomena" data-i18n-en="The dishes come from a 2024 menu and can differ today. Drink prices are from our Wolt menu for Sarajevska 14, dated 11 August 2026.">The dishes come from a 2024 menu and can differ today. Drink prices are from our Wolt menu for Sarajevska 14, dated 11 August 2026.</p>
+</section>
+
+<section>
+  <div class="slogan">
+    <div>
+      <h2 class="slogan-display"><span data-slot="slogan.line1">Life is too short</span><em class="slogan-script" data-slot="slogan.line2">to drink bad espresso.</em></h2>
+      <p class="slogan-copy" data-slot="slogan.copy">That's why we pick our beans with care, roast them ourselves and pour every cup like it's ours. Because it is.</p>
+      <a class="slogan-link micro" href="#ponuda" data-i18n-en="See the shop →">See the shop →</a>
+    </div>
+    <div class="slogan-media">
+      <figure class="tile-photo t-pour" aria-hidden="true"></figure>
+      <svg class="stamp" viewBox="0 0 100 100" aria-hidden="true">
+        <defs><path id="circ" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/></defs>
+        <text><textPath href="#circ">šoljica · beograd · užice · specialty ·</textPath></text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="ritual" id="gde">
+  <div class="ritual-head">
+    <h2 class="ritual-display"><span data-slot="ritual.line1">Not just coffee.</span> <em class="script" data-slot="ritual.line2">A ritual.</em></h2>
+  </div>
+  <div class="spots">
+    <!-- Sarajevska leads, and it is loc3, not loc1: the MARKUP is reordered, the slot
+         names are not (renaming a slot deletes that key from the CMS and the EN store). -->
+    <div class="spot spot-lead">
+      <span class="spot-role micro" data-i18n-en="Šoljica Specialty Coffee &amp; Gastro Bar">Šoljica Specialty Coffee &amp; Gastro Bar</span>
+      <h3 data-slot="loc3.city">Belgrade · Savski venac</h3>
+      <p data-slot="loc3.addr">Sarajevska 14</p>
+      <p data-slot="loc3.hours">Mon–Fri 07:30–23h · Sat and Sun 09–23h</p>
+      <p class="spot-note" data-i18n-en="Breakfast, salads and mains are made here. This is the only one that delivers.">Breakfast, salads and mains are made here. This is the only one that delivers.</p>
+      <p><a href="https://www.instagram.com/soljicacom/" data-slot="loc3.ig">@soljicacom</a></p>
+      <a class="wolt" href="https://wolt.com/en/srb/belgrade/restaurant/soljica" target="_blank" rel="noopener" data-i18n-en="Order delivery on Wolt">Order delivery on Wolt</a>
+    </div>
+    <div class="spot spot-second">
+      <span class="spot-role micro" data-i18n-en="Šoljica">Šoljica</span>
+      <h3 data-slot="loc1.city">Belgrade</h3>
+      <p data-slot="loc1.addr">Trg Nikole Pašića 5</p>
+      <p data-slot="loc1.hours">Mon–Fri 08–23h · Sat and Sun 09–23h</p>
+      <p class="spot-note" data-i18n-en="Coffee first. Delivery does not run from here.">Coffee first. Delivery does not run from here.</p>
+      <p><a href="https://www.instagram.com/soljicaspecialty/" data-slot="loc1.ig">@soljicaspecialty</a></p>
+    </div>
+    <div class="spot spot-brief">
+      <span class="spot-role micro" data-i18n-en="Also in Užice">Also in Užice</span>
+      <h3 data-slot="loc2.city">Užice</h3>
+      <p data-slot="loc2.addr">Dečanska 21</p>
+      <p data-slot="loc2.hours">Daily 07:30–23:30h · Saturdays until 02h</p>
+      <p><a href="https://www.instagram.com/soljica_uzice/" data-slot="loc2.ig">@soljica_uzice</a></p>
+    </div>
+  </div>
+  <p class="napomena" data-i18n-en="Opening hours come from the shops' public listings and are not confirmed by us yet.">Opening hours come from the shops' public listings and are not confirmed by us yet.</p>
+</section>
+
+<footer class="site-foot">
+  <a class="foot-mark" href="#vrh" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="40" height="39"></span></a>
+  <span class="foot-line" data-slot="footer.line">Šoljica · Specialty coffee and tea bar</span>
+  <div class="foot-side">
+    <a class="foot-ig" href="https://www.instagram.com/soljicacom/">Instagram</a>
+    <a class="lang-toggle" href="index.html" data-href-en="index.html" data-slot="footer.lang">SR</a>
+  </div>
+</footer>
+
+<!--
+  CMS-native page. Register rebuilt 2026-08-11 (T2: cream and ink, one ember
+  accent), shell rebuilt the same day (T3: joejuice's STRUCTURE, none of its
+  voice). Spec: brainstorms/2026-08-11-soljica-rebuild-spec.md.
+  - Every editable text carries data-slot; shop.items, beans.items, menu.dishes
+    and menu.drinks are the repeatable list-slots (data-slot-list + data-slot-item).
+    Decorative figures inside the grid carry no slots and are invisible to the
+    CMS engine. `node cms/cli.mjs slots` fails loudly if a redesign wraps a
+    slot's text in a tag and silently demotes it out of the content store.
+  - The rail (#kafa, T4) is the only SOURCED price list on the page: five items
+    off his Wolt menu for Sarajevska 14, harvested 2026-08-11, his spelling
+    untouched ("Late", "Ice coffee 0,3"). Its photo binds by nth-child, not by a
+    content field, and any card past the fourth falls back to the Š-coin on ink.
+  - The three locations (#gde, T5) are a hierarchy, not three cards: Sarajevska
+    leads and holds the page's ONLY ordering action (the ember Wolt pill, worded
+    as delivery from that location because only Sarajevska is on Wolt), Trg Nikole
+    Pašića is the coffee bar beside it, Užice is a mention on its own strip. The
+    markup order is loc3, loc1, loc2; the SLOT NAMES were not renamed. The shop
+    grid's three buttons stopped being "Poruči" to Instagram DMs for the same
+    criterion; they ask a question now, and the phone is the landline.
+    The HOURS are real as of 2026-08-11 and DIFFERENT per shop (goolio, from the
+    shops' public listings). The old "Svakog dana 09-21h" on all three was Wolt's
+    DELIVERY window, not opening time. Still not confirmed by the owner himself.
+    The micro line above each city is the VENUE NAME, on goolio's call: Sarajevska
+    trades as "Šoljica Specialty Coffee & Gastro Bar", Trg Nikole Pašića as plain
+    "Šoljica". That is the one place the string "Gastro Bar" is allowed, because
+    goolio amended criterion 8 to brand-level on 2026-08-11. Title, meta, hero and
+    footer stay "Šoljica". The ROLES moved down to the .spot-note line under the
+    hours, which is what carries criterion 7 now. Užice's label is still the phrase
+    "I u Užicu": nobody has said what that shop trades as.
+  - Jelovnik content harvested 2026-07-17 from the owner's own words (soljica.rs
+    /jelovnik + kudanaklopu.com listing, prices dated 18.07.2024), orthography
+    normalized, phrasing his. T6 DID replace the drink prices: menu.drinks now
+    carries ten items off the same 2026-08-11 Wolt KAFE harvest as the rail, the
+    ten the rail does not already show, his spelling verbatim. The 2024 prices
+    are gone, and with them a page that priced Cappuccino at 380 in the rail and
+    260 on the board. The DISHES are still the 2024 harvest: no newer source
+    exists, so the section says so instead of pretending.
+  - The provisional markers (.napomena, T6, criterion 11) are TEMPLATE-owned, not
+    slots. They disclaim values a chat op can edit, so a chat op must not be able
+    to delete the marker and leave the invented figure standing. Cost of that
+    call: clearing one after the owner confirms a figure is a code edit, not a
+    chat edit. Four of them: #ponuda and #zrna (names, notes and prices both
+    invented), #jelovnik (which vintage each column came from), #gde (hours read
+    off public listings, not confirmed by the owner). "100% arabica" left the
+    marquee entirely on the same criterion: a marquee cannot carry a footnote,
+    and nobody ever sourced that claim.
+  - EN variant: this file is the master; en.html is RENDERED from it +
+    cms/content.en.json (never edited by hand). Template-owned strings carry
+    their translation inline: data-i18n-en (leaf inner text), data-href-en
+    (the lang toggle), data-content-en (meta description). Slot text comes
+    from the EN content file.
+  - Cine hero (2026-07-17 /cinematic-web, retuned quieter 2026-08-11): html.cine
+    (head script, JS + no reduced-motion only) turns the hero into a 250svh scrub
+    track, ALL VECTOR, no photos and no video. Scroll drives: the Š mark
+    (assets/monogram-mark.svg, the coin WITHOUT its baked ink disc, which showed as
+    a lighter ring against the hero's own ground) travels up and docks its ring
+    exactly onto the o of the
+    logotype (assets/logo.svg), ring-to-ring, both potrace traces of the real
+    marks -> that o births the drawn cup, whose top-view ring IS the logotype's
+    own o-ring path -> the cup grows to about two thirds of the short side while
+    its top view squashes into a rim and the front draws itself on -> the tagline
+    and its two actions arrive. The wordmark and the stage share one grid row and
+    both stick to the top of it, so the row ending releases them. Zero
+    dependencies; the static hero is the untouched fallback.
+  - Facts to verify with the owner before any public deploy: hours, prices, lineup.
+-->
+
+<script>
+(() => {
+  const doc = document.documentElement;
+  if (!doc.classList.contains('cine')) return;
+  try {
+    const hero = document.querySelector('.hero');
+    const stage = document.querySelector('.cine-stage');
+    const mono = document.getElementById('cineMono');
+    const cup = document.getElementById('cineCup');
+    const cupTop = document.getElementById('cupTop');
+    const rosetta = document.getElementById('cupRosetta');
+    const front = Array.from(document.querySelectorAll('#cupFront path'));
+    const steam = Array.from(document.querySelectorAll('#cupSteam path'));
+    const wm = document.querySelector('.wm-img');
+    const say = document.querySelector('.hero-say');
+    const hint = document.querySelector('.cine-hint');
+
+    /* traced-vector geometry (potrace over the real marks):
+       LR = the logotype o-ring bbox as fractions of logo.svg's 602x210 box;
+       MR = the monogram ring bbox as fractions of monogram.svg's 259x251 box;
+       the cup svg's top ring spans RIMF of its own box, centered at (.5, .475). */
+    const LR = { cx: 147.03 / 602, cy: 109.16 / 210, w: 118.52 / 602 };
+    const MR = { cx: 130.69 / 259, cy: 126.12 / 251, w: 161.44 / 259 };
+    const RIMF = 0.90;
+
+    const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+    const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+    const ease = (t) => t * t * (3 - 2 * t);
+    const lerp = (a, b, t) => a + (b - a) * t;
+    for (const el of front.concat(steam)) { el.style.strokeDasharray = '1'; el.style.strokeDashoffset = '1'; }
+
+    function update() {
+      const vh = innerHeight;
+      const track = hero.offsetHeight - vh;
+      const p = track > 0 ? clamp(-hero.getBoundingClientRect().top / track, 0, 1) : 1;
+      const st = stage.getBoundingClientRect();
+      const homeX = st.left + st.width / 2;
+      const homeY = st.top + st.height / 2;
+      const wr = wm.getBoundingClientRect();
+
+      /* A+B: the Š-coin travels up and docks its ring EXACTLY onto the o-ring
+         (both are traced vectors; scale and offset computed ring-to-ring) */
+      const tB = ease(seg(p, 0.05, 0.30));
+      const monoW = mono.offsetWidth, monoH = mono.offsetHeight;
+      const sD = (LR.w * wr.width) / (MR.w * monoW);
+      const oX = wr.left + LR.cx * wr.width;
+      const oY = wr.top + LR.cy * wr.height;
+      const dxD = oX - homeX - (MR.cx * monoW - monoW / 2) * sD;
+      const dyD = oY - homeY - (MR.cy * monoH - monoH / 2) * sD;
+      mono.style.transform = 'translate(' + (dxD * tB) + 'px,' + (dyD * tB) + 'px) scale(' + lerp(1, sD, tB) + ')';
+      mono.style.opacity = String(1 - seg(p, 0.19, 0.27)); /* the coin clears before the dock completes: only the ring hands over to the o */
+      wm.style.opacity = String(seg(p, 0.20, 0.30));
+
+      /* C: the o births the drawn cup: its ring is the SAME path, so the birth
+         is seamless; it detaches toward center faster than it grows */
+      const tPos = ease(seg(p, 0.30, 0.50));
+      const tSize = ease(seg(p, 0.30, 0.58));
+      const cupD = cup.offsetWidth;
+      const sc0 = (LR.w * wr.width) / (RIMF * cupD);
+      /* retuned quieter for the new register (T3): the cup used to bloom to 92%
+         of the short side and 1000px; it now stops well short of the edges */
+      const grow = Math.min(0.68 * Math.min(innerWidth, vh), 700) / cupD;
+      const tG = ease(seg(p, 0.62, 0.90));
+      const sc = lerp(sc0, 1, tSize) * lerp(1, Math.max(grow, 1), tG);
+      const bx = oX - homeX;
+      const by = oY - homeY + 0.025 * cupD * sc0;
+      cup.style.transform = 'translate(' + (bx * (1 - tPos)) + 'px,' + (by * (1 - tPos)) + 'px) scale(' + sc + ')';
+      cup.style.opacity = String(seg(p, 0.29, 0.34));
+
+      /* D: above -> front. The top view (ring + crema + rosetta) squashes into
+         the cup's rim ellipse while the front of the cup draws itself on. */
+      const tT = ease(seg(p, 0.50, 0.72));
+      cupTop.style.transform = 'translate(0px,' + (-90 * tT) + 'px) scale(' + lerp(1, 0.62, tT) + ',' + lerp(1, 0.14, tT) + ')';
+      rosetta.style.opacity = String(lerp(0.9, 0.35, tT));
+      front[0].style.strokeDashoffset = String(1 - ease(seg(p, 0.56, 0.74)));
+      front[1].style.strokeDashoffset = String(1 - ease(seg(p, 0.62, 0.78)));
+      front[2].style.strokeDashoffset = String(1 - ease(seg(p, 0.68, 0.84)));
+      steam[0].style.strokeDashoffset = String(1 - ease(seg(p, 0.80, 0.92)));
+      steam[1].style.strokeDashoffset = String(1 - ease(seg(p, 0.84, 0.96)));
+
+      /* E: arrival, the line and its two actions fade in, the invitation fades
+         out. The nav is sticky and outside the hero now, so it needs no teardown */
+      say.style.opacity = String(seg(p, 0.86, 0.96));
+      hint.style.opacity = String(1 - seg(p, 0.02, 0.10));
+    }
+
+    let ticking = false;
+    const schedule = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); } };
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', schedule);
+    update();
+  } catch (e) {
+    doc.classList.remove('cine'); /* any failure: the static hero, untouched */
+  }
+})();
+</script>
+
+</body>
+</html>
