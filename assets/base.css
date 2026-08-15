@@ -1,0 +1,624 @@
+/* ============================================================================
+   Šoljica base: the part of the design system that belongs to no single page.
+
+   Extracted from index.html's inline <style> when the site gained its second
+   page (menu batch T7, 2026-08-13). Nothing here was rewritten in the move: the
+   rules are the home page's own, in their own order, so the cascade a reader
+   sees is the cascade that shipped before.
+
+   WHAT BELONGS IN THIS FILE, and the test is not "is it reused" but "would two
+   copies of it be allowed to disagree":
+     - the tokens and the two theme remaps. A second page with its own palette
+       is not a second page of the same site;
+     - the reset and the two type utilities every page writes in terms of;
+     - the nav and the footer, which are the same chrome on every page, down to
+       the traced geometry of the Š-coin;
+     - the section scaffolding (section, .sec-label, .uvod, .napomena), which is
+       the anatomy this site's sections have.
+   Page-specific layout stays in the page. There is no build step and no
+   include, so each page still writes its own markup: this file is what stops
+   the design system drifting between two hand-written copies of it.
+
+   ONE RULE holds the colour part together, inherited from the file it came out
+   of: every colour in the stylesheet is a var(), and every one of those vars is
+   declared on bare :root below. The themes remap SEVEN role tokens and nothing
+   else, which is why forced light, forced dark and the un-stamped system
+   default each resolve to a COMPLETE palette instead of half of one. The single
+   keyword exception is `transparent`, which has no theme to belong to.
+   Grep that keeps it true: no oklch( / rgb( / hsl( / # outside :root.
+   ============================================================================ */
+:root {
+  color-scheme: light;
+
+  /* ---- families: the logotype's own, unchanged ---- */
+  --display: "Abril Fatface", Georgia, serif;  /* fat serif, ball terminals */
+  --script: "Kaushan Script", cursive;         /* the logo's brush script */
+  --body: "Archivo", system-ui, sans-serif;
+
+  /* ---- the ramp: absolute values, never themed ---- */
+  --cream:      oklch(0.967 0.014 84);   /* the ground: warm oat paper */
+  --cream-lift: oklch(0.988 0.007 84);   /* cards standing off the ground */
+  --cream-sink: oklch(0.936 0.020 82);   /* wells pressed into it */
+
+  --ink-void:  oklch(0.108 0.013 62);    /* the floor of every scrim */
+  --ink-abyss: oklch(0.146 0.017 62);    /* hero, and the dark ground */
+  --ink:       oklch(0.196 0.019 60);    /* body text on cream, band on cream */
+  --ink-lift:  oklch(0.256 0.019 58);    /* panels standing off a dark ground */
+
+  --milk:  oklch(0.985 0.006 78);        /* also the cine cup's strokes */
+  --crema: oklch(0.884 0.056 82);        /* also the cine cup's crema */
+
+  --ember:      oklch(0.706 0.163 52);   /* THE accent, the logotype orange */
+  --ember-deep: oklch(0.545 0.146 46);   /* the accent when it carries text on cream */
+  --ember-lift: oklch(0.806 0.128 62);   /* the accent when it carries text on ink */
+
+  /* ---- roles: bare :root IS the light theme ---- */
+  --ground:      var(--cream);
+  --ground-lift: var(--cream-lift);
+  --band:        var(--ink);         /* strip + menu board */
+  --band-deep:   var(--ink-abyss);   /* hero */
+  --band-floor:  var(--ink-void);    /* the cine hero's bottom */
+  --text:        var(--ink);
+  --on-band:     var(--milk);
+  --accent:      var(--ember);
+  --accent-text: var(--ember-deep);
+  --on-accent:   var(--ink-abyss);
+  --coin-plate:  var(--ink-void);    /* the Š-coin's disc: painted by CSS, so it can leave in dark */
+
+  /* ---- derived: written once, follows whatever the roles resolve to ---- */
+  --text-soft:  color-mix(in oklch, var(--text) 74%, var(--ground));
+  --text-faint: color-mix(in oklch, var(--text) 52%, var(--ground));
+  --rule:       color-mix(in oklch, var(--text) 16%, transparent);
+  --rule-firm:  color-mix(in oklch, var(--text) 30%, transparent);
+
+  --on-band-soft:   color-mix(in oklch, var(--on-band) 70%, var(--band));
+  --on-band-faint:  color-mix(in oklch, var(--on-band) 50%, var(--band));
+  --rule-band:      color-mix(in oklch, var(--on-band) 18%, transparent);
+  --rule-band-firm: color-mix(in oklch, var(--on-band) 32%, transparent);
+
+  /* photography sits on the same floor in both themes, so its scrims and its
+     loading ground are theme-invariant by design, not by omission */
+  --scrim-soft: color-mix(in oklch, var(--ink-void) 28%, transparent);
+  --scrim-mid:  color-mix(in oklch, var(--ink-void) 58%, transparent);
+  --scrim-firm: color-mix(in oklch, var(--ink-void) 74%, transparent);
+  --scrim-deep: color-mix(in oklch, var(--ink-void) 88%, transparent);
+  --photo-warm: color-mix(in oklch, var(--ink-lift) 84%, var(--ember));
+  --photo-cool: color-mix(in oklch, var(--ink-abyss) 90%, var(--ember));
+
+  /* ---- editorial type scale ---- */
+  --t-micro: 0.75rem;                                    /* 12px tracked label */
+  --t-fine:  0.9375rem;                                  /* 15px notes + prices */
+  --t-body:  clamp(1rem, 0.28vw + 0.94rem, 1.125rem);    /* 16 -> 18 */
+  --t-lead:  clamp(1.125rem, 0.6vw + 1rem, 1.375rem);    /* intros */
+  --t-h4:    clamp(1.2rem, 0.5vw + 1.05rem, 1.45rem);    /* list rows */
+  --t-h3:    clamp(1.5rem, 0.9vw + 1.25rem, 2rem);       /* card names */
+  --t-h2:    clamp(2.5rem, 5vw, 4.5rem);                 /* section headings */
+  --t-h1:    clamp(2.9rem, 6vw, 5.5rem);                 /* the two statements */
+
+  /* ---- air ---- */
+  --gutter: clamp(20px, 5vw, 72px);
+  --band-y: clamp(5rem, 9vw, 10rem);
+  --measure: 42ch;
+  --nav-h: 56px;   /* the thin nav is sticky, so the hero and the cine stage both subtract it */
+
+  /* ---- shape + motion ---- */
+  --r-tile: 2px;
+  --r-pill: 999px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 300ms;
+}
+
+/* Dark. Seven remaps, no new colours: every value here is a ramp token already
+   declared above, or `transparent`. Guarded so an explicit light choice still wins. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:      var(--ink-abyss);
+    --ground-lift: var(--ink);
+    --band:        var(--ink-lift);
+    --text:        var(--cream);
+    --accent-text: var(--ember-lift);
+    --on-accent:   var(--ink-void);
+    --coin-plate:  transparent;   /* an ink disc on an ink page is a disc nobody can see */
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:      var(--ink-abyss);
+  --ground-lift: var(--ink);
+  --band:        var(--ink-lift);
+  --text:        var(--cream);
+  --accent-text: var(--ember-lift);
+  --on-accent:   var(--ink-void);
+  --coin-plate:  transparent;
+}
+
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body {
+  background: var(--ground);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: var(--t-body);
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+::selection { background: var(--accent); color: var(--on-accent); }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.micro {
+  font: 600 var(--t-micro)/1.3 var(--body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.script { font-family: var(--script); font-weight: 400; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- the thin nav: all of the page chrome, and it outlives the hero ----------
+   Sticky at the top of the PAGE (it is a sibling of the hero, not a child), so it
+   survives the 250svh cine track without the fixed-then-hide hack the old topbar
+   needed. Cream ground, hairline rule: it reads as a masthead, not a toolbar. */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0 var(--gutter);
+  background: var(--ground);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.nav-mark .coin { width: 32px; }
+
+/* The Š-coin, assembled rather than baked. The disc is a CSS circle in
+   --coin-plate (ink on cream, `transparent` in dark, where an ink disc on an
+   ink page is a disc nobody can see), and the mark on top is
+   assets/monogram-mark.svg, which is the traced monogram with its own disc
+   deleted. Percentages are the traced circle's own geometry: cx 130.7, cy
+   126.1, r 117 in the 259x251 box, so the CSS disc lands exactly where the
+   baked one did. */
+.coin { position: relative; display: block; aspect-ratio: 259 / 251; }
+.coin::before {
+  content: ""; position: absolute;
+  left: 5.29%; top: 3.63%; width: 90.35%; height: 93.23%;
+  border-radius: 50%; background: var(--coin-plate);
+}
+.coin img { position: relative; width: 100%; height: auto; }  /* height:auto or the width/height attributes squash the mark against the plate */
+.nav-links { display: flex; gap: clamp(1rem, 2.6vw, 2.4rem); }
+.nav-links a {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; min-width: 44px;   /* BOTH axes: an earlier gate passed targets 44 tall and 32 wide, and the short labels here ("Karta", EN "Shop") are exactly that shape */
+  white-space: nowrap;   /* a tracked two-word label breaks into a stack of three lines otherwise, which is what four links did at 390px */
+  color: var(--text-soft); text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.nav-links a:hover { color: var(--accent-text); }
+
+/* ---------- the phone drawer, and it is a CSS CHECKBOX rather than a script ----------
+   Ported from the Tilltrend site's own nav (goolio asked for that comparison on
+   2026-08-14), which runs this with no JavaScript at all. The pattern: a visually hidden
+   but FOCUSABLE checkbox is the first child of the bar, two labels for it are the burger
+   and the full-screen scrim, and the nav is a later SIBLING so `.nav-cb:checked ~` can
+   reach it. SIBLING ORDER IN THE MARKUP IS LOAD-BEARING; a nav moved above the checkbox
+   silently stops opening.
+
+   Why a checkbox and not a button with a script: this is a static site with no build, so
+   a drawer that only opens once a script has run is a nav that does not exist if that one
+   request fails. Here the drawer works before any JS, and assets/nav.js only adds what
+   the CSS cannot do (close on an IN-PAGE anchor tap, Escape, and the resize).
+
+   Three details are copied deliberately because Tilltrend paid for them:
+   - the checkbox is hidden with clip, never `display: none`, which would take it out of
+     the tab order and hand the drawer to mouse users only;
+   - the parked drawer is `visibility: hidden`, not merely translated off-screen. A fixed
+     element's containing block is the VIEWPORT, so a translated drawer stays hit-testable
+     and makes the page pannable sideways on a phone. Visibility flips AFTER the slide
+     out (`visibility 0s .24s`) and instantly on the way in;
+   - the burger outranks the scrim, or the close icon is not the close icon: the tap lands
+     on the backdrop instead, which happens to close it too and looks like it worked until
+     the day the two behave differently. */
+.nav-cb {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); border: 0;
+}
+/* Its own rule rather than reusing .sr-only: that utility is for text, and a change to it
+   must not be able to silently take the nav's only control out of the tab order. */
+.nav-burger, .nav-scrim { display: none; }
+
+/* ---------- section scaffolding ---------- */
+section { padding: var(--band-y) var(--gutter); }
+.sec-label { text-align: center; margin-bottom: clamp(2.6rem, 5vw, 4.5rem); }
+.sec-label .big {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--display); font-weight: 400;
+  font-size: var(--t-h2);
+  letter-spacing: -0.015em; line-height: 1.06;
+  text-wrap: balance;
+  text-transform: none;
+}
+.sec-label .micro { color: var(--text-faint); }
+.uvod {
+  max-width: var(--measure); margin: 0 auto clamp(2.8rem, 5vw, 4.4rem);
+  text-align: center; font-size: var(--t-lead); line-height: 1.5;
+  color: var(--text-soft); text-wrap: pretty;
+}
+/* ---------- napomena: the provisional marker (T6, spec criterion 11) ----------
+   Every figure on this page that did NOT come off his Wolt menu says so here.
+   TEMPLATE-owned on purpose, not a slot: it disclaims values a chat op can
+   edit, so a chat op must not be able to delete the disclaimer and leave the
+   invented price standing. The cost of that choice is that clearing a marker
+   once the owner confirms a figure is a code edit, not a chat edit. */
+.napomena {
+  max-width: 60ch; margin: clamp(1.8rem, 3vw, 2.6rem) auto 0;
+  text-align: center; font-size: var(--t-fine); line-height: 1.5;
+  color: var(--text-faint); text-wrap: pretty;
+}
+
+/* ---------- footer: light, and short. One coffee bar, not a chain ---------- */
+.site-foot {
+  background: var(--ground);
+  border-top: 1px solid var(--rule);
+  padding: clamp(2.2rem, 4vw, 3.4rem) var(--gutter);
+  display: flex; flex-wrap: wrap; gap: 1.2rem 2rem;
+  justify-content: space-between; align-items: center;
+  font-size: var(--t-fine); color: var(--text-faint);
+}
+.foot-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.foot-mark .coin { width: 40px; }
+.foot-line { color: var(--text-soft); }
+.foot-side { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 1.8rem); }
+.foot-ig {
+  display: inline-flex; align-items: center; min-height: 44px;
+  color: var(--text-soft); text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.foot-ig:hover { color: var(--accent-text); }
+.lang-toggle {
+  border: 1.5px solid var(--rule-firm); background: none; color: var(--text);
+  font: 600 var(--t-micro) var(--body); letter-spacing: 0.16em;
+  padding: 11px 18px; border-radius: var(--r-pill); cursor: pointer; min-height: 44px;
+  text-decoration: none; display: inline-flex; align-items: center;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent-text); }
+
+/* ---------- responsive: the chrome's own rules only ----------
+   Each page keeps the media-query rules for its own components. These are here
+   for the same reason the components above are: two pages must not disagree
+   about them. */
+@media (max-width: 560px) {
+  /* THE FOUR LINKS LEAVE THE BAR HERE (2026-08-14, goolio's call) and become the drawer.
+     What stood in this block was the squeeze that kept them in it: gap down to 0.8rem and
+     the tracking cut from 0.2em to 0.06em, with a note saying that at 390px the tracking
+     alone was wider than the gaps. That was the bar at its limit, and it was measured
+     passing the mobile gate the same day it was replaced, so this is a change of shape
+     rather than a repair. The labels get their size, their case and their full 0.2em of
+     tracking back, because a drawer has room for them. */
+  .site-foot { justify-content: center; text-align: center; }
+
+  .nav-burger {
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: none; margin-left: auto;
+    width: 44px; height: 44px;   /* 44, not the 42 the ported design used: this site gates on it */
+    margin-right: -10px;         /* optical: pulls the icon's own padding back to the gutter line */
+    border-radius: 2px; color: var(--text); cursor: pointer;
+    z-index: 3;                  /* over the drawer(2) and the scrim(1), so the close icon closes */
+    transition: color var(--dur) var(--ease);
+  }
+  .nav-burger svg { width: 24px; height: 24px; display: block; }
+  .nav-burger:hover { color: var(--accent-text); }
+  .nav-burger .ic-close { display: none; }
+  .nav-cb:checked ~ .nav-burger .ic-burger { display: none; }
+  .nav-cb:checked ~ .nav-burger .ic-close { display: block; }
+  /* The ring paints on the LABEL while focus really sits on the checkbox beside it. */
+  .nav-cb:focus-visible ~ .nav-burger { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .topbar .nav-links {
+    position: fixed; top: 0; right: 0; z-index: 2;
+    height: 100vh; height: 100dvh;   /* dvh so the drawer is not cut by a phone's URL bar */
+    width: min(76vw, 268px);
+    flex-direction: column; align-items: stretch; gap: 0.2rem;
+    padding: calc(var(--nav-h) + 0.9rem) 1.1rem 1.4rem;   /* clears the bar, so the first link never sits under the close icon */
+    background: var(--ground);
+    border-left: 1px solid var(--rule);
+    box-shadow: -18px 0 44px rgb(0 0 0 / 0.16);
+    overflow-y: auto;
+    transform: translateX(105%); visibility: hidden;
+    transition: transform 0.24s var(--ease), visibility 0s 0.24s;
+  }
+  .nav-cb:checked ~ .nav-links {
+    transform: translateX(0); visibility: visible;
+    transition: transform 0.24s var(--ease);
+  }
+  .topbar .nav-links a {
+    justify-content: flex-start;
+    min-height: 48px; padding: 0 0.7rem;
+    border-radius: 2px;
+    color: var(--text);
+  }
+  .topbar .nav-links a[aria-current="page"] { color: var(--accent-text); }
+
+  .nav-scrim {
+    display: block; position: fixed; inset: 0; z-index: 1;
+    background: rgb(0 0 0 / 0.42);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.24s var(--ease), visibility 0s 0.24s;
+  }
+  .nav-cb:checked ~ .nav-scrim {
+    opacity: 1; visibility: visible;
+    transition: opacity 0.24s var(--ease);
+  }
+
+  /* Lock the page behind the drawer. TWO rules, never comma-joined: an engine that cannot
+     parse :has() drops the whole selector list, and it is exactly those engines that need
+     the class assets/nav.js mirrors onto the body. */
+  body:has(.nav-cb:checked) { overflow: hidden; }
+  body.nav-open { overflow: hidden; }
+}
+@media (pointer: coarse) {
+  .lang-toggle { padding: 14px 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.01ms !important; }
+  /* The drawer's park is `visibility 0s .24s`, a DELAY rather than a duration, so the rule
+     above does not touch it: without this the drawer would vanish instantly and then go on
+     swallowing taps for another 240ms. Delay to zero, and the two happen together. */
+  .topbar .nav-links, .nav-scrim { transition-delay: 0s !important; }
+}
+
+
+/* ==============================================================================
+   THE MENU PAGES' LAYOUT (moved here at the POS batch's T15, 2026-08-14).
+
+   It was inline in trg.html from T10, and T10 wrote the instruction for this move
+   into the page itself: when the second bar's page landed there would be two copies
+   of it, and T7's rule for what belongs in this file is not "is it reused" but
+   "would two copies be allowed to disagree". They would not. trg.html and
+   sarajevska.html are ONE design serving two shops; the only thing that may differ
+   between them is which drinks and which prices they carry. Two shops whose menus
+   quietly drifted into two layouts is the exact failure this file exists to stop,
+   and the copies were still byte-identical apart from one stale comment, which is
+   the cheapest moment the move will ever have.
+
+   It is APPENDED, at the end, on purpose. The block used to sit in a <style> after
+   the <link> to this file, so its rules won every tie against rules here. Anywhere
+   but the end and that would change, silently, for any pair of equal-specificity
+   rules touching one property.
+
+   index.html downloads the menu rules it does not use. That is the price, and it is
+   about 12 KB before compression. (This read "index.html and karta.html" until T20
+   deleted that page, which is also where a third of this cost was expected to go.)
+   ============================================================================== */
+
+  /* ============================================================================
+     ONE BAR'S MENU (POS batch T10, 2026-08-14). Scaffolded by
+     tools/build-bar-page.mjs and hand-owned from that moment on: the generator
+     refuses to overwrite this file, because on this site the page IS the content
+     store and a rebuild would erase every edit the owner ever made in the chat bar.
+
+     Every price on it is this shop's TILL price, joined to data/pos-evidence.tsv
+     on the data-sifra each row carries. The printed book supplies the names and
+     the grouping and NOT one number.
+
+     AND THE REASON IS NOT THE ONE THE BATCH WAS SOLD ON. T10 measured the two
+     sources family by family, which is only possible once a row carries both a
+     family and a printed line, and the claim that the book runs behind the till
+     did not survive it: at Trg they agree on 163 of the 167 rows that name the
+     same drink in the same printed family, and the four that differ are the till
+     charging more. What a till really supplies is coverage and per-shop truth:
+     rows the printed book has no line for at all, printed lines this bar does
+     not ring, and the products the two shops price differently. The T10 entry in
+     brainstorms/2026-08-13-pos-two-bar-menus-tickets.md carries the figures.
+
+     The layout was inherited from the single drinks list these two pages replaced,
+     deliberately, so a reader would not have to relearn it. That page was deleted at
+     T20 (2026-08-14) and this is where its layout lives now. (T10 wrote a note here asking T15
+     to move this stylesheet into assets/base.css or explain why not, once the
+     second bar's page made two copies of it. T15 moved it, which is why you are
+     reading it here; the argument is in the section header above.)
+
+     EVERY PRICE CARRIES "din" ON PURPOSE. cms/provenance.mjs only recognises a
+     price by its currency word, so a bare "260" would be invisible to the gate
+     and this whole page would pass by stating nothing it could check.
+     ============================================================================ */
+
+  .menu-head { padding-bottom: clamp(1.6rem, 3vw, 2.6rem); }
+  .menu-head .big { font-size: var(--t-h1); }
+
+  .fam-group { padding-top: clamp(2.4rem, 5vw, 4rem); padding-bottom: clamp(2.4rem, 5vw, 4rem); }
+
+  /* Two columns, not three: the longest family runs twenty-eight rows and a third
+     column would set a two-row block beside it with nothing under it.
+
+     Columns rather than a grid, and the reason is the book's own shape. A two-column
+     grid pairs families ROW BY ROW, so Cocktails (16 rows) would sit beside Mixed
+     drinks (8) and leave eight rows of void under the short one; with thirty-six
+     families of wildly uneven length that void repeats down the whole page. Columns
+     flow instead of pairing: each family stays whole (break-inside), the printed
+     order still reads down the left column and on down the right. */
+  .families {
+    columns: 2;
+    column-gap: clamp(2.4rem, 5vw, 5.5rem);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .fam { break-inside: avoid; margin-bottom: clamp(2.6rem, 4.5vw, 4.6rem); }
+  .fam-head {
+    margin-bottom: clamp(0.9rem, 1.6vw, 1.3rem);
+    padding-bottom: 0.5rem;
+    border-bottom: 1.5px solid var(--rule-firm);
+  }
+  .fam-title {
+    font-family: var(--display); font-weight: 400;
+    font-size: var(--t-h3); line-height: 1.14; letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  /* the two lines the printed menu sets under a family: the blend's origins and
+     its one tasting note, and the single-origin "ask us" line */
+  .fam-note { margin-top: 0.4rem; font-size: var(--t-fine); line-height: 1.45; color: var(--text-faint); text-wrap: pretty; }
+
+  .rows { display: grid; gap: clamp(0.5rem, 0.9vw, 0.8rem); }
+  .row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1.2rem;
+    border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem;
+  }
+  /* --t-body, not the --t-fine the price uses: these names ARE this page's reading text,
+     and the standing mobile gate wants body text at 16px or more. A denser list would have
+     been easy and would have failed the rule the site holds every page to. */
+  .row-name { font-size: var(--t-body); line-height: 1.35; text-wrap: pretty; }
+  .row-price {
+    font-weight: 600; font-size: var(--t-fine); white-space: nowrap;
+    color: var(--text-soft); font-variant-numeric: tabular-nums;
+  }
+
+  /* The families whose every row has the book's printed ingredient line. Name and line
+     stack against the price, which keeps the row's anatomy identical to every other row
+     on the page. A family where one row lacks the line carries it on none of them: the
+     Guardian reads a list's fields off item 0 and then forbids an empty one. */
+  .row-main { display: grid; gap: 0.15rem; min-width: 0; }
+  .row-desc { font-size: var(--t-fine); line-height: 1.4; color: var(--text-faint); text-wrap: pretty; }
+
+  /* ---------- the sticky strip: which shop, and where in this shop's menu ----------
+     TWO controls in ONE row (T12), and the row is the whole reason for the shape. T10
+     sized this page's chrome and refused a second sticky row: two 44px rows plus the
+     56px nav is 144px pinned to an 844px phone. Adding the bar switcher as a THIRD row
+     does not improve that arithmetic, so the switcher lives inside the index's own row
+     and pays for its width out of the index's scroll window on a phone.
+
+     It sticks UNDER the nav, so the two read as one masthead of two lines: the nav is
+     the site, this line is the page.
+
+     --index-h is MEASURED by the script at the foot of this page, because this strip is
+     one row on a desktop and one scrolling row on a phone, and scroll-margin-top has to
+     know which. The 48px below is the no-script fallback, not the real number. */
+  :root { --index-h: 48px; }
+  .menu-strip {
+    position: sticky; top: var(--nav-h); z-index: 19;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 0 clamp(0.9rem, 2.4vw, 2.2rem);
+    padding: 0 var(--gutter);
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ---------- the bar switcher (T12, criterion 23) ----------
+     Which shop you are reading, and the way to the other one.
+
+     The current SHOP is a filled chip and the current FAMILY is an underline: two marks
+     of different kinds on one row, deliberately. Give both controls the same mark and a
+     reader sees one row of seven tabs, two of which happen to be lit.
+
+     A shop whose page has not been built yet is an inert span carrying a marker word,
+     not an anchor to a file that would 404. See barSwitch() in the generator. */
+  .bar-switch { display: flex; align-items: center; flex: 0 0 auto; }
+  .bar-switch a, .bar-soon { white-space: nowrap; }
+  .bar-switch a {
+    /* the 44px target is the ANCHOR; the chip inside it is what you see, because a chip
+       grown to 44px in a 45px row touches both hairlines and reads as a filled band */
+    display: inline-flex; align-items: center;
+    min-height: 44px; padding: 0 0.3rem;
+    color: var(--text-faint); text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+  .bar-switch a:hover { color: var(--accent-text); }
+  .bar-switch a > span {
+    display: inline-flex; align-items: center;
+    padding: 0.42em 0.85em; border-radius: var(--r-pill);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  /* the site's own strong pairing rather than the accent: a small ink chip on cream
+     reads as "you are here" without becoming the loudest thing on the page, and it
+     inverts with the theme because both halves are role tokens */
+  .bar-switch a[aria-current] > span { background: var(--band); color: var(--on-band); }
+  .bar-soon {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    padding: 0 0.3rem; color: var(--text-faint); opacity: 0.75;
+  }
+  /* the marker is what stops an unclickable name reading as a broken one */
+  .bar-soon em {
+    font-style: normal; font-size: 0.85em; letter-spacing: 0.1em;
+    padding: 0.2em 0.5em; border-radius: var(--r-pill);
+    border: 1px solid var(--rule-firm);
+  }
+
+  /* ---------- the jump index ----------
+     Thirty-six families over a page this tall: without this the only way to a rakija is
+     the scrollbar.
+
+     TEMPLATE-OWNED, not slots, and each label is the same string as the section micro
+     label above the heading it jumps to. Two editable copies of one word is how an index
+     ends up naming a section that has since renamed itself; the EN render carries both
+     copies through the same data-i18n-en mechanism, so they cannot drift there either. */
+  .menu-index {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0 clamp(0.9rem, 2.4vw, 2.2rem);
+  }
+  .menu-index a {
+    display: inline-flex; align-items: center;
+    /* flex-shrink OFF, and it is not a nicety: a nowrap flex row shrinks its items to fit
+       rather than overflowing, so at 390px the five labels were squeezed to 44px boxes and
+       printed on top of each other while the bar reported no overflow at all. The bar is
+       what scrolls; a label is never narrower than its own word. */
+    flex: 0 0 auto;
+    min-height: 44px; min-width: 44px;
+    margin-bottom: -1px;   /* so the active rule covers the bar's hairline instead of sitting above it */
+    white-space: nowrap;
+    color: var(--text-faint); text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .menu-index a:hover { color: var(--accent-text); }
+  .menu-index a[aria-current] { color: var(--accent-text); border-bottom-color: var(--accent); }
+
+  /* an anchor has to land BELOW both sticky bars, not behind them */
+  .menu-head, .fam-group { scroll-margin-top: calc(var(--nav-h) + var(--index-h)); }
+
+  /* the note now carries the air under the intro, so the intro stops carrying it twice */
+  .menu-head .uvod { margin-bottom: 0; }
+
+  @media (max-width: 900px) {
+    /* One column. The families are short enough that a phone reads them as a
+       single scroll, which is how a menu is read standing up anyway. */
+    .families { columns: 1; }
+  }
+  @media (max-width: 560px) {
+    /* One row that scrolls sideways rather than two rows that stack, and the reason is
+       vertical: two rows of 44px targets plus the 56px nav is 144px of chrome pinned to a
+       844px phone. The bar clips its own overflow, so the PAGE still does not scroll
+       sideways, and the script keeps the active family scrolled into view, which is what
+       stops a hidden label being a lost one. Tracking gives way first, as it does in the
+       nav one line above: 0.2em is 2.4px of air per character and there are 43 of them.
+
+       T12 put the switcher in front of that row and it is the index that pays: the
+       switcher is PINNED (flex: 0 0 auto, set above) and the index takes what is left,
+       so the way to the other shop cannot scroll out of reach while the way to a family
+       can, which is the right way round because the index auto-centres its active label
+       and the switcher has nothing to centre. */
+    .menu-strip { flex-wrap: nowrap; justify-content: flex-start; gap: 0 0.5rem; }
+    .menu-index {
+      flex: 1 1 auto; min-width: 0;
+      flex-wrap: nowrap; justify-content: flex-start;
+      overflow-x: auto; scrollbar-width: none;
+      gap: 0 1.1rem;
+    }
+    .menu-index::-webkit-scrollbar { display: none; }
+    .menu-index a { letter-spacing: 0.06em; }
+    .bar-switch { letter-spacing: 0.06em; }
+    .bar-switch a { padding: 0 0.1rem; }
+    .bar-switch a > span { padding: 0.42em 0.6em; }
+    .bar-soon { padding: 0 0.1rem; gap: 0.3em; }
+    /* the marker sheds its box at phone width. It is worth 26px of the index's scroll
+       window, and a smaller fainter word still reads as a marker once it is the only
+       lowercase-height thing in a row of tracked capitals. (This said "the most temporary
+       thing on the page (T15 deletes it)" until T15. Both shops' pages exist now, so
+       NOTHING renders .bar-soon today; the rules stay because barSwitch() still emits it
+       for a declared bar whose page is not on disk, which is how Sarajevska's own entry
+       looked for three tickets. Dead on both pages, live in the mechanism.) */
+    .bar-soon em { font-size: 0.78em; letter-spacing: 0.06em; padding: 0; border: 0; }
+  }

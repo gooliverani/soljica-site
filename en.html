@@ -9,186 +9,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Kaushan+Script&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
 <style>
   /* ============================================================================
-     Šoljica: quiet luxe editorial register (rebuild T2, 2026-08-11)
+     Šoljica home page: quiet luxe editorial register (rebuild T2, 2026-08-11)
      Cream and ink, ONE ember accent pulled from the logotype, generous air.
      joejuice.com's structure only; none of its voice. Spec:
      brainstorms/2026-08-11-soljica-rebuild-spec.md, criterion 3.
 
-     ONE RULE holds this file together: every colour in the stylesheet is a
-     var(), and every one of those vars is declared on bare :root below. The
-     themes remap SEVEN role tokens and nothing else, which is why forced light,
-     forced dark and the un-stamped system default each resolve to a COMPLETE
-     palette instead of half of one. The single keyword exception is
-     `transparent`, which has no theme to belong to.
-     Grep that keeps it true: no oklch( / rgb( / hsl( / # outside :root.
+     THE TOKENS, THE RESET, THE NAV, THE SECTION SCAFFOLDING AND THE FOOTER LIVE
+     IN assets/base.css since the site gained a second page (T7, 2026-08-13).
+     They are linked above, so they still cascade before everything here. What
+     is left in this file is what only the home page has: the hero and its cine
+     track, the rail, the shop, the menu board, the slogan and the three shops.
+     A colour here is still always a var() declared on base.css's :root, and the
+     grep that keeps it true now reads: no oklch( / rgb( / hsl( in this file, and
+     no hex colour. (Bare # still appears, as href targets and as the cine cup's
+     own SVG id selectors, which is why the old wording named :root.)
      ============================================================================ */
-  :root {
-    color-scheme: light;
-
-    /* ---- families: the logotype's own, unchanged ---- */
-    --display: "Abril Fatface", Georgia, serif;  /* fat serif, ball terminals */
-    --script: "Kaushan Script", cursive;         /* the logo's brush script */
-    --body: "Archivo", system-ui, sans-serif;
-
-    /* ---- the ramp: absolute values, never themed ---- */
-    --cream:      oklch(0.967 0.014 84);   /* the ground: warm oat paper */
-    --cream-lift: oklch(0.988 0.007 84);   /* cards standing off the ground */
-    --cream-sink: oklch(0.936 0.020 82);   /* wells pressed into it */
-
-    --ink-void:  oklch(0.108 0.013 62);    /* the floor of every scrim */
-    --ink-abyss: oklch(0.146 0.017 62);    /* hero, and the dark ground */
-    --ink:       oklch(0.196 0.019 60);    /* body text on cream, band on cream */
-    --ink-lift:  oklch(0.256 0.019 58);    /* panels standing off a dark ground */
-
-    --milk:  oklch(0.985 0.006 78);        /* also the cine cup's strokes */
-    --crema: oklch(0.884 0.056 82);        /* also the cine cup's crema */
-
-    --ember:      oklch(0.706 0.163 52);   /* THE accent, the logotype orange */
-    --ember-deep: oklch(0.545 0.146 46);   /* the accent when it carries text on cream */
-    --ember-lift: oklch(0.806 0.128 62);   /* the accent when it carries text on ink */
-
-    /* ---- roles: bare :root IS the light theme ---- */
-    --ground:      var(--cream);
-    --ground-lift: var(--cream-lift);
-    --band:        var(--ink);         /* strip + menu board */
-    --band-deep:   var(--ink-abyss);   /* hero */
-    --band-floor:  var(--ink-void);    /* the cine hero's bottom */
-    --text:        var(--ink);
-    --on-band:     var(--milk);
-    --accent:      var(--ember);
-    --accent-text: var(--ember-deep);
-    --on-accent:   var(--ink-abyss);
-    --coin-plate:  var(--ink-void);    /* the Š-coin's disc: painted by CSS, so it can leave in dark */
-
-    /* ---- derived: written once, follows whatever the roles resolve to ---- */
-    --text-soft:  color-mix(in oklch, var(--text) 74%, var(--ground));
-    --text-faint: color-mix(in oklch, var(--text) 52%, var(--ground));
-    --rule:       color-mix(in oklch, var(--text) 16%, transparent);
-    --rule-firm:  color-mix(in oklch, var(--text) 30%, transparent);
-
-    --on-band-soft:   color-mix(in oklch, var(--on-band) 70%, var(--band));
-    --on-band-faint:  color-mix(in oklch, var(--on-band) 50%, var(--band));
-    --rule-band:      color-mix(in oklch, var(--on-band) 18%, transparent);
-    --rule-band-firm: color-mix(in oklch, var(--on-band) 32%, transparent);
-
-    /* photography sits on the same floor in both themes, so its scrims and its
-       loading ground are theme-invariant by design, not by omission */
-    --scrim-soft: color-mix(in oklch, var(--ink-void) 28%, transparent);
-    --scrim-mid:  color-mix(in oklch, var(--ink-void) 58%, transparent);
-    --scrim-firm: color-mix(in oklch, var(--ink-void) 74%, transparent);
-    --scrim-deep: color-mix(in oklch, var(--ink-void) 88%, transparent);
-    --photo-warm: color-mix(in oklch, var(--ink-lift) 84%, var(--ember));
-    --photo-cool: color-mix(in oklch, var(--ink-abyss) 90%, var(--ember));
-
-    /* ---- editorial type scale ---- */
-    --t-micro: 0.75rem;                                    /* 12px tracked label */
-    --t-fine:  0.9375rem;                                  /* 15px notes + prices */
-    --t-body:  clamp(1rem, 0.28vw + 0.94rem, 1.125rem);    /* 16 -> 18 */
-    --t-lead:  clamp(1.125rem, 0.6vw + 1rem, 1.375rem);    /* intros */
-    --t-h4:    clamp(1.2rem, 0.5vw + 1.05rem, 1.45rem);    /* list rows */
-    --t-h3:    clamp(1.5rem, 0.9vw + 1.25rem, 2rem);       /* card names */
-    --t-h2:    clamp(2.5rem, 5vw, 4.5rem);                 /* section headings */
-    --t-h1:    clamp(2.9rem, 6vw, 5.5rem);                 /* the two statements */
-
-    /* ---- air ---- */
-    --gutter: clamp(20px, 5vw, 72px);
-    --band-y: clamp(5rem, 9vw, 10rem);
-    --measure: 42ch;
-    --nav-h: 56px;   /* the thin nav is sticky, so the hero and the cine stage both subtract it */
-
-    /* ---- shape + motion ---- */
-    --r-tile: 2px;
-    --r-pill: 999px;
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    --dur: 300ms;
-  }
-
-  /* Dark. Seven remaps, no new colours: every value here is a ramp token already
-     declared above, or `transparent`. Guarded so an explicit light choice still wins. */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      color-scheme: dark;
-      --ground:      var(--ink-abyss);
-      --ground-lift: var(--ink);
-      --band:        var(--ink-lift);
-      --text:        var(--cream);
-      --accent-text: var(--ember-lift);
-      --on-accent:   var(--ink-void);
-      --coin-plate:  transparent;   /* an ink disc on an ink page is a disc nobody can see */
-    }
-  }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --ground:      var(--ink-abyss);
-    --ground-lift: var(--ink);
-    --band:        var(--ink-lift);
-    --text:        var(--cream);
-    --accent-text: var(--ember-lift);
-    --on-accent:   var(--ink-void);
-    --coin-plate:  transparent;
-  }
-
-  * { box-sizing: border-box; margin: 0; }
-  html { scroll-behavior: smooth; }
-  html, body { overflow-x: clip; }
-  body {
-    background: var(--ground);
-    color: var(--text);
-    font-family: var(--body);
-    font-size: var(--t-body);
-    line-height: 1.62;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  ::selection { background: var(--accent); color: var(--on-accent); }
-  img { max-width: 100%; display: block; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-  .micro {
-    font: 600 var(--t-micro)/1.3 var(--body);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  .script { font-family: var(--script); font-weight: 400; }
-
-  /* ---------- the thin nav: all of the page chrome, and it outlives the hero ----------
-     Sticky at the top of the PAGE (it is a sibling of the hero, not a child), so it
-     survives the 250svh cine track without the fixed-then-hide hack the old topbar
-     needed. Cream ground, hairline rule: it reads as a masthead, not a toolbar. */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    height: var(--nav-h);
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    padding: 0 var(--gutter);
-    background: var(--ground);
-    border-bottom: 1px solid var(--rule);
-  }
-  .nav-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
-  .nav-mark .coin { width: 32px; }
-
-  /* The Š-coin, assembled rather than baked. The disc is a CSS circle in
-     --coin-plate (ink on cream, `transparent` in dark, where an ink disc on an
-     ink page is a disc nobody can see), and the mark on top is
-     assets/monogram-mark.svg, which is the traced monogram with its own disc
-     deleted. Percentages are the traced circle's own geometry: cx 130.7, cy
-     126.1, r 117 in the 259x251 box, so the CSS disc lands exactly where the
-     baked one did. */
-  .coin { position: relative; display: block; aspect-ratio: 259 / 251; }
-  .coin::before {
-    content: ""; position: absolute;
-    left: 5.29%; top: 3.63%; width: 90.35%; height: 93.23%;
-    border-radius: 50%; background: var(--coin-plate);
-  }
-  .coin img { position: relative; width: 100%; height: auto; }  /* height:auto or the width/height attributes squash the mark against the plate */
-  .nav-links { display: flex; gap: clamp(1rem, 2.6vw, 2.4rem); }
-  .nav-links a {
-    display: inline-flex; align-items: center; min-height: 44px;
-    color: var(--text-soft); text-decoration: none;
-    transition: color var(--dur) var(--ease);
-  }
-  .nav-links a:hover { color: var(--accent-text); }
 
   /* ---------- hero: the mark on ink, one line, two flat actions ----------
      Stays dark on purpose: assets/logo.svg is the real traced mark and its
@@ -217,10 +55,6 @@
     display: block;
     width: clamp(240px, 32vw, 460px);
     max-width: none; /* the global img max-width:100% collapses the auto grid track at 390px */
-  }
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; overflow: hidden;
-    clip-path: inset(50%); white-space: nowrap;
   }
   .hero-foot {
     position: relative; z-index: 1; align-self: end;
@@ -302,53 +136,39 @@
     border-bottom: 1px solid var(--rule);
   }
 
-  /* ---------- section scaffolding ---------- */
-  section { padding: var(--band-y) var(--gutter); }
-  .sec-label { text-align: center; margin-bottom: clamp(2.6rem, 5vw, 4.5rem); }
-  .sec-label .big {
-    display: block;
-    margin-top: 0.6rem;
-    font-family: var(--display); font-weight: 400;
-    font-size: var(--t-h2);
-    letter-spacing: -0.015em; line-height: 1.06;
-    text-wrap: balance;
-    text-transform: none;
-  }
-  .sec-label .micro { color: var(--text-faint); }
-  .uvod {
-    max-width: var(--measure); margin: 0 auto clamp(2.8rem, 5vw, 4.4rem);
-    text-align: center; font-size: var(--t-lead); line-height: 1.5;
-    color: var(--text-soft); text-wrap: pretty;
-  }
-  /* ---------- napomena: the provisional marker (T6, spec criterion 11) ----------
-     Every figure on this page that did NOT come off his Wolt menu says so here.
-     TEMPLATE-owned on purpose, not a slot: it disclaims values a chat op can
-     edit, so a chat op must not be able to delete the disclaimer and leave the
-     invented price standing. The cost of that choice is that clearing a marker
-     once the owner confirms a figure is a code edit, not a chat edit. */
-  .napomena {
-    max-width: 60ch; margin: clamp(1.8rem, 3vw, 2.6rem) auto 0;
-    text-align: center; font-size: var(--t-fine); line-height: 1.5;
-    color: var(--text-faint); text-wrap: pretty;
-  }
+  /* section, .sec-label, .uvod and .napomena are the site's section anatomy and
+     live in assets/base.css. These two are the home page's own bands recolouring
+     the marker against ink. */
   .menu .napomena { color: var(--on-band-faint); }
   .ritual .napomena { color: var(--on-band-faint); margin-top: clamp(2rem, 3.5vw, 3rem); }
 
-  /* ---------- rail: the page's engine, his drinks at his prices ----------
+  /* ---------- rail: the page's engine, five of his drinks and the door to the menus ----------
      joejuice's "most popular products" row with the claim removed: nobody has
-     told us what sells, so the row is just five items off his own Wolt menu,
-     named and priced as he lists them. No ordering action lives here on
-     purpose; spec criterion 6 gives the one order link to Sarajevska.
+     told us what sells. No ordering action lives here on purpose; the rebuild
+     spec's criterion 6 gives the one order link to Sarajevska.
 
-     PHOTO BINDING (the decision T4 was asked to settle): the tile is
-     TEMPLATE-owned and bound by nth-child, not a content field. cms/engine.mjs
-     clones item 1 as the prototype and substitutes data-slot TEXT only, so a
-     photo could only ride along as a filename in a text field that some script
-     then has to resolve: a new failure mode, for a value the owner has no way
-     to upload anyway. Any card without a photograph of its own falls back to
-     the Š-coin on ink, which is also what a sixth item added through the CMS
-     gets. Card 5 uses that fallback deliberately: the KAFE harvest has no plain
-     espresso, so no fifth product frame was shot. */
+     NO PRICES SINCE THE POS BATCH'S T17 (2026-08-14), and the reason is not that
+     the old ones were wrong. They were the printed book's counter prices, put
+     here by the menu batch's T4 after the 2026-08-11 Wolt DELIVERY harvest was
+     found on this page. What retires them is that ONE number cannot answer for
+     two shops: the tills at Trg and Sarajevska disagree on 14 products, so a
+     price on the home page is either a claim about one bar that does not say
+     which, or a claim about both that is false. The five cards keep the name and
+     the photograph, and the price now lives where the shop is named, one page
+     each. The category-range line that sat under them (menu batch T4, criterion
+     6) went with them, mechanism included: it was computed from the book, and
+     the book no longer prices this site.
+
+     PHOTO BINDING (the decision the rebuild batch's T4 was asked to settle): the
+     tile is TEMPLATE-owned and bound by nth-child, not a content field.
+     cms/engine.mjs clones item 1 as the prototype and substitutes data-slot TEXT
+     only, so a photo could only ride along as a filename in a text field that
+     some script then has to resolve: a new failure mode, for a value the owner
+     has no way to upload anyway. Any card without a photograph of its own falls
+     back to the Š-coin on ink, which is also what a sixth item added through the
+     CMS gets. THE ORDER OF THESE FIVE IS THE PHOTO ORDER: cappuccino, latte XL,
+     ice coffee, espresso martini. Card 5 uses the fallback deliberately, because
+     no product frame was ever shot for a plain espresso. */
   .rail {
     display: grid; grid-template-columns: repeat(5, 1fr);
     gap: clamp(12px, 1.6vw, 26px);
@@ -370,12 +190,49 @@
   .rail-card h3 {
     font-family: var(--display); font-weight: 400;
     font-size: var(--t-h4); line-height: 1.14; letter-spacing: 0;
-    min-height: 2.28em;   /* two lines: his longest name wraps, and the prices should still line up */
     text-wrap: balance;
   }
-  .rail-price { font-size: var(--t-fine); font-weight: 600; color: var(--text-soft); }
+  /* The h3 carried min-height: 2.28em so a wrapped name still left the prices on one
+     line. T17 took the prices, so the reserved second line was reserved for nothing and
+     showed as dead space under every short name. */
 
-  /* ---------- shop: editorial grid ---------- */
+  /* ---------- the rail's route: one door per shop (criterion 31) ----------
+     Where the computed range line used to sit. Both links are TEMPLATE-owned, like
+     the bar switcher on the menu pages and for the same reason: which shops exist
+     and what their pages are called is the site's own structure, not the owner's
+     copy, and a chat edit that renamed one would leave the home page pointing at a
+     page no bar has. The sentence above them IS a slot, because "our two bars do not
+     price everything alike" is a thing about his business he may want to word
+     himself. Sarajevska leads, as it does in #gde. */
+  .rail-route {
+    max-width: 60ch; margin: clamp(2rem, 3.2vw, 2.8rem) auto 0;
+    text-align: center;
+  }
+  .rail-route-copy {
+    font-size: var(--t-fine); line-height: 1.5;
+    color: var(--text-soft); text-wrap: pretty;
+  }
+  .rail-doors {
+    margin-top: 1.4rem;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    /* the row gap is 1.6rem and not less on purpose: each door carries an invisible
+       44px hit box centred on a ~21px link, so stacked doors closer than that would
+       hand one link's bottom half to the other's tap target */
+    gap: 1.6rem clamp(1.6rem, 3vw, 2.6rem);
+  }
+  .rail-door {
+    display: inline-block; position: relative;
+    color: var(--text); text-decoration: none;
+    border-bottom: 1.5px solid var(--accent); padding-bottom: 4px;
+    transition: color var(--dur) var(--ease);
+  }
+  .rail-door::after {   /* same invisible 44px hit box as .slogan-link, and for the same reason */
+    content: ""; position: absolute; left: 0; right: 0;
+    top: 50%; height: 44px; transform: translateY(-50%);
+  }
+  .rail-door:hover { color: var(--accent-text); }
+
+  /* ---------- shop: the house blend between two photographs, then the shelf ---------- */
   .mix-list {
     display: grid; gap: clamp(12px, 1.4vw, 24px);
     grid-template-columns: repeat(3, 1fr);
@@ -389,12 +246,14 @@
   }
   .tile-photo.t-tin   { background-image: url("assets/tin.webp"); background-size: 175%; background-position: 50% 42%; }
   .tile-photo.t-latte { background-image: url("assets/latte.webp"); }
-  /* night.webp left the page here (T4, spec criterion 10): its two cups are
-     part-poured and a hand is in frame. It is still in assets/, off the site. */
-  .tile-photo.t-night { background-image: url("assets/rail-espresso.webp"); }
+  /* .t-night is gone since T5 of the menu batch: the shop grid's second row held two invented
+     blends and a third photograph, and the real lineup is a list of ten bags, not more cards.
+     That class carried rail-espresso.webp, which nothing else on the page used, so the shot
+     left the site with it. night.webp had already left at T4 (two part-poured cups, a hand in
+     frame). Both files are still in assets/, off the page. */
   .tile-photo.t-pour  { background-image: url("assets/rail-latte-xl.webp"); }
   .tile-photo .ph-chip { left: 12px; bottom: 12px; }
-  .mix { /* card anatomy: origin stamp top, name+price center, notes at the foot */
+  .mix { /* card anatomy: label top, name+weight+action center, note and origins at the foot */
     background: var(--ground-lift);
     border: 1px solid var(--rule);
     border-radius: var(--r-tile);
@@ -402,22 +261,23 @@
     display: flex; flex-direction: column; align-items: center;
     text-align: center; padding: clamp(1.8rem, 2.6vw, 2.6rem) 1.6rem;
   }
-  .stamp-origin {
-    width: 46px; height: 46px; flex: 0 0 auto;
-    border: 1px solid var(--rule-firm);
-    border-radius: 50%; display: grid; place-items: center;
-    font: 600 10px var(--body); letter-spacing: 0.14em;
-    color: var(--text-faint);
-  }
+  /* the SRB circle (.stamp-origin) went with the invented blends: it read as an origin, and
+     the real blend prints three of them (Guatemala, Brasil, Nicaragua) at the card's foot */
+  .mix-label { flex: 0 0 auto; color: var(--text-faint); }
   .mix-mid { margin: auto 0; display: flex; flex-direction: column; align-items: center; gap: 0.85rem; }
-  .mix .notes { margin-top: auto; padding-top: 1rem; }
+  .mix-foot { margin-top: auto; padding-top: 1rem; display: grid; gap: 0.7rem; justify-items: center; }
   .mix h3 {
     font-family: var(--display); font-weight: 400;
     font-size: var(--t-h3); letter-spacing: 0; line-height: 1.12;
     color: var(--text);
   }
-  .mix .price { color: var(--text-soft); }
+  .mix .weight { color: var(--text-soft); }
+  /* The blend's price (T18). It sits under the weight rather than beside it because .mix-mid
+     is a centred column and a name/weight/price row would have to invent a horizontal rhythm
+     the card does not otherwise have. */
+  .mix .mix-price { font-size: var(--t-lead); font-weight: 600; color: var(--text); }
   .mix .notes { color: var(--text-faint); font-size: var(--t-fine); max-width: 28ch; }
+  .mix .origins { color: var(--text-faint); }
   .order {
     margin-top: 0.6rem;
     border: 1.5px solid var(--text); border-radius: var(--r-pill);
@@ -432,16 +292,37 @@
     padding-block: 14px;   /* inline padding grows the hit box to 44px without moving the line box */
   }
 
-  /* ---------- beans: quiet tasting list ---------- */
-  .beans { padding-top: 0; }
-  .bean-list { display: grid; gap: clamp(1.2rem, 2vw, 1.8rem); max-width: 760px; margin: 0 auto; }
-  .bean {
-    display: flex; justify-content: space-between; align-items: baseline; gap: 1.4rem;
+  /* ---------- the shelf: the other eight bags, now with prices ----------
+     This is #zrna's own row anatomy, inherited rather than invented: that section was a quiet
+     list of name against a right-aligned figure, and T5 retired the section but kept the
+     pattern. `.notes` is deliberately absent here: exactly one tasting note exists in the
+     printed book and it belongs to the blend, in the card above.
+
+     PRICES ARRIVED AT THE POS BATCH'S T18 (2026-08-14), and the row grew a third cell for
+     them. T5 shipped weights alone because the book's retail price column is under a taped
+     strip of handwritten numbers, which is `confirmed` evidence while criterion 4 gates on
+     `read`. The till settles it: every bag here is an article with a code, at the same price
+     at both Belgrade shops, joined on bar + POS code like any drink on a menu page. The
+     weight sits between the name and the price rather than beside it, because a 200 g bag at
+     490 and a 250 g bag at 1.400 are not comparable numbers unless the size is read first. */
+  .shelf { margin-top: clamp(2.8rem, 5vw, 4.6rem); }
+  .shelf-label { display: block; text-align: center; color: var(--text-faint); margin-bottom: clamp(1.4rem, 2.4vw, 2rem); }
+  .shelf-list { display: grid; gap: clamp(1.2rem, 2vw, 1.8rem); max-width: 760px; margin: 0 auto; }
+  .bag {
+    display: grid; grid-template-columns: 1fr auto auto; align-items: baseline;
+    gap: 0.6rem clamp(1rem, 2vw, 1.8rem);
     border-bottom: 1px solid var(--rule); padding-bottom: 0.9rem;
   }
-  .bean b { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); }
-  .bean .notes { color: var(--text-faint); font-size: var(--t-fine); }
-  .bean .price { font-weight: 600; font-size: var(--t-fine); white-space: nowrap; color: var(--text-soft); }
+  .bag b { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); }
+  .bag .weight { font-weight: 600; font-size: var(--t-fine); white-space: nowrap; color: var(--text-faint); }
+  .bag .bag-price {
+    font-weight: 600; font-size: var(--t-fine); white-space: nowrap; color: var(--text-soft);
+    /* a three-figure price and a four-figure one line up on the right edge. Do NOT write the
+       example numbers out here with the currency word: cms/provenance.mjs reads a number plus
+       "din" anywhere in the template as a price no store holds, and it caught this comment's
+       first draft. It is right to. */
+    min-width: 7ch; text-align: right;
+  }
 
   /* ---------- jelovnik: dark menu board, two quiet columns ---------- */
   .menu { background: var(--band); color: var(--on-band); }
@@ -459,14 +340,44 @@
     transform: rotate(-1.5deg);
     margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
   }
-  .dish { border-bottom: 1px solid var(--rule-band); padding: 1.1rem 0; }
-  .dish b { font-family: var(--display); font-weight: 400; font-size: var(--t-h4); line-height: 1.2; }
-  .dish .notes { color: var(--on-band-soft); font-size: var(--t-fine); margin-top: 0.3rem; text-wrap: pretty; }
-  .drink {
-    display: flex; justify-content: space-between; align-items: baseline; gap: 1.2rem;
-    border-bottom: 1px solid var(--rule-band); padding: 1rem 0;
+  /* .dish, .dish b and .dish .notes went with the 2024 dish list at T19, and so did
+     `.menu-col .napomena`, which existed to left-align the marker that said how old that
+     list was. Both columns are routes now, so this section owns no list of its own.
+     The second column stopped being a price list on 2026-08-12 (menu batch T4) and
+     became the door to one. Its ten drinks were the same Wolt DELIVERY prices as the
+     rail's, so the page quoted numbers the counter does not charge, twice. That one
+     door became TWO at T20 (2026-08-14), when the single book-priced list it opened was
+     deleted: there is no one page to point at any more, because the two Belgrade tills
+     disagree on 14 products. The first
+     column made the same move at T19, for a different reason: not that its content was
+     wrong, but that it was two years old and unre-sourceable, and a real one exists on
+     Sarajevska's page. The border-left is the divider BETWEEN the two, so it stays on
+     the second column only. */
+  .menu-route { border-left: 1px solid var(--rule-band); padding-left: clamp(1.6rem, 3vw, 2.8rem); }
+  .route-copy { color: var(--on-band-soft); font-size: var(--t-lead); line-height: 1.5; text-wrap: pretty; }
+  .route-link {
+    display: inline-block; position: relative; margin-top: 1.6rem;
+    color: var(--on-band); text-decoration: none;
+    border-bottom: 1.5px solid var(--accent); padding-bottom: 4px;
+    transition: color var(--dur) var(--ease);
   }
-  .drink .price { color: var(--on-band-soft); font-weight: 600; font-size: var(--t-fine); white-space: nowrap; }
+  .route-link::after {   /* same invisible 44px hit box as .slogan-link, and for the same reason */
+    content: ""; position: absolute; left: 0; right: 0;
+    top: 50%; height: 44px; transform: translateY(-50%);
+  }
+  .route-link:hover { color: var(--accent-text); }
+  /* The bar column holds TWO doors since T20, one per shop, where it held one to the
+     deleted single list. The row gap is 1.6rem and not less for the same reason .rail-doors
+     gives it: each door carries an invisible 44px hit box centred on a ~21px link, so two
+     doors stacked closer than that would hand one link's bottom half to the other's target.
+     The margin moves off the links and onto the row, or the second one in a wrapped row
+     would push itself down by another 1.6rem. */
+  .route-doors {
+    margin-top: 1.6rem;
+    display: flex; flex-wrap: wrap;
+    gap: 1.6rem clamp(1.6rem, 3vw, 2.6rem);
+  }
+  .route-doors .route-link { margin-top: 0; }
 
   /* ---------- slogan: editorial split + stamp ---------- */
   .slogan {
@@ -572,33 +483,8 @@
   .spot-brief .spot-role { margin-bottom: 0; flex-basis: 100%; }
   .spot-brief p { margin-top: 0; }
 
-  /* ---------- footer: light, and short. One coffee bar, not a chain ---------- */
-  .site-foot {
-    background: var(--ground);
-    border-top: 1px solid var(--rule);
-    padding: clamp(2.2rem, 4vw, 3.4rem) var(--gutter);
-    display: flex; flex-wrap: wrap; gap: 1.2rem 2rem;
-    justify-content: space-between; align-items: center;
-    font-size: var(--t-fine); color: var(--text-faint);
-  }
-  .foot-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
-  .foot-mark .coin { width: 40px; }
-  .foot-line { color: var(--text-soft); }
-  .foot-side { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 1.8rem); }
-  .foot-ig {
-    display: inline-flex; align-items: center; min-height: 44px;
-    color: var(--text-soft); text-decoration: none;
-    transition: color var(--dur) var(--ease);
-  }
-  .foot-ig:hover { color: var(--accent-text); }
-  .lang-toggle {
-    border: 1.5px solid var(--rule-firm); background: none; color: var(--text);
-    font: 600 var(--t-micro) var(--body); letter-spacing: 0.16em;
-    padding: 11px 18px; border-radius: var(--r-pill); cursor: pointer; min-height: 44px;
-    text-decoration: none; display: inline-flex; align-items: center;
-    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-  }
-  .lang-toggle:hover { border-color: var(--accent); color: var(--accent-text); }
+  /* The footer and the language toggle are chrome, so they live in
+     assets/base.css with the nav. */
 
   /* ---------- responsive ---------- */
   @media (max-width: 900px) {
@@ -618,6 +504,12 @@
     .mix-list { grid-template-columns: 1fr 1fr; }
     .t-latte { display: none; }
     .slogan, .ritual-head, .menu-cols { grid-template-columns: 1fr; }
+    /* stacked, a left rule points at nothing: the bar route sits UNDER the kitchen route,
+       so its divider has to be the edge it actually meets */
+    .menu-route {
+      border-left: 0; padding-left: 0;
+      border-top: 1px solid var(--rule-band); padding-top: clamp(1.6rem, 3vw, 2.4rem);
+    }
     .spots { grid-template-columns: 1fr; }
     .spot-second { border-top: 1px solid var(--rule-band); padding-top: clamp(1.4rem, 2.4vw, 2rem); }
     .spot .wolt { width: 100%; }   /* stacked, the one action should be reachable without aiming */
@@ -631,15 +523,12 @@
        which keeps the alternating rhythm the desktop grid has. */
     .mix { min-height: 300px; }
     .t-latte { display: block; }
-    .site-foot { justify-content: center; text-align: center; }
   }
   @media (pointer: coarse) {
-    .order, .lang-toggle { padding: 14px 24px; }
+    .order { padding: 14px 24px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .stamp { animation: none; }
-    html { scroll-behavior: auto; }
-    * { transition-duration: 0.01ms !important; }
   }
 </style>
 <script>
@@ -652,10 +541,30 @@
 <body>
 
 <header class="topbar">
+  <!-- THE PHONE DRAWER'S SWITCH (2026-08-14). A checkbox, not a button with a script: this
+       is a static site, so a nav that only opens once JS has run is a nav that does not
+       exist when that request fails. The order of the next four elements is load-bearing,
+       because the stylesheet reaches the drawer with `.nav-cb:checked ~ .nav-links`: the
+       checkbox first, then the labels that toggle it, then the nav. assets/nav.js adds
+       only what CSS cannot do here, which is closing on an IN-PAGE anchor tap.
+       Its name is a hidden SPAN and not an aria-label, for the reason the bar switcher on
+       the menu pages already carries: the render swaps href, meta content and leaf inner
+       text, so an attribute would still read Serbian to a screen reader on the EN page. -->
+  <input type="checkbox" id="nav-toggle" class="nav-cb">
   <a class="nav-mark" href="#vrh" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="32" height="31"></span></a>
+  <label for="nav-toggle" class="nav-burger"><span class="sr-only" data-i18n-en="Menu">Menu</span><svg class="ic-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg><svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg></label>
+  <label for="nav-toggle" class="nav-scrim" aria-hidden="true"></label>
   <nav class="nav-links micro"><!-- no aria-label: it is the only nav, and a label here would stay Serbian on the EN render -->
     <a href="#ponuda" data-i18n-en="Shop">Shop</a>
-    <a href="#jelovnik" data-i18n-en="Menu">Menu</a>
+    <a href="#jelovnik" data-i18n-en="Food">Food</a>
+    <!-- ON THE PAGE SINCE T20 (2026-08-14), where it used to leave it. This was the one
+         off-page link in the nav and it went to the single drinks list, which is deleted:
+         one book-priced page cannot serve two shops that price 14 products differently.
+         There is no single destination to move it to, so it points at the section that
+         ENDS in the two doors, and the choice of shop stays where a reader can see both
+         at once. No data-href-en any more either: an in-page anchor is the same in both
+         languages, and one left behind would have routed the English nav at a dead page. -->
+    <a href="#kafa" data-i18n-en="Drinks">Drinks</a>
     <a href="#gde" data-i18n-en="Find us">Find us</a>
   </nav>
 </header>
@@ -717,33 +626,36 @@
     <span class="micro" data-i18n-en="Coffee">Coffee</span>
     <h2 class="big" data-slot="rail.heading">What we pour</h2>
   </div>
-  <p class="uvod" data-slot="rail.intro">Names and prices come from our Wolt menu for Sarajevska 14. They can differ at the other two.</p>
+  <p class="uvod" data-slot="rail.intro">This is what we pour. Prices are on each bar's own menu, because our two Belgrade bars differ here and there.</p>
   <div class="rail" data-slot-list="rail.items" data-item-template="rail-card">
     <article class="rail-card" data-slot-item>
       <figure class="rail-shot" aria-hidden="true"></figure>
       <h3 data-slot="name">Cappuccino</h3>
-      <span class="rail-price" data-slot="price">380 din</span>
     </article>
     <article class="rail-card" data-slot-item>
       <figure class="rail-shot" aria-hidden="true"></figure>
       <h3 data-slot="name">Latte XL</h3>
-      <span class="rail-price" data-slot="price">410 din</span>
     </article>
     <article class="rail-card" data-slot-item>
       <figure class="rail-shot" aria-hidden="true"></figure>
-      <h3 data-slot="name">Ice coffee 0,3</h3>
-      <span class="rail-price" data-slot="price">590 din</span>
+      <h3 data-slot="name">Ice coffee</h3>
     </article>
     <article class="rail-card" data-slot-item>
       <figure class="rail-shot" aria-hidden="true"></figure>
       <h3 data-slot="name">Espresso Martini</h3>
-      <span class="rail-price" data-slot="price">660 din</span>
     </article>
     <article class="rail-card" data-slot-item>
       <figure class="rail-shot" aria-hidden="true"></figure>
-      <h3 data-slot="name">Late Classic coffee šoljica</h3>
-      <span class="rail-price" data-slot="price">240 din</span>
+      <h3 data-slot="name">Espresso</h3>
     </article>
+  </div>
+  <div class="rail-route">
+    <p class="rail-route-copy" data-slot="rail.route">Each bar has its own menu, with the prices from its own till.</p>
+    <nav class="rail-doors" aria-labelledby="railDoorsLabel">
+      <span class="sr-only" id="railDoorsLabel" data-i18n-en="Menus by shop">Menus by shop</span>
+      <a class="rail-door" href="sarajevska.en.html" data-href-en="sarajevska.en.html" data-i18n-en="Sarajevska 14 →">Sarajevska 14 →</a>
+      <a class="rail-door" href="trg.en.html" data-href-en="trg.en.html" data-i18n-en="Trg Nikole Pašića 5 →">Trg Nikole Pašića 5 →</a>
+    </nav>
   </div>
 </section>
 
@@ -752,63 +664,92 @@
     <span class="micro" data-i18n-en="Shop">Shop</span>
     <h2 class="big" data-slot="shop.heading">Take Šoljica home</h2>
   </div>
-  <p class="uvod" data-slot="shop.intro">Our blends, roasted in-house. Whole bean or freshly ground, your call. Ask us what is on the shelf right now.</p>
-  <div class="mix-list" data-slot-list="shop.items" data-item-template="mix">
+  <p class="uvod" data-slot="shop.intro">We roast it ourselves, so you take home the same coffee you drink here. Whole bean or freshly ground, your call. Ask us what is on the shelf right now.</p>
+  <!-- The house blend, between the two photographs the section always had. It is NOT in
+       shop.items: it is the one bag the printed book describes in prose, and an item field
+       may never be empty (see cms/guardian.mjs), so a `notes` field on that list would have
+       forced nine invented tasting notes onto the nine bags that have none.
+
+       IT BECAME A ONE-ITEM LIST OF ITS OWN AT THE POS BATCH'S T18 (2026-08-14), and it was
+       four slots before that. The reason is the price: a price the gate can prove has to be
+       a LIST ITEM, because the join key is the item's own data-sifra and a slot has no
+       item to carry one. `pricesInContent` reads a number in a slot as a price in prose and
+       fails it closed, correctly, so shop.blend.price as a slot would have turned the gate
+       red on the site's best-evidenced number.
+
+       This is T5's field-set rule APPLIED, not excepted. That rule is "a list's field set is
+       decided by what EVERY row can fill", and every row of THIS list can fill all five: it
+       has one row, the blend, and the blend is the one bag the book describes in prose. The
+       nine behind it still get name + weight + price and no note, which is the same rule
+       reaching the opposite answer for a different list.
+
+       The two figures are siblings of the item, not items: cms/engine.mjs grows a list by
+       cloning its LAST data-slot-item and splices only field ranges, so nothing here touches
+       them. -->
+  <div class="mix-list" data-slot-list="shop.blend.items" data-item-template="mix">
     <figure class="tile-photo t-tin" aria-hidden="true"></figure>
-    <div class="mix" data-slot-item>
-      <span class="stamp-origin" aria-hidden="true">SRB</span>
+    <div class="mix" data-slot-item data-sifra="206">
+      <span class="mix-label micro" data-i18n-en="House blend">House blend</span>
       <div class="mix-mid">
-        <h3 data-slot="name">Kućna mešavina</h3>
-        <span class="price micro" data-slot="price">1.290 din / 250 g</span>
-        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+        <h3 data-slot="name">Blend Šoljica</h3>
+        <span class="weight micro" data-slot="weight">250 g</span>
+        <span class="mix-price" data-slot="price">1.300 din</span>
+        <a class="order" href="https://www.instagram.com/soljicacom/" data-i18n-en="Ask us">Ask us</a>
       </div>
-      <span class="notes" data-slot="notes">every day, in every cup: chocolate, hazelnut, mild acidity</span>
+      <div class="mix-foot">
+        <span class="notes" data-slot="note">Sweet fruity aroma with a chocolate note and tones of hazelnut</span>
+        <span class="origins micro" data-slot="origins">Guatemala, Brazil, Nicaragua</span>
+      </div>
     </div>
     <figure class="tile-photo t-latte" aria-hidden="true"></figure>
-    <div class="mix" data-slot-item>
-      <span class="stamp-origin" aria-hidden="true">SRB</span>
-      <div class="mix-mid">
-        <h3 data-slot="name">Beogradska kaldrma</h3>
-        <span class="price micro" data-slot="price">1.390 din / 250 g</span>
-        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+  </div>
+  <div class="shelf">
+    <span class="shelf-label micro" data-i18n-en="Also on the shelf">Also on the shelf</span>
+    <div class="shelf-list" data-slot-list="shop.items" data-item-template="bag">
+      <div class="bag" data-slot-item data-sifra="185">
+        <b data-slot="name">Dominican Republic</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.600 din</span>
       </div>
-      <span class="notes" data-slot="notes">strong as cobblestone: a dark-roast espresso blend, cocoa and smoke</span>
-    </div>
-    <figure class="tile-photo t-night" aria-hidden="true"></figure>
-    <div class="mix" data-slot-item>
-      <span class="stamp-origin" aria-hidden="true">SRB</span>
-      <div class="mix-mid">
-        <h3 data-slot="name">Prva šoljica</h3>
-        <span class="price micro" data-slot="price">1.450 din / 250 g</span>
-        <a class="order" href="https://www.instagram.com/soljicacom/" data-slot="cta">Ask us</a>
+      <div class="bag" data-slot-item data-sifra="190">
+        <b data-slot="name">Tanzania</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.600 din</span>
       </div>
-      <span class="notes" data-slot="notes">for the morning: light roast, citrus and honey, filter or moka</span>
+      <div class="bag" data-slot-item data-sifra="189">
+        <b data-slot="name">Papa New Guinea</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.700 din</span>
+      </div>
+      <div class="bag" data-slot-item data-sifra="188">
+        <b data-slot="name">House coffee</b>
+        <span class="weight" data-slot="weight">200 g</span>
+        <span class="bag-price" data-slot="price">490 din</span>
+      </div>
+      <div class="bag" data-slot-item data-sifra="10281">
+        <b data-slot="name">Uganda</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.400 din</span>
+      </div>
+      <div class="bag" data-slot-item data-sifra="82">
+        <b data-slot="name">Costa Rica</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.400 din</span>
+      </div>
+      <div class="bag" data-slot-item data-sifra="207">
+        <b data-slot="name">Peru</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.400 din</span>
+      </div>
+      <div class="bag" data-slot-item data-sifra="187">
+        <b data-slot="name">Rwanda</b>
+        <span class="weight" data-slot="weight">250 g</span>
+        <span class="bag-price" data-slot="price">1.300 din</span>
+      </div>
     </div>
   </div>
-  <p class="napomena" data-i18n-en="Provisional: the blend names, notes and prices are not confirmed yet.">Provisional: the blend names, notes and prices are not confirmed yet.</p>
+  <p class="napomena" data-i18n-en="Names and pack sizes come from the printed list in the shop, and the prices from the till. They are the same in both Belgrade shops.">Names and pack sizes come from the printed list in the shop, and the prices from the till. They are the same in both Belgrade shops.</p>
   <p class="kanali" data-slot="shop.channels"><span data-i18n-en="Ask us by message on ">Ask us by message on </span><a href="https://www.instagram.com/soljicacom/" data-i18n-en="Instagram">Instagram</a><span data-i18n-en=" or call "> or call </span><a href="tel:+381116300563">+381 11 630 0563</a>.</p>
-</section>
-
-<section class="beans" id="zrna">
-  <div class="sec-label">
-    <span class="micro" data-i18n-en="This week in the bars">This week in the bars</span>
-    <h2 class="big" data-slot="beans.heading">Beans of the week</h2>
-  </div>
-  <div class="bean-list" data-slot-list="beans.items" data-item-template="bean">
-    <div class="bean" data-slot-item>
-      <span><b data-slot="name">Ethiopia Yirgacheffe</b><br><span class="notes" data-slot="notes">floral, citrus, light roast</span></span>
-      <span class="price" data-slot="price">1.450 din / 250 g</span>
-    </div>
-    <div class="bean" data-slot-item>
-      <span><b data-slot="name">Brazil Cerrado</b><br><span class="notes" data-slot="notes">chocolate, hazelnut, medium roast</span></span>
-      <span class="price" data-slot="price">1.190 din / 250 g</span>
-    </div>
-    <div class="bean" data-slot-item>
-      <span><b data-slot="name">Colombia Huila</b><br><span class="notes" data-slot="notes">caramel, red fruit</span></span>
-      <span class="price" data-slot="price">1.290 din / 250 g</span>
-    </div>
-  </div>
-  <p class="napomena" data-i18n-en="The same goes for the beans of the week: this list is a placeholder until we confirm what is on the shelf.">The same goes for the beans of the week: this list is a placeholder until we confirm what is on the shelf.</p>
 </section>
 
 <section class="menu" id="jelovnik">
@@ -816,92 +757,41 @@
     <span class="micro" data-i18n-en="At the bar">At the bar</span>
     <h2 class="big" data-slot="menu.heading">The menu</h2>
   </div>
-  <p class="uvod" data-slot="menu.intro">A short pick of what we eat and drink around here. The full menu is waiting at the bar.</p>
+  <p class="uvod" data-slot="menu.intro">The food is cooked at Sarajevska, the drinks are poured at both. It is all on the menus.</p>
+  <!-- BOTH COLUMNS ARE ROUTES SINCE THE POS BATCH'S T19 (2026-08-14). The left one held an
+       eight-dish list scraped from kudanaklopu.com and dated 18.07.2024, which was the last dated
+       content on the site and the last list nobody could re-source: the scrape is two years old
+       and the shop has no food export, so the list's own marker had to say it might be wrong.
+       Sarajevska's page carries 76 real food rows off the till, in eight families the printed
+       book does not print, so this column became the door to those rather than a shorter and
+       older copy of them. Same move the menu batch's T4 made when it retired the drinks list.
+
+       THE KITCHEN IS ONE SHOP'S AND THE COPY SAYS WHICH. Trg's export has no food at all: its 36
+       families are the printed drink families, the last of them sweets, which is what you eat
+       with a coffee and not a kitchen. Routing "food" at both bars would have been the tidier
+       sentence and a false one, so the link goes to Sarajevska and the copy says what Trg is. -->
   <div class="menu-cols">
     <div class="menu-col">
       <h3 class="menu-col-title" data-slot="menu.kitchen.title">From the kitchen</h3>
-      <div data-slot-list="menu.dishes" data-item-template="dish">
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Šoljica breakfast</b>
-          <p class="notes" data-slot="notes">2 eggs, bacon, sausage, house-made cheese and sesame pastries, crostini with avocado feta and sunflower seeds, cherry tomatoes, arugula and a honey-mustard dressing.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Scrambled eggs on avocado</b>
-          <p class="notes" data-slot="notes">Creamy scrambled eggs, avocado and crispy smoked pork neck (or without it) on toasted bread.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Croque madame</b>
-          <p class="notes" data-slot="notes">Buđola on rustic bread with clarified butter, covered in an aromatic béchamel, baked with cheddar and organic eggs, fresh chives.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Danish sandwich</b>
-          <p class="notes" data-slot="notes">Smoked salmon in a garlic-and-dill cheese spread, on our rye bread, with avocado, cucumber, capers, orange, fermented red onion and sunflower seeds.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Club sandwich</b>
-          <p class="notes" data-slot="notes">Chicken, our special mayo-based spread, tomato, cheese, lettuce and three slices of toast.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Šoljica Smash Burger</b>
-          <p class="notes" data-slot="notes">Beef burger in a brioche bun with cheddar, burger sauce, coleslaw, red onion, jalapeño, tomato, pickles and bacon, served with fries, onion rings, cheddar sauce and ketchup.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Caesar salad</b>
-          <p class="notes" data-slot="notes">Chicken, butterhead lettuce, Caesar dressing, croutons, mushrooms, bacon, parmesan, cherry tomatoes.</p>
-        </div>
-        <div class="dish" data-slot-item>
-          <b data-slot="name">Šoljica Waffle</b>
-          <p class="notes" data-slot="notes">A single or double waffle with our vanilla cream and forest fruit, apricot, white and dark chocolate toppings.</p>
-        </div>
-      </div>
+      <p class="route-copy" data-slot="menu.kitchen.copy">Only Sarajevska has a kitchen: breakfast, pizza, pasta, salads, sandwiches and main courses. At Trg the coffee leads, with something sweet beside it.</p>
+      <a class="route-link" href="sarajevska.en.html#kuhinja" data-href-en="sarajevska.en.html#kuhinja" data-i18n-en="Open the Sarajevska kitchen →">Open the Sarajevska kitchen →</a>
     </div>
-    <div class="menu-col">
+    <div class="menu-col menu-route">
       <h3 class="menu-col-title" data-slot="menu.bar.title">From the bar</h3>
-      <div data-slot-list="menu.drinks" data-item-template="drink">
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Cappuccino doppio</span>
-          <span class="price" data-slot="price">490 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Cappuccino Classic coffee šoljica</span>
-          <span class="price" data-slot="price">340 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Late XL Classic coffee šoljica</span>
-          <span class="price" data-slot="price">410 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Latte XL soya Classic coffee šoljica</span>
-          <span class="price" data-slot="price">490 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Speciality nes</span>
-          <span class="price" data-slot="price">360 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Cappuccino Ice coffee</span>
-          <span class="price" data-slot="price">340 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Latte XL Ice coffee</span>
-          <span class="price" data-slot="price">410 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Mocha Ice coffee</span>
-          <span class="price" data-slot="price">430 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Ice forzeccino 0,3</span>
-          <span class="price" data-slot="price">560 din</span>
-        </div>
-        <div class="drink" data-slot-item>
-          <span data-slot="name">Baileys + espresso</span>
-          <span class="price" data-slot="price">590 din</span>
-        </div>
-      </div>
+      <p class="route-copy" data-slot="menu.bar.copy">Coffee, tea, juice, cocktails, wine, rakija and beer. Each shop has its own list, because some prices differ.</p>
+      <!-- TWO DOORS SINCE T20 (2026-08-14), and they are TEMPLATE-owned like the rail's and
+           like the menu pages' bar switcher: which shops exist and what their pages are
+           called is the site's own structure, not the owner's copy, so a chat edit cannot
+           route this column at a page no bar has. The copy above them IS a slot, because
+           "our two bars do not price everything alike" is a thing about his business he may
+           want to word himself. Sarajevska leads, as it does in #gde and under the rail. -->
+      <nav class="route-doors" aria-labelledby="menuDoorsLabel">
+        <span class="sr-only" id="menuDoorsLabel" data-i18n-en="Drinks by shop">Drinks by shop</span>
+        <a class="route-link" href="sarajevska.en.html" data-href-en="sarajevska.en.html" data-i18n-en="Sarajevska 14 →">Sarajevska 14 →</a>
+        <a class="route-link" href="trg.en.html" data-href-en="trg.en.html" data-i18n-en="Trg Nikole Pašića 5 →">Trg Nikole Pašića 5 →</a>
+      </nav>
     </div>
   </div>
-  <p class="napomena" data-i18n-en="The dishes come from a 2024 menu and can differ today. Drink prices are from our Wolt menu for Sarajevska 14, dated 11 August 2026.">The dishes come from a 2024 menu and can differ today. Drink prices are from our Wolt menu for Sarajevska 14, dated 11 August 2026.</p>
 </section>
 
 <section>
@@ -969,15 +859,45 @@
   CMS-native page. Register rebuilt 2026-08-11 (T2: cream and ink, one ember
   accent), shell rebuilt the same day (T3: joejuice's STRUCTURE, none of its
   voice). Spec: brainstorms/2026-08-11-soljica-rebuild-spec.md.
-  - Every editable text carries data-slot; shop.items, beans.items, menu.dishes
-    and menu.drinks are the repeatable list-slots (data-slot-list + data-slot-item).
+  - Every editable text carries data-slot; rail.items, shop.blend.items and
+    shop.items are the repeatable list-slots (data-slot-list + data-slot-item).
+    shop.blend.items has exactly one row and became a list at T18 so its price
+    could carry a data-sifra; see the comment above the card for why that is the
+    field-set rule applied rather than excepted.
     Decorative figures inside the grid carry no slots and are invisible to the
     CMS engine. `node cms/cli.mjs slots` fails loudly if a redesign wraps a
     slot's text in a tag and silently demotes it out of the content store.
-  - The rail (#kafa, T4) is the only SOURCED price list on the page: five items
-    off his Wolt menu for Sarajevska 14, harvested 2026-08-11, his spelling
-    untouched ("Late", "Ice coffee 0,3"). Its photo binds by nth-child, not by a
-    content field, and any card past the fourth falls back to the Š-coin on ink.
+    THREE lists have been retired and each one left because it could not be
+    sourced, not because it was untidy: menu.drinks at the menu batch's T4
+    (2026-08-12, ten Wolt delivery prices), beans.items at its T5 (2026-08-13,
+    "zrna nedelje", a rotation that does not exist, three invented names at three
+    invented prices), and menu.dishes at the POS batch's T19 (2026-08-14, a 2024
+    scrape of a food list the shop has no export for). A retired list must also be
+    struck by hand from cms/required-slots.json and from LIST_MAX in
+    cms/guardian.mjs: the slot gate cannot tell a deliberate retirement from a key
+    a redesign silently ate, and a stale cap is how a list comes back carrying a
+    ceiling nobody re-argued.
+  - The rail (#kafa) carries five drinks and NO PRICE, since the POS batch's T17
+    (2026-08-14). It held the printed book's counter prices (menu batch T4), and
+    Wolt DELIVERY prices 25 to 35 percent high before that. What retires them is
+    that the tills at Trg and Sarajevska disagree on 14 products, so one number
+    here can only be a claim about one shop that does not say which. The five
+    names stay, the photographs stay, and the .rail-route block under them is the
+    door to a menu per shop. Its photo binds by nth-child, not by a content field,
+    so the order of the five is the order of the photographs, and any card past
+    the fourth falls back to the Š-coin on ink.
+  - The two doors are TEMPLATE-owned and only rail.route (the sentence above them)
+    is a slot: which shops exist and what their pages are called is the site's own
+    structure, and a chat edit renaming one would route the home page at nothing.
+  - THE ONLY PRICES ON THIS PAGE ARE THE NINE RETAIL BAGS (T18, 2026-08-14), and
+    they are the only ones on the site that answer to BOTH tills: the registry gives
+    this page bars: ['trg', 'sarajevska'], so each price is looked up twice and both
+    shops must agree, which is the proof rather than an assumption in a comment.
+    No DRINK price is stated here at all, which is criterion 30 (T17). rail.ranges,
+    the one DERIVED string the page ever had (menu batch T4, criterion 6), went with
+    the drink prices, and its mechanism was deleted from cms/provenance.mjs in the
+    same commit: it was computed from the printed book, which no longer prices
+    anything here.
   - The three locations (#gde, T5) are a hierarchy, not three cards: Sarajevska
     leads and holds the page's ONLY ordering action (the ember Wolt pill, worded
     as delivery from that location because only Sarajevska is on Wolt), Trg Nikole
@@ -995,25 +915,58 @@
     footer stay "Šoljica". The ROLES moved down to the .spot-note line under the
     hours, which is what carries criterion 7 now. Užice's label is still the phrase
     "I u Užicu": nobody has said what that shop trades as.
-  - Jelovnik content harvested 2026-07-17 from the owner's own words (soljica.rs
-    /jelovnik + kudanaklopu.com listing, prices dated 18.07.2024), orthography
-    normalized, phrasing his. T6 DID replace the drink prices: menu.drinks now
-    carries ten items off the same 2026-08-11 Wolt KAFE harvest as the rail, the
-    ten the rail does not already show, his spelling verbatim. The 2024 prices
-    are gone, and with them a page that priced Cappuccino at 380 in the rail and
-    260 on the board. The DISHES are still the 2024 harvest: no newer source
-    exists, so the section says so instead of pretending.
-  - The provisional markers (.napomena, T6, criterion 11) are TEMPLATE-owned, not
-    slots. They disclaim values a chat op can edit, so a chat op must not be able
-    to delete the marker and leave the invented figure standing. Cost of that
-    call: clearing one after the owner confirms a figure is a code edit, not a
-    chat edit. Four of them: #ponuda and #zrna (names, notes and prices both
-    invented), #jelovnik (which vintage each column came from), #gde (hours read
-    off public listings, not confirmed by the owner). "100% arabica" left the
-    marquee entirely on the same criterion: a marquee cannot carry a footnote,
-    and nobody ever sourced that claim.
+  - #jelovnik is TWO DOORS since T19 (2026-08-14) and holds no list of its own.
+    Its left column carried eight dishes harvested 2026-07-17 from the owner's own
+    words (soljica.rs/jelovnik + a kudanaklopu.com listing dated 18.07.2024), and
+    they were the last dated content on this site: no newer source existed, so the
+    marker under them had to say 2024 out loud and admit no price was shown. What
+    retired them is not that they were wrong, it is that a REAL food list now
+    exists: sarajevska.html carries 76 rows off that shop's till in eight families
+    the printed book does not print. So the column routes there.
+    THE KITCHEN IS ONE SHOP'S AND THE COPY SAYS SO. Trg's export has no food: its
+    36 families are the printed drink families, ending in sweets, which is what you
+    eat with a coffee. Routing "food" at both bars would have read better and been
+    false. The second column was ten drinks at Wolt delivery prices, became the one
+    route to the single drinks list at the menu batch's T4, and became TWO doors at
+    T20 (2026-08-14) when that page was deleted. Drinks route to both shops where
+    food routes to one, and that asymmetry is the fact rather than an oversight.
+    The nav's fourth link went the same way in the same ticket: it was this site's
+    only off-page nav item and it now points at #kafa, the section the doors end.
+  - #ponuda is the retail shelf, rebuilt at T5 (2026-08-13) off the printed book's
+    KAFA block and PRICED off the two tills at T18 (2026-08-14): the house blend as
+    the card between the two photographs and the other eight as a list of name,
+    weight and price. T5 shipped no price because the book's retail column is
+    covered by a taped strip of handwritten numbers, goolio read them back so they
+    are `confirmed`, and criterion 4 gates the site on `read`. The till is what
+    settles it, and the two sources AGREE ON ALL NINE: 1300, 1600, 1600, 1700, 490,
+    1400, 1400, 1400, 1300, his readback against the export, exactly. That is the
+    only place in this repo where the `confirmed` tier can be checked against a
+    machine, and it held.
+    ECUADOR CAME OFF (goolio, 2026-08-14: "if Ecuador is not in POS export then is
+    not in the menu"). It is the one printed bag with no price from any source and
+    no article in either export, so ten bags became nine.
+    The blend's tasting note and its three origins are the only prose the book
+    prints about any bag, so they are the only prose here; the eight have no note
+    rather than eight invented ones. Blend Šoljica is its own one-item list rather
+    than part of shop.items, because a list field may never be empty.
+  - The provisional markers (.napomena) are TEMPLATE-owned, not slots. They
+    disclaim values a chat op can edit, so a chat op must not be able to delete
+    the marker and leave the invented figure standing. Cost of that call: clearing
+    one after the owner confirms a figure is a code edit, not a chat edit. TWO of
+    them now: #ponuda (T18 rewrote it: the names and pack sizes come off the
+    printed book and the prices off the till, and they are the same in both Belgrade
+    shops, which the gate proves by looking each one up twice) and #gde (hours read
+    off public listings, not confirmed by the owner). #jelovnik's went with the 2024
+    dish list at T19, which is the shape a marker is supposed to have: it existed to
+    disclaim that list, and it left when the list did rather than outliving it.
+    #zrna had a fourth and left with the
+    section. "100% arabica" left the marquee entirely on the same criterion:
+    a marquee cannot carry a footnote, and nobody ever sourced that claim.
   - EN variant: this file is the master; en.html is RENDERED from it +
-    cms/content.en.json (never edited by hand). Template-owned strings carry
+    cms/content.en.json. Values there change through the CMS (`apply` with
+    "lang":"en"); a STRUCTURAL change, a slot added or a list retired, has to be
+    edited into that file by hand, and `node cms/cli.mjs check` is what proves it
+    still renders afterwards. Template-owned strings carry
     their translation inline: data-i18n-en (leaf inner text), data-href-en
     (the lang toggle), data-content-en (meta description). Slot text comes
     from the EN content file.
@@ -1129,6 +1082,10 @@
   }
 })();
 </script>
+
+<!-- The phone drawer opens and closes without this file; it adds the close on an in-page
+     anchor tap, Escape, and the resize past the breakpoint. See its own header. -->
+<script src="assets/nav.js" defer></script>
 
 </body>
 </html>

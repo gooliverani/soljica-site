@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Šoljica · Sarajevska</title>
+<meta name="description" content="Šoljica's menu at Sarajevska 14, Belgrade: breakfast, pizza, pasta, coffee, tea, cocktails, wine and rakija at counter prices." data-content-en="Šoljica's menu at Sarajevska 14, Belgrade: breakfast, pizza, pasta, coffee, tea, cocktails, wine and rakija at counter prices.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Abril and Archivo only: nothing on this page is set in the brush script, so the third
+     family would be a download for a var() no rule here resolves. -->
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<!-- No page stylesheet. The menu layout lived in a <style> block right here from T10
+     until T15 moved it into assets/base.css, on the instruction T10 wrote into the page
+     itself: two bars' pages are one design serving two shops, and T7's test for this file
+     is "would two copies be allowed to disagree". They would not. The move was proved
+     behaviour-preserving over 2198 body elements across both pages at 1440 light and 390
+     dark: zero computed-style differences. A third bar's page gets the layout by linking
+     the same file, which is the point. -->
+</head>
+<body>
+
+<header class="topbar">
+  <!-- THE PHONE DRAWER'S SWITCH (2026-08-14), and the four elements below are in a
+       load-bearing order: the stylesheet reaches the drawer with .nav-cb:checked ~ .nav-links,
+       so the checkbox has to come first and the nav last. A checkbox rather than a button
+       with a script, because a static page whose nav needs JS to open has no nav when that
+       one request fails; assets/nav.js only adds the close on an in-page anchor tap, Escape
+       and the resize. The burger is named by a hidden SPAN and not an aria-label, for the
+       reason the bar switcher below already carries: the render swaps href, meta content and
+       leaf inner text, so an attribute would read Serbian on the English page. -->
+  <input type="checkbox" id="nav-toggle" class="nav-cb">
+  <a class="nav-mark" href="en.html" data-href-en="en.html" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="32" height="31"></span></a>
+  <label for="nav-toggle" class="nav-burger"><span class="sr-only" data-i18n-en="Menu">Menu</span><svg class="ic-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg><svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg></label>
+  <label for="nav-toggle" class="nav-scrim" aria-hidden="true"></label>
+  <nav class="nav-links micro">
+    <a href="en.html#ponuda" data-href-en="en.html#ponuda" data-i18n-en="Shop">Shop</a>
+    <a href="en.html#jelovnik" data-href-en="en.html#jelovnik" data-i18n-en="Food">Food</a>
+    <a href="sarajevska.en.html" data-href-en="sarajevska.en.html" data-i18n-en="Menu" aria-current="page">Menu</a>
+    <a href="en.html#gde" data-href-en="en.html#gde" data-i18n-en="Find us">Find us</a>
+  </nav>
+</header>
+
+<div class="menu-strip">
+
+  <!-- The bar switcher (criterion 23). Both entries are TEMPLATE-owned, like the index
+       beside them: the shops are the site's own structure, not the owner's copy, and a
+       chat edit that renamed one would leave the page routing to a name no page has.
+       A shop whose page does not exist yet is a span, not an anchor that would 404. -->
+  <nav class="bar-switch micro" aria-labelledby="barsLabel">
+    <span class="sr-only" id="barsLabel" data-i18n-en="Choose a shop">Choose a shop</span>
+    <a href="trg.en.html" data-href-en="trg.en.html"><span>Trg</span></a>
+    <a href="sarajevska.en.html" data-href-en="sarajevska.en.html" aria-current="page"><span>Sarajevska</span></a>
+  </nav>
+
+  <nav class="menu-index micro" aria-labelledby="indexLabel">
+    <!-- labelled by a hidden SPAN rather than aria-label: an attribute cannot be translated
+         by the render (it swaps href and meta content only), so an aria-label would read
+         Serbian to a screen reader on the English page. -->
+    <span class="sr-only" id="indexLabel" data-i18n-en="Jump to a family">Jump to a family</span>
+    <a href="#kafa" data-i18n-en="Coffee">Coffee</a>
+    <a href="#caj" data-i18n-en="Tea and chocolate">Tea and chocolate</a>
+    <a href="#bez-alkohola" data-i18n-en="Soft drinks">Soft drinks</a>
+    <a href="#alkohol" data-i18n-en="Alcohol">Alcohol</a>
+    <a href="#kuhinja" data-i18n-en="Kitchen">Kitchen</a>
+    <a href="#slatko" data-i18n-en="Sweet">Sweet</a>
+  </nav>
+
+</div>
+
+<section class="menu-head" id="vrh">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Menu">Menu</span>
+    <h1 class="big" data-slot="sarajevska.title">Sarajevska 14</h1>
+  </div>
+  <p class="uvod" data-slot="sarajevska.intro">This is this bar's whole menu, kitchen and bar, at the prices our till rings.</p>
+  <!-- Criterion 22, and template-owned for the reason a napomena always is: it qualifies
+       every price on the page, so a chat op must not be able to delete the qualification
+       and leave hundreds of prices standing unqualified. The intro above says where the
+       prices come from in his voice and can be edited; this line is the one that cannot.
+
+       It names ONE shop, which is the whole difference this batch exists to make:
+       a price on this page answers to this shop's till and says so,
+       instead of a book price standing for two shops that disagree on fourteen products. -->
+  <p class="napomena" data-i18n-en="These prices are for the counter at Sarajevska 14. Delivery runs on its own price list, so prices there are different.">These prices are for the counter at Sarajevska 14. Delivery runs on its own price list, so prices there are different.</p>
+</section>
+
+<section class="fam-group" id="kafa">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Coffee">Coffee</span>
+    <h2 class="big" data-slot="sarajevska.coffee.heading">From espresso to filter</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.classic.heading">Classic coffee / Šoljica blend</h3>
+        <p class="fam-note" data-slot="sarajevska.classic.origins">Guatemala, Brazil, Nicaragua</p>
+        <p class="fam-note" data-slot="sarajevska.classic.note">Sweet fruity aroma with a chocolate note and tones of hazelnut</p>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.classic.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="4"><span class="row-name" data-slot="name">Espresso</span><span class="row-price" data-slot="price">220 din</span></div>
+        <div class="row" data-slot-item data-sifra="6"><span class="row-name" data-slot="name">Espresso Doppio</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="7"><span class="row-name" data-slot="name">Macchiato</span><span class="row-price" data-slot="price">230 din</span></div>
+        <div class="row" data-slot-item data-sifra="8"><span class="row-name" data-slot="name">Con Panna</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="9"><span class="row-name" data-slot="name">Cappuccino</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="10"><span class="row-name" data-slot="name">Cappuccino + cinnamon & honey</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="11"><span class="row-name" data-slot="name">Latte</span><span class="row-price" data-slot="price">270 din</span></div>
+        <div class="row" data-slot-item data-sifra="12"><span class="row-name" data-slot="name">Latte choco</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="13"><span class="row-name" data-slot="name">Cappuccino Doppio</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="14"><span class="row-name" data-slot="name">Latte caramel</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="15"><span class="row-name" data-slot="name">Mocha choco</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="16"><span class="row-name" data-slot="name">Mocha caramel</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="20"><span class="row-name" data-slot="name">Latte XL</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="21"><span class="row-name" data-slot="name">Latte XL choco</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="22"><span class="row-name" data-slot="name">Latte XL caramel</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="23"><span class="row-name" data-slot="name">Cappuccino soya</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="24"><span class="row-name" data-slot="name">Latte XL soya</span><span class="row-price" data-slot="price">380 din</span></div>
+        <div class="row" data-slot-item data-sifra="25"><span class="row-name" data-slot="name">Latte soya</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="26"><span class="row-name" data-slot="name">House coffee</span><span class="row-price" data-slot="price">220 din</span></div>
+        <div class="row" data-slot-item data-sifra="319"><span class="row-name" data-slot="name">Oat Cappucino</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="320"><span class="row-name" data-slot="name">Oat Cappucino doppio</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="321"><span class="row-name" data-slot="name">Oat Machiato</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="322"><span class="row-name" data-slot="name">Oat Latte</span><span class="row-price" data-slot="price">370 din</span></div>
+        <div class="row" data-slot-item data-sifra="323"><span class="row-name" data-slot="name">Oat Latte XL</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="324"><span class="row-name" data-slot="name">Oat Mocha</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="335"><span class="row-name" data-slot="name">Americano</span><span class="row-price" data-slot="price">220 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.so.heading">Single origin coffee</h3>
+        <p class="fam-note" data-slot="sarajevska.so.note">Ask us which single origins we are pouring today</p>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.so.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="5"><span class="row-name" data-slot="name">Espresso</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="115"><span class="row-name" data-slot="name">Espresso Doppio</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="122"><span class="row-name" data-slot="name">Cappuccino</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="123"><span class="row-name" data-slot="name">Cappuccino Doppio</span><span class="row-price" data-slot="price">380 din</span></div>
+        <div class="row" data-slot-item data-sifra="326"><span class="row-name" data-slot="name">S.O. Oat Cappucino</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="327"><span class="row-name" data-slot="name">S.O. Oat Capp. doppio</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="328"><span class="row-name" data-slot="name">S.O. Oat Machiato</span><span class="row-price" data-slot="price">350 din</span></div>
+        <div class="row" data-slot-item data-sifra="329"><span class="row-name" data-slot="name">S.O. Oat Mocha</span><span class="row-price" data-slot="price">440 din</span></div>
+        <div class="row" data-slot-item data-sifra="10268"><span class="row-name" data-slot="name">S.O. Mocha</span><span class="row-price" data-slot="price">370 din</span></div>
+        <div class="row" data-slot-item data-sifra="10269"><span class="row-name" data-slot="name">S.O. Cappuccino soya</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="10270"><span class="row-name" data-slot="name">S.O. Cappuccino soya Doppio</span><span class="row-price" data-slot="price">440 din</span></div>
+        <div class="row" data-slot-item data-sifra="10271"><span class="row-name" data-slot="name">S.O. Macchiato</span><span class="row-price" data-slot="price">290 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.decaf.heading">Single origin decaf</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.decaf.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="131"><span class="row-name" data-slot="name">Espresso Doppio</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="132"><span class="row-name" data-slot="name">Espresso</span><span class="row-price" data-slot="price">270 din</span></div>
+        <div class="row" data-slot-item data-sifra="133"><span class="row-name" data-slot="name">Macchiato</span><span class="row-price" data-slot="price">280 din</span></div>
+        <div class="row" data-slot-item data-sifra="134"><span class="row-name" data-slot="name">Cappuccino</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="204"><span class="row-name" data-slot="name">Latte XL</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="10259"><span class="row-name" data-slot="name">Cappuccino Doppio</span><span class="row-price" data-slot="price">380 din</span></div>
+        <div class="row" data-slot-item data-sifra="10260"><span class="row-name" data-slot="name">Latte XL Soya</span><span class="row-price" data-slot="price">380 din</span></div>
+        <div class="row" data-slot-item data-sifra="10261"><span class="row-name" data-slot="name">Cappuccino soya</span><span class="row-price" data-slot="price">350 din</span></div>
+        <div class="row" data-slot-item data-sifra="10262"><span class="row-name" data-slot="name">Cappuccino Doppio Soya</span><span class="row-price" data-slot="price">440 din</span></div>
+        <div class="row" data-slot-item data-sifra="10263"><span class="row-name" data-slot="name">Mocha</span><span class="row-price" data-slot="price">350 din</span></div>
+        <div class="row" data-slot-item data-sifra="10264"><span class="row-name" data-slot="name">Mocha Soya</span><span class="row-price" data-slot="price">380 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.ice.heading">Ice coffee</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.ice.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="27"><span class="row-name" data-slot="name">Affogato (espresso & vanilla ice cream)</span><span class="row-price" data-slot="price">280 din</span></div>
+        <div class="row" data-slot-item data-sifra="28"><span class="row-name" data-slot="name">Cappucino</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="29"><span class="row-name" data-slot="name">Doppio</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="30"><span class="row-name" data-slot="name">Latte</span><span class="row-price" data-slot="price">270 din</span></div>
+        <div class="row" data-slot-item data-sifra="31"><span class="row-name" data-slot="name">Ice Latte choco</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="32"><span class="row-name" data-slot="name">Ice Latte caramel</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="33"><span class="row-name" data-slot="name">Ice Mocha choco</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="34"><span class="row-name" data-slot="name">Ice Mocha caramel</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="35"><span class="row-name" data-slot="name">Latte XL</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="36"><span class="row-name" data-slot="name">Ice Latte XL choco</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="37"><span class="row-name" data-slot="name">Ice Latte XL caramel</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="38"><span class="row-name" data-slot="name">Choco Bottom Drizzle</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="39"><span class="row-name" data-slot="name">Speciality Nes</span><span class="row-price" data-slot="price">280 din</span></div>
+        <div class="row" data-slot-item data-sifra="118"><span class="row-name" data-slot="name">Cappuccino doppio</span><span class="row-price" data-slot="price">330 din</span></div>
+        <div class="row" data-slot-item data-sifra="261"><span class="row-name" data-slot="name">Affogato choco & pistachio</span><span class="row-price" data-slot="price">380 din</span></div>
+        <div class="row" data-slot-item data-sifra="263"><span class="row-name" data-slot="name">Ice Latte Delux vanilla 0,35 l</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="10385"><span class="row-name" data-slot="name">Ice coffee</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="10392"><span class="row-name" data-slot="name">Ice frozeccino</span><span class="row-price" data-slot="price">430 din</span></div>
+        <div class="row" data-slot-item data-sifra="10394"><span class="row-name" data-slot="name">Coconut Ice coffee</span><span class="row-price" data-slot="price">460 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.black.heading">Black coffee</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.black.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="18"><span class="row-name" data-slot="name">Black coffee</span><span class="row-price" data-slot="price">430 din</span></div>
+        <div class="row" data-slot-item data-sifra="19"><span class="row-name" data-slot="name">Black coffee S.O.</span><span class="row-price" data-slot="price">470 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.alco.heading">Alco / coffee</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.alco.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="98"><span class="row-name" data-slot="name">Espresso Martini</span><span class="row-price" data-slot="price">510 din</span></div>
+        <div class="row" data-slot-item data-sifra="99"><span class="row-name" data-slot="name">Baileys + espresso</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="100"><span class="row-name" data-slot="name">Baileys + espresso + vanilla ice cream</span><span class="row-price" data-slot="price">490 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="fam-group" id="caj">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Tea and chocolate">Tea and chocolate</span>
+    <h2 class="big" data-slot="sarajevska.tea.heading">Hot and iced</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.crni.heading">Loose leaf tea · black</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.crni.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="66"><span class="row-name" data-slot="name">Apple & cinnamon 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="67"><span class="row-name" data-slot="name">Ceylon op pattigalla 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.zeleni.heading">Loose leaf tea · green</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.zeleni.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="68"><span class="row-name" data-slot="name">Pure green sencha 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="69"><span class="row-name" data-slot="name">Jasmine flower 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="70"><span class="row-name" data-slot="name">Casablanca mint 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="71"><span class="row-name" data-slot="name">Orange & ginger 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="72"><span class="row-name" data-slot="name">Passion fruit & mango 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="73"><span class="row-name" data-slot="name">Citronella 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.beli.heading">Loose leaf tea · white</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.beli.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="74"><span class="row-name" data-slot="name">Mao feng 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="75"><span class="row-name" data-slot="name">Night in Paris 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.vocni.heading">Loose leaf tea · fruit</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.vocni.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="77"><span class="row-name" data-slot="name">Red passion 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="78"><span class="row-name" data-slot="name">Kiba flip 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="79"><span class="row-name" data-slot="name">Cranberry 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="10254"><span class="row-name" data-slot="name">Fig & passion fruit 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.biljni.heading">Loose leaf tea · herbal</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.biljni.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="80"><span class="row-name" data-slot="name">Ayran mint 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+        <div class="row" data-slot-item data-sifra="81"><span class="row-name" data-slot="name">Donna chamomile organic 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.tea.rooibush.heading">Loose leaf tea · rooibush</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.tea.rooibush.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="76"><span class="row-name" data-slot="name">Aronia tropical cherry 0,3 l</span><span class="row-price" data-slot="price">260 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.icetea.home.heading">Homemade ice tea</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.icetea.home.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="40"><span class="row-name" data-slot="name">Cranberry (fruit tea) 0,35 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="41"><span class="row-name" data-slot="name">Red passion (fruit tea) 0,35 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="42"><span class="row-name" data-slot="name">Passion fruit & mango (green tea) 0,35 l</span><span class="row-price" data-slot="price">410 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.icetea.heading">Ice tea</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.icetea.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="173"><span class="row-name" data-slot="name">Fuzetea peach 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.choco.heading">Hot chocolate</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.choco.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="62"><span class="row-name" data-slot="name">Hot chocolate 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="65"><span class="row-name" data-slot="name">Hot chocolate (rum & cinnamon) 0,25 l</span><span class="row-price" data-slot="price">430 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="fam-group" id="bez-alkohola">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Soft drinks">Soft drinks</span>
+    <h2 class="big" data-slot="sarajevska.soft.heading">From the blender and the bottle</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.smoothies.heading">Smoothies</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.smoothies.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="52"><span class="row-main"><span class="row-name" data-slot="name">JUST PEACHY 0,35 l</span><span class="row-desc" data-slot="desc">banana + apricot + peach + orange</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="53"><span class="row-main"><span class="row-name" data-slot="name">HONEY BUNNY 0,35 l</span><span class="row-desc" data-slot="desc">raspberry + pineapple + honey + soda water</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="54"><span class="row-main"><span class="row-name" data-slot="name">VERY SCARY BERRY 0,35 l</span><span class="row-desc" data-slot="desc">strawberry + raspberry + milk</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="55"><span class="row-main"><span class="row-name" data-slot="name">STRAWBANANA 0,35 l</span><span class="row-desc" data-slot="desc">banana + strawberry + milk</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="56"><span class="row-main"><span class="row-name" data-slot="name">DANDY SPIRIT 0,35 l</span><span class="row-desc" data-slot="desc">raspberry + pineapple + soya milk + honey</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="57"><span class="row-main"><span class="row-name" data-slot="name">TROPIC EXOTIC 0,35 l</span><span class="row-desc" data-slot="desc">pineapple + orange + banana + milk</span></span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="58"><span class="row-main"><span class="row-name" data-slot="name">BLUEBERRY KICK 0,35 l</span><span class="row-desc" data-slot="desc">blueberry + orange + banana + milk</span></span><span class="row-price" data-slot="price">470 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.green.heading">Green smoothies</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.green.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="95"><span class="row-main"><span class="row-name" data-slot="name">POPAYE'S SECRET 0,35 l</span><span class="row-desc" data-slot="desc">spinach + milk + pineapple + lemon</span></span><span class="row-price" data-slot="price">510 din</span></div>
+        <div class="row" data-slot-item data-sifra="96"><span class="row-main"><span class="row-name" data-slot="name">MUSCLE BOOSTER 0,35 l</span><span class="row-desc" data-slot="desc">spinach + orange + strawberry + blueberry + banana</span></span><span class="row-price" data-slot="price">510 din</span></div>
+        <div class="row" data-slot-item data-sifra="97"><span class="row-main"><span class="row-name" data-slot="name">ENERGIZER 0,35 l</span><span class="row-desc" data-slot="desc">spinach + pineapple + banana + orange</span></span><span class="row-price" data-slot="price">510 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.shake.heading">Milkshake</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.shake.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="59"><span class="row-main"><span class="row-name" data-slot="name">PLAZMAMAN 0,35 l</span><span class="row-desc" data-slot="desc">banana + Plazma + milk</span></span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="60"><span class="row-main"><span class="row-name" data-slot="name">CHOCO MAGIC 0,35 l</span><span class="row-desc" data-slot="desc">banana + Plazma + milk + vanilla syrup + chocolate topping</span></span><span class="row-price" data-slot="price">440 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.cedjeno.heading">Freshly squeezed</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.cedjeno.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="48"><span class="row-name" data-slot="name">Fresh squeezed orange 0,35 l</span><span class="row-price" data-slot="price">440 din</span></div>
+        <div class="row" data-slot-item data-sifra="49"><span class="row-name" data-slot="name">Fresh squeezed grapefruit 0,35 l</span><span class="row-price" data-slot="price">520 din</span></div>
+        <div class="row" data-slot-item data-sifra="50"><span class="row-name" data-slot="name">Fresh squeezed mix 0,35 l</span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="51"><span class="row-name" data-slot="name">Lemonade 0,33 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="213"><span class="row-name" data-slot="name">Fresh squeezed orange 0,2 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="248"><span class="row-name" data-slot="name">Fresh squeezed grapefruit 0,2 l</span><span class="row-price" data-slot="price">320 din</span></div>
+        <div class="row" data-slot-item data-sifra="10313"><span class="row-name" data-slot="name">Fresh squeezed orange and grapefruit 0,35 l</span><span class="row-price" data-slot="price">470 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.sokovi.heading">Juices</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.sokovi.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="45"><span class="row-name" data-slot="name">Cedevita orange 0,5 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="46"><span class="row-name" data-slot="name">Cedevita Lemon 0,5 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="145"><span class="row-name" data-slot="name">Next Forest fruit 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="146"><span class="row-name" data-slot="name">Next Peach 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="147"><span class="row-name" data-slot="name">Next Strawberry 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="148"><span class="row-name" data-slot="name">Next Orange 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="149"><span class="row-name" data-slot="name">Next Apple 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="180"><span class="row-name" data-slot="name">Next Sour cherry 0,2 l</span><span class="row-price" data-slot="price">290 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.fizzy.heading">Fizzy drinks</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.fizzy.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="139"><span class="row-name" data-slot="name">Coca Cola 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="140"><span class="row-name" data-slot="name">Coca Cola Zero 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="150"><span class="row-name" data-slot="name">Fanta 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="151"><span class="row-name" data-slot="name">Schweppes Biter Lemon 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="152"><span class="row-name" data-slot="name">Schweppes Tonic 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="198"><span class="row-name" data-slot="name">Sprite 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+        <div class="row" data-slot-item data-sifra="239"><span class="row-name" data-slot="name">Thomas Henry tonic 0,2 l</span><span class="row-price" data-slot="price">450 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.energy.heading">Energy drinks</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.energy.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="44"><span class="row-name" data-slot="name">Red Bull 0,25 l</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="153"><span class="row-name" data-slot="name">Ultra energy 0,25 l</span><span class="row-price" data-slot="price">310 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.water.heading">Water</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.water.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="43"><span class="row-name" data-slot="name">Still water Rosa 0,33 l</span><span class="row-price" data-slot="price">220 din</span></div>
+        <div class="row" data-slot-item data-sifra="195"><span class="row-name" data-slot="name">Sparkling water Romerquelle lemongrass 0,33 l</span><span class="row-price" data-slot="price">270 din</span></div>
+        <div class="row" data-slot-item data-sifra="218"><span class="row-name" data-slot="name">Still water Rosa 0,75 l</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="219"><span class="row-name" data-slot="name">Sparkling water Rosa 0,33 l</span><span class="row-price" data-slot="price">220 din</span></div>
+        <div class="row" data-slot-item data-sifra="340"><span class="row-name" data-slot="name">San Benedetto 0,75 l still</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="341"><span class="row-name" data-slot="name">San Benedetto 0,75 l sparkling</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="10266"><span class="row-name" data-slot="name">Sparkling water Rosa 0,75 l</span><span class="row-price" data-slot="price">360 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.extras.heading">Extras</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.extras.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="63"><span class="row-name" data-slot="name">Soya milk 0,03 l</span><span class="row-price" data-slot="price">70 din</span></div>
+        <div class="row" data-slot-item data-sifra="211"><span class="row-name" data-slot="name">Milk 0,02 l</span><span class="row-price" data-slot="price">40 din</span></div>
+        <div class="row" data-slot-item data-sifra="250"><span class="row-name" data-slot="name">Whipped cream 30 g</span><span class="row-price" data-slot="price">40 din</span></div>
+        <div class="row" data-slot-item data-sifra="317"><span class="row-name" data-slot="name">Ice cream scoop 30 g</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="325"><span class="row-name" data-slot="name">Oat milk 0,03 l</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="10278"><span class="row-name" data-slot="name">Lemon 0,02 l</span><span class="row-price" data-slot="price">70 din</span></div>
+        <div class="row" data-slot-item data-sifra="10279"><span class="row-name" data-slot="name">Honey 15 g</span><span class="row-price" data-slot="price">50 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="fam-group" id="alkohol">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Alcohol">Alcohol</span>
+    <h2 class="big" data-slot="sarajevska.booze.heading">Cocktails, wine and rakija</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.cocktails.heading">Cocktails</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.cocktails.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="87"><span class="row-name" data-slot="name">APEROL SPRITZ 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="88"><span class="row-name" data-slot="name">BELLINI 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="90"><span class="row-name" data-slot="name">CUBA LIBRE 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="106"><span class="row-name" data-slot="name">AMERICANO 0,15 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="107"><span class="row-name" data-slot="name">NEGRONI 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="108"><span class="row-name" data-slot="name">CAMPARI SPRITZ 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="114"><span class="row-name" data-slot="name">HUGO 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="124"><span class="row-name" data-slot="name">THE GODFATHER 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="125"><span class="row-name" data-slot="name">DAIQUIRI 0,15 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="126"><span class="row-name" data-slot="name">MOJITO 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="127"><span class="row-name" data-slot="name">Caipirinha 0,2 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="128"><span class="row-name" data-slot="name">LYNCHBURG LEMONADE 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="129"><span class="row-name" data-slot="name">MELON MARTINI 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="178"><span class="row-name" data-slot="name">MOSCOW MULE 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+        <div class="row" data-slot-item data-sifra="212"><span class="row-name" data-slot="name">PEACH MARTINI 0,3 l</span><span class="row-price" data-slot="price">660 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.mixed.heading">Mixed drinks</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.mixed.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="85"><span class="row-name" data-slot="name">Campari Juice 0,2 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="86"><span class="row-name" data-slot="name">Vodka Juice 0,2 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="89"><span class="row-name" data-slot="name">GIN TONIC 0,2 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="104"><span class="row-name" data-slot="name">Vodka Tonic 0,3 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="105"><span class="row-name" data-slot="name">Campari Tonic 0,3 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="183"><span class="row-name" data-slot="name">GIN BULLDOG TONIC 0,2 l</span><span class="row-price" data-slot="price">580 din</span></div>
+        <div class="row" data-slot-item data-sifra="343"><span class="row-name" data-slot="name">Gin tonic Tiger 0,2 l</span><span class="row-price" data-slot="price">580 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.beer.heading">Beer</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.beer.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="61"><span class="row-name" data-slot="name">Heineken 0,25 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="142"><span class="row-name" data-slot="name">Laško 0,33 l</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="143"><span class="row-name" data-slot="name">Kaputziner 0,5 l</span><span class="row-price" data-slot="price">640 din</span></div>
+        <div class="row" data-slot-item data-sifra="144"><span class="row-name" data-slot="name">Birra Moretti 0,33 l</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="177"><span class="row-name" data-slot="name">Heineken 0.0 0,25 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="208"><span class="row-name" data-slot="name">Draught Birra Moretti 0,5 l</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="220"><span class="row-name" data-slot="name">Draught Birra Moretti 0,25 l</span><span class="row-price" data-slot="price">320 din</span></div>
+        <div class="row" data-slot-item data-sifra="10284"><span class="row-name" data-slot="name">Brew Dog PUNK IPA 0,33 l</span><span class="row-price" data-slot="price">710 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.sparkling.heading">Sparkling wine</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.sparkling.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="84"><span class="row-name" data-slot="name">Sparkling wine 0,15 l Cinzano - Italy</span><span class="row-price" data-slot="price">470 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.white.heading">White wine</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.white.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="191"><span class="row-name" data-slot="name">Sauvignon blanc 0,15 l - Todorović winery</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="214"><span class="row-name" data-slot="name">Chardonay 0,15 l - Todorović winery</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="334"><span class="row-name" data-slot="name">Žuti cvet 0,187 l</span><span class="row-price" data-slot="price">610 din</span></div>
+        <div class="row" data-slot-item data-sifra="344"><span class="row-name" data-slot="name">Orange Todorović 0,2 l</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="10303"><span class="row-name" data-slot="name">Tamjanika Žuti cvet 0,15 l - Aleksić winery</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="10305"><span class="row-name" data-slot="name">Malvazija San Tommaso 0,15 l - San Tommaso winery</span><span class="row-price" data-slot="price">580 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.rose.heading">Rosé wine</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.rose.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="192"><span class="row-name" data-slot="name">Todorović Rose 0,15 l - Todorović winery</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="262"><span class="row-name" data-slot="name">Pink Punk Rose 0,15 l</span><span class="row-price" data-slot="price">490 din</span></div>
+        <div class="row" data-slot-item data-sifra="10319"><span class="row-name" data-slot="name">Barbara Rose 0,15 l - Aleksić winery</span><span class="row-price" data-slot="price">470 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.red.heading">Red wine</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.red.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="193"><span class="row-name" data-slot="name">Teorema 0,15 l - Todorović winery</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="215"><span class="row-name" data-slot="name">Merlot 0,15 l - Todorović winery</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="216"><span class="row-name" data-slot="name">Todorović Shiraz 0,15 l</span><span class="row-price" data-slot="price">460 din</span></div>
+        <div class="row" data-slot-item data-sifra="217"><span class="row-name" data-slot="name">Todorović Vranac 0,15 l</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="10307"><span class="row-name" data-slot="name">Primitivo Puglia 0,15 l - Cielo e Terra winery</span><span class="row-price" data-slot="price">480 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.mulled.heading">Mulled wine</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.mulled.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="103"><span class="row-name" data-slot="name">Medveđa krv 0,2 l</span><span class="row-price" data-slot="price">310 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.rakija.heading">Rakija</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.rakija.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="102"><span class="row-name" data-slot="name">Gorda 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="137"><span class="row-name" data-slot="name">Mala-Dunja 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="138"><span class="row-name" data-slot="name">Mala-Viljemovka 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="200"><span class="row-name" data-slot="name">Zlatna kajsija 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="247"><span class="row-name" data-slot="name">Alchymia slivovitz 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="10293"><span class="row-name" data-slot="name">Zarić kraljica - plum 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10295"><span class="row-name" data-slot="name">Zarić nirvana - pear 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10297"><span class="row-name" data-slot="name">Zarić medena - honey brandy 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10299"><span class="row-name" data-slot="name">Bojkovčanka - plum 0,03 l - 10y</span><span class="row-price" data-slot="price">490 din</span></div>
+        <div class="row" data-slot-item data-sifra="10301"><span class="row-name" data-slot="name">Bojkovčanka - quince 0,03 l - 5y</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10309"><span class="row-name" data-slot="name">Dostojna plum 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="10407"><span class="row-name" data-slot="name">Bojkovčanka - apricot 0,03 l - 3y</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10408"><span class="row-name" data-slot="name">Bojkovčanka - pear 0,03 l - 5y</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="10409"><span class="row-name" data-slot="name">Grape brandy Bojkovčanka 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.whiskey.heading">Whiskey & bourbon</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.whiskey.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="91"><span class="row-name" data-slot="name">Macallan 1824 Amber 0,03 l</span><span class="row-price" data-slot="price">820 din</span></div>
+        <div class="row" data-slot-item data-sifra="92"><span class="row-name" data-slot="name">Woodford Reserve Distillers Select 0,03 l</span><span class="row-price" data-slot="price">550 din</span></div>
+        <div class="row" data-slot-item data-sifra="93"><span class="row-name" data-slot="name">Glenfiddich 15 yo Solera 0,03 l</span><span class="row-price" data-slot="price">650 din</span></div>
+        <div class="row" data-slot-item data-sifra="94"><span class="row-name" data-slot="name">Four Roses Single Barrel 0,03 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="119"><span class="row-name" data-slot="name">Jameson Irish whiskey 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="120"><span class="row-name" data-slot="name">Jack Daniel's Tennessee whiskey 0,03 l</span><span class="row-price" data-slot="price">440 din</span></div>
+        <div class="row" data-slot-item data-sifra="121"><span class="row-name" data-slot="name">Johnnie Walker Black Label 0,03 l</span><span class="row-price" data-slot="price">470 din</span></div>
+        <div class="row" data-slot-item data-sifra="203"><span class="row-name" data-slot="name">Naked Grouse 0,03 l</span><span class="row-price" data-slot="price">680 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.spirits.heading">Other spirits</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.spirits.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="2"><span class="row-name" data-slot="name">Campari Bitter 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="3"><span class="row-name" data-slot="name">Baileys Irish Cream 0,03 l</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="174"><span class="row-name" data-slot="name">Brugal rum 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="175"><span class="row-name" data-slot="name">Bickens Gin 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="176"><span class="row-name" data-slot="name">Zlatni pelin 0,05 l</span><span class="row-price" data-slot="price">360 din</span></div>
+        <div class="row" data-slot-item data-sifra="179"><span class="row-name" data-slot="name">Finlandia Vodka 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="182"><span class="row-name" data-slot="name">Bulldog Gin 0,03 l</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="196"><span class="row-name" data-slot="name">Tequila Silver 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="197"><span class="row-name" data-slot="name">Tequila Gold 0,03 l</span><span class="row-price" data-slot="price">390 din</span></div>
+        <div class="row" data-slot-item data-sifra="246"><span class="row-name" data-slot="name">SmidGin 0,03 l</span><span class="row-price" data-slot="price">540 din</span></div>
+        <div class="row" data-slot-item data-sifra="333"><span class="row-name" data-slot="name">Jägermeister 0,03 l</span><span class="row-price" data-slot="price">410 din</span></div>
+        <div class="row" data-slot-item data-sifra="342"><span class="row-name" data-slot="name">Gin Tigers 0,03 l</span><span class="row-price" data-slot="price">420 din</span></div>
+        <div class="row" data-slot-item data-sifra="10289"><span class="row-name" data-slot="name">Amaretto 0,03 l</span><span class="row-price" data-slot="price">360 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="fam-group" id="kuhinja">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Kitchen">Kitchen</span>
+    <h2 class="big" data-slot="sarajevska.kitchen.heading">Breakfast, pizza and pasta</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.dorucak.heading">Breakfast</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.dorucak.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1002"><span class="row-name" data-slot="name">French toast</span><span class="row-price" data-slot="price">580 din</span></div>
+        <div class="row" data-slot-item data-sifra="1003"><span class="row-name" data-slot="name">Scrambled eggs on avocado</span><span class="row-price" data-slot="price">750 din</span></div>
+        <div class="row" data-slot-item data-sifra="1006"><span class="row-name" data-slot="name">Šoljica breakfast</span><span class="row-price" data-slot="price">850 din</span></div>
+        <div class="row" data-slot-item data-sifra="1026"><span class="row-name" data-slot="name">Granola with red berries</span><span class="row-price" data-slot="price">650 din</span></div>
+        <div class="row" data-slot-item data-sifra="1122"><span class="row-name" data-slot="name">Šoljica breakfast with coffee</span><span class="row-price" data-slot="price">850 din</span></div>
+        <div class="row" data-slot-item data-sifra="1123"><span class="row-name" data-slot="name">Šoljica breakfast with fresh squeezed juice</span><span class="row-price" data-slot="price">850 din</span></div>
+        <div class="row" data-slot-item data-sifra="1142"><span class="row-name" data-slot="name">Uštipci</span><span class="row-price" data-slot="price">550 din</span></div>
+        <div class="row" data-slot-item data-sifra="1143"><span class="row-name" data-slot="name">Polenta</span><span class="row-price" data-slot="price">550 din</span></div>
+        <div class="row" data-slot-item data-sifra="1144"><span class="row-name" data-slot="name">Corn porridge</span><span class="row-price" data-slot="price">590 din</span></div>
+        <div class="row" data-slot-item data-sifra="1145"><span class="row-name" data-slot="name">Oat porridge</span><span class="row-price" data-slot="price">490 din</span></div>
+        <div class="row" data-slot-item data-sifra="10324"><span class="row-name" data-slot="name">Omelette</span><span class="row-price" data-slot="price">450 din</span></div>
+        <div class="row" data-slot-item data-sifra="10325"><span class="row-name" data-slot="name">Croissant with ham and cheese</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="10377"><span class="row-name" data-slot="name">Protein omelette</span><span class="row-price" data-slot="price">690 din</span></div>
+        <div class="row" data-slot-item data-sifra="10405"><span class="row-name" data-slot="name">Croissant with fried egg</span><span class="row-price" data-slot="price">320 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.pizza.heading">Pizza</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.pizza.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1126"><span class="row-name" data-slot="name">Pizza Margherita 32 cm</span><span class="row-price" data-slot="price">890 din</span></div>
+        <div class="row" data-slot-item data-sifra="1127"><span class="row-name" data-slot="name">Pizza Capricciosa 32 cm</span><span class="row-price" data-slot="price">990 din</span></div>
+        <div class="row" data-slot-item data-sifra="1128"><span class="row-name" data-slot="name">Pizza Diavolo 32 cm</span><span class="row-price" data-slot="price">1100 din</span></div>
+        <div class="row" data-slot-item data-sifra="1129"><span class="row-name" data-slot="name">Pizza Vesuvio 32 cm</span><span class="row-price" data-slot="price">850 din</span></div>
+        <div class="row" data-slot-item data-sifra="1130"><span class="row-name" data-slot="name">Pizza Mortadella 32 cm</span><span class="row-price" data-slot="price">1190 din</span></div>
+        <div class="row" data-slot-item data-sifra="1131"><span class="row-name" data-slot="name">Pizza Šoljica 32 cm</span><span class="row-price" data-slot="price">1400 din</span></div>
+        <div class="row" data-slot-item data-sifra="1135"><span class="row-name" data-slot="name">Pizza Margheritta 22 cm</span><span class="row-price" data-slot="price">550 din</span></div>
+        <div class="row" data-slot-item data-sifra="1136"><span class="row-name" data-slot="name">Pizza Capricciosa 22 cm</span><span class="row-price" data-slot="price">650 din</span></div>
+        <div class="row" data-slot-item data-sifra="1137"><span class="row-name" data-slot="name">Pizza Diavolo 22 cm</span><span class="row-price" data-slot="price">690 din</span></div>
+        <div class="row" data-slot-item data-sifra="1138"><span class="row-name" data-slot="name">Pizza Mortadela 22 cm</span><span class="row-price" data-slot="price">690 din</span></div>
+        <div class="row" data-slot-item data-sifra="1139"><span class="row-name" data-slot="name">Pizza Šoljica 22 cm</span><span class="row-price" data-slot="price">700 din</span></div>
+        <div class="row" data-slot-item data-sifra="1141"><span class="row-name" data-slot="name">Pizza Vesuvio 22 cm</span><span class="row-price" data-slot="price">590 din</span></div>
+        <div class="row" data-slot-item data-sifra="1173"><span class="row-name" data-slot="name">Quattro formaggi 32 cm</span><span class="row-price" data-slot="price">1190 din</span></div>
+        <div class="row" data-slot-item data-sifra="1177"><span class="row-name" data-slot="name">Quattro formaggi 22 cm</span><span class="row-price" data-slot="price">810 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.pasta.heading">Pasta and risotto</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.pasta.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1014"><span class="row-name" data-slot="name">Chicken pesto pasta</span><span class="row-price" data-slot="price">890 din</span></div>
+        <div class="row" data-slot-item data-sifra="1059"><span class="row-name" data-slot="name">Pasta Amatriciana</span><span class="row-price" data-slot="price">890 din</span></div>
+        <div class="row" data-slot-item data-sifra="1073"><span class="row-name" data-slot="name">Risotto with chicken</span><span class="row-price" data-slot="price">890 din</span></div>
+        <div class="row" data-slot-item data-sifra="1151"><span class="row-name" data-slot="name">Risotto with vegetables</span><span class="row-price" data-slot="price">790 din</span></div>
+        <div class="row" data-slot-item data-sifra="10396"><span class="row-name" data-slot="name">Pasta Bolognese</span><span class="row-price" data-slot="price">990 din</span></div>
+        <div class="row" data-slot-item data-sifra="10397"><span class="row-name" data-slot="name">Pasta Carbonara</span><span class="row-price" data-slot="price">990 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.salate.heading">Salads</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.salate.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1012"><span class="row-name" data-slot="name">Caesar salad</span><span class="row-price" data-slot="price">950 din</span></div>
+        <div class="row" data-slot-item data-sifra="1089"><span class="row-name" data-slot="name">Tuna salad</span><span class="row-price" data-slot="price">910 din</span></div>
+        <div class="row" data-slot-item data-sifra="10400"><span class="row-name" data-slot="name">Greek salad</span><span class="row-price" data-slot="price">890 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.sendvici.heading">Sandwiches and wraps</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.sendvici.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1004"><span class="row-name" data-slot="name">Chicken wrap</span><span class="row-price" data-slot="price">780 din</span></div>
+        <div class="row" data-slot-item data-sifra="1010"><span class="row-name" data-slot="name">Šoljica Burger</span><span class="row-price" data-slot="price">1150 din</span></div>
+        <div class="row" data-slot-item data-sifra="1132"><span class="row-name" data-slot="name">Mortadella panini</span><span class="row-price" data-slot="price">760 din</span></div>
+        <div class="row" data-slot-item data-sifra="1133"><span class="row-name" data-slot="name">Prosciutto panini</span><span class="row-price" data-slot="price">860 din</span></div>
+        <div class="row" data-slot-item data-sifra="1134"><span class="row-name" data-slot="name">Corizo panini</span><span class="row-price" data-slot="price">760 din</span></div>
+        <div class="row" data-slot-item data-sifra="1178"><span class="row-name" data-slot="name">Caesar wrap</span><span class="row-price" data-slot="price">860 din</span></div>
+        <div class="row" data-slot-item data-sifra="1179"><span class="row-name" data-slot="name">Pulled pork wrap</span><span class="row-price" data-slot="price">860 din</span></div>
+        <div class="row" data-slot-item data-sifra="1180"><span class="row-name" data-slot="name">Pulled pork sandwich</span><span class="row-price" data-slot="price">860 din</span></div>
+        <div class="row" data-slot-item data-sifra="1181"><span class="row-name" data-slot="name">Tuna sandwich</span><span class="row-price" data-slot="price">780 din</span></div>
+        <div class="row" data-slot-item data-sifra="10327"><span class="row-name" data-slot="name">Club sandwich</span><span class="row-price" data-slot="price">860 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.glavno.heading">Main courses</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.glavno.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1017"><span class="row-name" data-slot="name">Smoked chicken drumstick</span><span class="row-price" data-slot="price">1190 din</span></div>
+        <div class="row" data-slot-item data-sifra="1027"><span class="row-name" data-slot="name">Potage</span><span class="row-price" data-slot="price">490 din</span></div>
+        <div class="row" data-slot-item data-sifra="10250"><span class="row-name" data-slot="name">Chicken nuggets</span><span class="row-price" data-slot="price">790 din</span></div>
+        <div class="row" data-slot-item data-sifra="10322"><span class="row-name" data-slot="name">Homemade Stara Planina sausage</span><span class="row-price" data-slot="price">990 din</span></div>
+        <div class="row" data-slot-item data-sifra="10335"><span class="row-name" data-slot="name">Beef tacos</span><span class="row-price" data-slot="price">890 din</span></div>
+        <div class="row" data-slot-item data-sifra="10336"><span class="row-name" data-slot="name">Wings</span><span class="row-price" data-slot="price">970 din</span></div>
+        <div class="row" data-slot-item data-sifra="10337"><span class="row-name" data-slot="name">Grilled salmon</span><span class="row-price" data-slot="price">1850 din</span></div>
+        <div class="row" data-slot-item data-sifra="10402"><span class="row-name" data-slot="name">Grilled chicken in smoked cheese sauce</span><span class="row-price" data-slot="price">990 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.prilozi.heading">Sides</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.prilozi.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1020"><span class="row-name" data-slot="name">Bread basket</span><span class="row-price" data-slot="price">150 din</span></div>
+        <div class="row" data-slot-item data-sifra="1053"><span class="row-name" data-slot="name">Ajvar</span><span class="row-price" data-slot="price">160 din</span></div>
+        <div class="row" data-slot-item data-sifra="1140"><span class="row-name" data-slot="name">Focaccia</span><span class="row-price" data-slot="price">350 din</span></div>
+        <div class="row" data-slot-item data-sifra="10288"><span class="row-name" data-slot="name">Fries 200 g</span><span class="row-price" data-slot="price">290 din</span></div>
+        <div class="row" data-slot-item data-sifra="10378"><span class="row-name" data-slot="name">Forest fruit cream</span><span class="row-price" data-slot="price">110 din</span></div>
+        <div class="row" data-slot-item data-sifra="10379"><span class="row-name" data-slot="name">Pistachio cream</span><span class="row-price" data-slot="price">110 din</span></div>
+        <div class="row" data-slot-item data-sifra="10381"><span class="row-name" data-slot="name">Chocolate cream</span><span class="row-price" data-slot="price">110 din</span></div>
+      </div>
+    </article>
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.dodaci.heading">Add-ons</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.dodaci.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1001"><span class="row-name" data-slot="name">Extra egg</span><span class="row-price" data-slot="price">60 din</span></div>
+        <div class="row" data-slot-item data-sifra="1021"><span class="row-name" data-slot="name">Extra sausage</span><span class="row-price" data-slot="price">280 din</span></div>
+        <div class="row" data-slot-item data-sifra="1022"><span class="row-name" data-slot="name">Extra yoghurt 0,3 l</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="1023"><span class="row-name" data-slot="name">Extra parmesan 30 g</span><span class="row-price" data-slot="price">130 din</span></div>
+        <div class="row" data-slot-item data-sifra="1024"><span class="row-name" data-slot="name">Extra cured pork neck 30 g</span><span class="row-price" data-slot="price">110 din</span></div>
+        <div class="row" data-slot-item data-sifra="1054"><span class="row-name" data-slot="name">Extra bacon 40 g</span><span class="row-price" data-slot="price">120 din</span></div>
+        <div class="row" data-slot-item data-sifra="1056"><span class="row-name" data-slot="name">Extra prosciutto 40 g</span><span class="row-price" data-slot="price">150 din</span></div>
+        <div class="row" data-slot-item data-sifra="1057"><span class="row-name" data-slot="name">Extra vegetables 150 g</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="1146"><span class="row-name" data-slot="name">Extra kulen</span><span class="row-price" data-slot="price">120 din</span></div>
+        <div class="row" data-slot-item data-sifra="1147"><span class="row-name" data-slot="name">Extra ham</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="1148"><span class="row-name" data-slot="name">Extra feta cheese</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="1149"><span class="row-name" data-slot="name">Extra kashkaval cheese</span><span class="row-price" data-slot="price">140 din</span></div>
+        <div class="row" data-slot-item data-sifra="1154"><span class="row-name" data-slot="name">Tartar sauce 30 g</span><span class="row-price" data-slot="price">90 din</span></div>
+        <div class="row" data-slot-item data-sifra="1175"><span class="row-name" data-slot="name">Extra mozzarella 60 g</span><span class="row-price" data-slot="price">160 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="fam-group" id="slatko">
+  <div class="sec-label">
+    <span class="micro" data-i18n-en="Sweet">Sweet</span>
+    <h2 class="big" data-slot="sarajevska.sweet.heading">With your coffee</h2>
+  </div>
+  <div class="families">
+
+    <article class="fam">
+      <header class="fam-head">
+        <h3 class="fam-title" data-slot="sarajevska.sweets.heading">Something sweet</h3>
+      </header>
+      <div class="rows" data-slot-list="sarajevska.sweets.items" data-item-template="row">
+        <div class="row" data-slot-item data-sifra="1028"><span class="row-name" data-slot="name">Tiramisu</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="1062"><span class="row-name" data-slot="name">San Sebastina cheesecake</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="1121"><span class="row-name" data-slot="name">Cake of the day</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="1124"><span class="row-name" data-slot="name">Apple pie</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="1125"><span class="row-name" data-slot="name">Poppy seed cake</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="1152"><span class="row-name" data-slot="name">Banana split</span><span class="row-price" data-slot="price">490 din</span></div>
+        <div class="row" data-slot-item data-sifra="1156"><span class="row-name" data-slot="name">Cheese cake</span><span class="row-price" data-slot="price">480 din</span></div>
+        <div class="row" data-slot-item data-sifra="10343"><span class="row-name" data-slot="name">Šoljica muffin</span><span class="row-price" data-slot="price">190 din</span></div>
+        <div class="row" data-slot-item data-sifra="10349"><span class="row-name" data-slot="name">Croissant basic</span><span class="row-price" data-slot="price">190 din</span></div>
+        <div class="row" data-slot-item data-sifra="10380"><span class="row-name" data-slot="name">Pistachio tiramisu</span><span class="row-price" data-slot="price">480 din</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer class="site-foot">
+  <a class="foot-mark" href="en.html" data-href-en="en.html" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="40" height="39"></span></a>
+  <span class="foot-line" data-slot="footer.line">Šoljica · Specialty coffee and tea bar</span>
+  <div class="foot-side">
+    <a class="foot-ig" href="https://www.instagram.com/soljicacom/">Instagram</a>
+    <a class="lang-toggle" href="sarajevska.html" data-href-en="sarajevska.html" data-slot="footer.lang">SR</a>
+  </div>
+</footer>
+
+<script>
+/* The jump index's two behaviours. Both are enhancements: with this file removed the
+   index is still five anchors in a bar that still sticks, and the only losses are the
+   active mark and an exactly-right scroll-margin.
+
+   NO LESS-THAN SIGN TOUCHES A LETTER IN HERE, ON PURPOSE. cms/engine.mjs finds tags by
+   scanning the whole file for a less-than sign followed by a letter, so a tight numeric
+   comparison inside a script reads to it as the open tag of an element named after the
+   variable, and the English render is built off that scan. Every comparison below is
+   written the other way round. */
+(() => {
+  const bar = document.querySelector('.menu-index');
+  /* the STRIP is what sticks and what a section has to clear; the INDEX is what scrolls
+     sideways inside it. T12 put a bar switcher in the strip beside the index, so the two
+     stopped being the same element and every measurement below had to say which it meant. */
+  const strip = document.querySelector('.menu-strip');
+  if (!bar || !strip) return;
+
+  const links = Array.from(bar.querySelectorAll('a'));
+  const sections = [];
+  const linkOf = new Map();
+  for (const a of links) {
+    const sec = document.getElementById(a.getAttribute('href').slice(1));
+    if (!sec) continue;
+    sections.push(sec);
+    linkOf.set(sec, a);
+  }
+
+  /* one row on a desktop, one scrolling row on a phone, and a taller one if a language
+     ever wraps it: scroll-margin-top is told the real height rather than guessing */
+  const measure = () => document.documentElement.style.setProperty('--index-h', strip.offsetHeight + 'px');
+  measure();
+
+  let current = null;
+  function mark(a) {
+    if (a === current) return;
+    if (current) current.removeAttribute('aria-current');
+    current = a;
+    if (!a) return;
+    a.setAttribute('aria-current', 'location');
+    /* scrollLeft by hand, not scrollIntoView: that one walks up the ancestors and would
+       scroll the PAGE while the page is what is doing the scrolling */
+    const centered = a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2;
+    bar.scrollLeft = Math.max(0, centered);
+  }
+
+  let queued = false;
+  function spy() {
+    queued = false;
+    const line = strip.getBoundingClientRect().bottom + 1;
+    let active = null;
+    for (const sec of sections) {
+      if (sec.getBoundingClientRect().top - line > 0) break;
+      active = sec;
+    }
+    /* the last family is two rows tall and never reaches the line on a tall screen, so
+       the end of the page is treated as arrival at it */
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) {
+      active = sections[sections.length - 1];
+    }
+    mark(active ? linkOf.get(active) : null);
+  }
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(spy);
+  }
+
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', () => { measure(); onScroll(); });
+  spy();
+})();
+</script>
+
+<!-- The phone drawer opens and closes without this file; it adds the close on an in-page
+     anchor tap, Escape, and the resize past the breakpoint. See its own header. -->
+<script src="assets/nav.js" defer></script>
+
+</body>
+</html>
