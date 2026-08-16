@@ -8,9 +8,27 @@
 <meta name="description" content="Šoljica's menu at Sarajevska 14, Belgrade: breakfast, pizza, pasta, coffee, tea, cocktails, wine and rakija at counter prices." data-content-en="Šoljica's menu at Sarajevska 14, Belgrade: breakfast, pizza, pasta, coffee, tea, cocktails, wine and rakija at counter prices.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Abril and Archivo only: nothing on this page is set in the brush script, so the third
-     family would be a download for a var() no rule here resolves. -->
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<!-- Prata, Archivo AND Kaushan Script. This comment used to read "Prata and Archivo only:
+     nothing on this page is set in the brush script", and it was true when it was written
+     and silently stopped being true on 2026-08-16, when batch L's L3 moved `.wolt` onto
+     var(--script) in assets/base.css. This page has carried a .wolt since 2026-08-15, so
+     from that moment its one commercial action asked for a face the page never fetched and
+     fell through to the generic `cursive`, which on Windows is Comic Sans.
+
+     WHAT MADE IT INVISIBLE FOR A DAY: a computed font-family is the DECLARED STACK. It
+     reads "Kaushan Script", cursive whether or not the face exists, so an element audit
+     that reads the cascade cannot see this, and document.fonts.check() cannot either (it
+     answers "can these characters be rendered at all", which a fallback satisfies). What
+     sees it is measuring the phrase against the bare fallback, or looking at it full size.
+
+     A page's font link is therefore CONTENT-DEPENDENT chrome, not shared chrome, and the
+     gate for it is in cms/pages.test.mjs: any page whose markup uses a class the site's CSS
+     sets to var(--script) must request the face. (Prata replaced Abril Fatface on
+     2026-08-15; see the families block at the top of assets/base.css.) -->
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Kaushan+Script&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="sr" href="sarajevska.html">
+<link rel="alternate" hreflang="en" href="sarajevska.en.html">
+<link rel="alternate" hreflang="x-default" href="sarajevska.html">
 <link rel="stylesheet" href="assets/base.css">
 <!-- No page stylesheet. The menu layout lived in a <style> block right here from T10
      until T15 moved it into assets/base.css, on the instruction T10 wrote into the page
@@ -19,10 +37,38 @@
      behaviour-preserving over 2198 body elements across both pages at 1440 light and 390
      dark: zero computed-style differences. A third bar's page gets the layout by linking
      the same file, which is the point. -->
+<script>
+  /* THE REGISTER, STAMPED BEFORE FIRST PAINT. Inline and in the head on purpose: a
+     deferred file runs after the page has painted, so a visitor who chose dark would get
+     a cream flash on every navigation. Two jobs only: reveal the control (assets/base.css
+     hides .theme-switch unless .js-theme is set, so a button that cannot work is never
+     offered) and apply the stored choice. The rest is assets/theme.js, and the two share
+     exactly one storage key and one attribute name.
+     HAND-DUPLICATED in index.html, trg.html, sarajevska.html and the template inside
+     tools/build-bar-page.mjs, like the nav below it. No build step, no include. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js-theme');
+    var t = null;
+    try { t = localStorage.getItem('soljica-theme'); } catch (e) { t = null; }
+    var picked = t === 'light' || t === 'dark';
+    if (picked) d.setAttribute('data-theme', t);
+    d.setAttribute('data-theme-state', picked ? t : 'system');
+  })();
+</script>
 </head>
 <body>
 
-<header class="topbar">
+<!-- THE COIN, DEFINED ONCE (L4b, 2026-08-16). assets/monogram-tokenized.svg is
+     assets/monogram-mark.svg with its one fill swapped to currentColor and every path
+     byte-identical. It has to be INLINE and it has to be currentColor: the source file is a
+     near-WHITE mark drawn for the dark hero, so as an <img> it is invisible on cream at any
+     opacity, and an img cannot inherit a colour. Defined once as a <symbol> and referenced
+     with <use> by every section pair, rather than written out per section, which on a page
+     with six of them is the difference between 4KB and 50KB of the same drawing.
+     The file is named in this comment so publish's ASSET_RE still copies it and still fails
+     loudly if it is ever deleted: assets/monogram-tokenized.svg -->
+<svg class="mark-defs" aria-hidden="true" focusable="false"><symbol id="coin-mark" viewBox="0 0 259 251"><path fill="currentColor" fill-rule="evenodd" d="M 121.664 46.444 C 119.554 47.203, 115.054 48.132, 111.664 48.510 C 97.558 50.081, 82.782 60.613, 70.293 78 C 58.453 94.484, 53.645 105.474, 52.521 118.624 C 52.151 122.956, 51.404 127.943, 50.861 129.706 C 49.968 132.606, 50.506 134.166, 56.501 146.078 C 67.190 167.312, 71.448 173.306, 79.502 178.458 C 85.275 182.151, 87.997 185.357, 88.006 188.473 C 88.016 192.386, 90.102 197.968, 92.714 201.071 C 96.021 205.002, 100.119 204.658, 106.062 199.951 C 109.493 197.233, 110.580 196.880, 113.778 197.440 C 115.825 197.799, 122.544 198.409, 128.710 198.796 C 139.633 199.482, 142.783 200.651, 142.968 204.089 C 142.986 204.414, 144.154 205.205, 145.565 205.848 C 148.048 206.979, 148.120 206.915, 147.815 203.852 C 147.507 200.759, 147.629 200.659, 153.227 199.372 C 176.206 194.093, 197.806 170.260, 204.920 142.333 C 211.405 116.874, 202.354 89.270, 180.281 67.188 C 172.038 58.941, 167.573 56.582, 155.017 53.841 C 149.188 52.568, 146.021 51.347, 144.982 49.972 C 143.927 48.576, 141.488 47.658, 136.982 46.963 C 133.417 46.412, 129.375 45.760, 128 45.513 C 126.625 45.266, 123.774 45.685, 121.664 46.444 M 119.500 52.647 C 101.492 55.516, 82.044 68.079, 72.196 83.203 C 67.741 90.043, 63 101.559, 63 105.536 C 63 106.906, 62.480 108.859, 61.845 109.876 C 60.957 111.299, 61.072 114.012, 62.345 121.656 C 63.255 127.118, 64 132.664, 64 133.980 C 64 142.289, 69.935 156.943, 76.835 165.673 C 83.135 173.642, 99.080 183.121, 114.422 188.017 C 118.681 189.376, 132.422 188.771, 139.287 186.923 C 144.191 185.602, 150.433 179.970, 151.634 175.781 C 152.989 171.057, 156.958 169.854, 161.097 172.913 L 164.203 175.210 167.180 171.598 C 168.817 169.611, 171.865 167.202, 173.954 166.243 C 179.484 163.704, 190.288 150.359, 192.020 143.927 C 193.396 138.814, 195.125 110.633, 194.356 105.828 C 193.799 102.344, 193.924 102.031, 195.619 102.658 C 198.605 103.763, 198.939 104.967, 198.853 114.336 C 198.770 123.478, 199.477 125.436, 202.644 124.835 C 205.416 124.310, 205.526 118.207, 202.955 107.561 C 199.502 93.260, 196.167 88.166, 191.973 90.785 C 190.452 91.735, 189.345 90.717, 183.887 83.347 C 173.408 69.197, 161.132 59.371, 148.237 54.811 C 142.521 52.789, 126.281 51.566, 119.500 52.647 M 115.237 67.250 L 113.126 69.500 121.047 78 L 128.969 86.500 134.017 81 C 136.793 77.975, 140.248 74.011, 141.696 72.191 L 144.327 68.883 142.110 66.691 C 140.105 64.709, 139.803 64.658, 138.948 66.158 C 138.429 67.070, 136.187 70.114, 133.966 72.924 C 129.147 79.020, 128.199 78.827, 121.890 70.470 C 117.060 64.073, 117.856 64.459, 115.237 67.250 M 115.643 93.555 C 105.368 97.323, 100.769 102.815, 100.644 111.468 C 100.490 122.168, 106.710 127.157, 128.556 133.855 C 143.937 138.570, 148.547 142.558, 147.621 150.348 C 146.501 159.780, 131.708 164.826, 117.612 160.584 C 110.357 158.400, 109.297 157.106, 112.946 154.886 C 121.316 149.797, 114.313 138.142, 105.163 141.932 C 97.907 144.938, 98.571 157.397, 106.256 162.432 C 116.542 169.171, 137.624 169.911, 149.196 163.939 C 155.740 160.562, 159.010 154.779, 158.984 146.628 C 158.948 135.435, 152.156 129.670, 131.167 123.019 C 115.883 118.176, 112 115.514, 112 109.883 C 112 101.350, 117.471 97.493, 129.500 97.548 C 142.413 97.608, 147.641 100.300, 143 104.500 C 140.031 107.187, 140.345 112.340, 143.635 114.927 C 151.306 120.961, 160.221 112.163, 155.945 102.779 C 152.067 94.267, 128.445 88.861, 115.643 93.555 M 198.035 131.934 C 196.268 135.236, 196.740 139, 198.922 139 C 200.974 139, 203.700 132.941, 202.512 131.020 C 201.493 129.370, 199.152 129.848, 198.035 131.934 M 191.075 150.304 C 188.546 156.956, 190.651 158.944, 195.635 154.612 C 197.995 152.560, 198.306 151.802, 197.398 150.311 C 195.650 147.439, 192.165 147.436, 191.075 150.304 M 185.162 161.620 C 180.676 167.062, 179.834 174, 183.659 174 C 187.577 174, 195.324 161.951, 193.403 158.844 C 192.125 156.776, 188.013 158.161, 185.162 161.620 M 154.250 175.208 C 151.101 176.744, 151.144 181, 154.309 181 C 157.531 181, 160.288 178.733, 159.847 176.445 C 159.407 174.157, 157.341 173.701, 154.250 175.208"/></symbol></svg><header class="topbar">
   <!-- THE PHONE DRAWER'S SWITCH (2026-08-14), and the four elements below are in a
        load-bearing order: the stylesheet reaches the drawer with .nav-cb:checked ~ .nav-links,
        so the checkbox has to come first and the nav last. A checkbox rather than a button
@@ -32,7 +78,16 @@
        reason the bar switcher below already carries: the render swaps href, meta content and
        leaf inner text, so an attribute would read Serbian on the English page. -->
   <input type="checkbox" id="nav-toggle" class="nav-cb">
-  <a class="nav-mark" href="en.html" data-href-en="en.html" aria-label="Šoljica"><span class="coin"><img src="assets/monogram-mark.svg" alt="" width="32" height="31"></span></a>
+  <!-- THE SITE'S MARK IS THE FULL LOGOTYPE (D1, 2026-08-16). goolio, 2026-08-15: "replace
+       that coin Š logo with the real one Šoljica everywhere." It is INLINED rather than
+       loaded from assets/logo-tokenized.svg, because the letterforms are painted with
+       currentColor and an image cannot inherit a colour: as an <img> this mark would be
+       black on cream and invisible on ink, which is the lesson the withdrawn drawings
+       already taught. That file is the source and this is a copy of it, hand-duplicated
+       across three pages and the scaffold the way the rest of the masthead is, so a test
+       in cms/pages.test.mjs compares all four copies' path data back to it.
+       THE Š-COIN IS NOT RETIRED: it keeps the footer and any slot that has to be square. -->
+  <a class="nav-mark" href="en.html" data-href-en="en.html" aria-label="Šoljica"><span class="wordmark-slot"><svg viewBox="0 0 602 210" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 56.230 22.385 C 53.947 25.776, 50.711 29.861, 49.039 31.462 L 46 34.374 42.913 31.437 C 41.215 29.822, 37.857 25.891, 35.451 22.702 L 31.076 16.903 27.378 20.293 L 23.679 23.682 34.409 35.091 C 40.311 41.366, 45.487 46.500, 45.911 46.500 C 47.184 46.500, 67 24.250, 67 22.821 C 67 22.094, 65.511 20.312, 63.690 18.859 L 60.381 16.219 56.230 22.385 M 194 23.965 L 194 28.930 204.250 29.215 L 214.500 29.500 214.500 88.500 L 214.500 147.500 204.250 147.785 L 194 148.070 194 152.535 L 194 157 223.500 157 L 253 157 253 153 L 253 149 244.200 149 C 238.689 149, 234.952 148.552, 234.200 147.800 C 233.292 146.892, 233 131.089, 233 82.800 L 233 19 213.500 19 L 194 19 194 23.965 M 34.974 57.929 C 16.773 61.794, 7 70.900, 7 83.993 C 7 97.914, 15.742 104.995, 43.500 113.556 C 56.939 117.701, 63.457 120.680, 66.683 124.151 C 75.048 133.150, 69.605 146.254, 56.339 149.053 C 48.474 150.712, 37.776 150.549, 30.588 148.659 C 24.610 147.088, 20.338 144.193, 22.700 143.313 C 31.031 140.212, 32.226 126.937, 24.440 123.977 C 6.423 117.127, -0.911 141.223, 15.831 152.260 C 31.066 162.304, 61.052 162.350, 75.724 152.352 C 89.197 143.171, 90.747 123.476, 78.872 112.336 C 75.607 109.272, 64.379 103, 62.160 103 C 61.559 103, 59.590 102.365, 57.784 101.588 C 55.978 100.812, 49.213 98.544, 42.750 96.548 C 27.340 91.790, 22.432 87.728, 23.257 80.414 C 24.371 70.526, 32.100 65.568, 46.410 65.560 C 56.369 65.555, 65.853 67.453, 66.683 69.617 C 66.975 70.377, 65.815 72.304, 64.107 73.900 C 58.107 79.504, 60.818 88.797, 69.103 91.028 C 78.385 93.527, 85.515 85.890, 83.572 75.529 C 81.761 65.881, 69.142 59.186, 48 56.657 C 45.368 56.342, 39.962 56.870, 34.974 57.929 M 412.500 57.620 C 390.523 61.576, 375.517 78.628, 373.003 102.500 C 369.654 134.298, 387.830 157.864, 417.136 159.718 C 436.873 160.967, 453.484 151.169, 460.336 134.236 L 462.871 127.973 459.313 126.486 C 454.620 124.526, 453.258 124.611, 452.528 126.912 C 452.194 127.964, 450.558 130.551, 448.893 132.662 C 430.703 155.713, 399.373 148.426, 393.564 119.792 C 388.870 96.657, 397.003 75.351, 413.363 67.922 C 422.618 63.720, 436.478 65.922, 443.750 72.751 C 448.057 76.795, 447.860 77.755, 442.446 79.118 C 434.374 81.151, 431.117 88.388, 434.920 95.843 C 437.187 100.287, 440.435 102, 446.597 102 C 455.911 102, 460.015 97.339, 459.978 86.800 C 459.925 71.541, 448.886 60.909, 429.606 57.546 C 424.729 56.696, 420.684 56.040, 420.619 56.090 C 420.554 56.139, 416.900 56.828, 412.500 57.620 M 502.772 57.981 C 487.003 61.306, 475.983 71.348, 476.015 82.363 C 476.041 91.370, 480.310 96.167, 488.302 96.167 C 502.130 96.167, 504.819 76.933, 491.344 74.405 C 479.801 72.239, 503.075 63.585, 515.452 65.441 C 529.453 67.540, 535.855 86.609, 525.958 96.732 C 522.744 100.019, 510.057 106.954, 503.500 109.008 C 501.300 109.697, 499.050 110.612, 498.500 111.041 C 497.950 111.471, 495.475 112.630, 493 113.617 C 473.337 121.460, 466.080 138.910, 477.210 151.586 C 482.480 157.589, 487.238 159.480, 497 159.451 C 510.668 159.411, 523.385 152.074, 528.544 141.250 C 530.621 136.895, 531.219 137.122, 533.331 143.070 C 537.288 154.210, 547.172 160.614, 559.090 159.761 C 574.984 158.624, 582 148.906, 582 128.025 L 582 118 578 118 L 574 118 573.988 125.250 C 573.973 134.763, 571.793 142.873, 568.480 145.750 C 565.371 148.450, 558.590 148.802, 555.217 146.439 C 549.843 142.675, 549.538 140.815, 549 108.426 L 548.500 78.351 545.479 72.448 C 541.258 64.199, 534.877 59.845, 523.785 57.643 C 513.818 55.665, 513.753 55.666, 502.772 57.981 M 252 63.466 L 252 67.932 262.750 68.216 L 273.500 68.500 273.500 124.574 L 273.500 180.648 270.752 184.800 C 266.978 190.500, 263.758 192.393, 257.980 192.306 C 251.391 192.207, 250.321 191.352, 253.092 188.402 C 256.803 184.452, 257.023 175.853, 253.497 172.585 C 242.273 162.183, 227.638 177.422, 235.717 191.099 C 242.911 203.277, 270.178 204.482, 282.363 193.160 C 291.933 184.269, 292 183.735, 292 116.557 L 292 59 272 59 L 252 59 252 63.466 M 313 63.500 L 313 68 321.300 68 C 326.422 68, 330.059 68.459, 330.800 69.200 C 331.692 70.092, 332 80.237, 332 108.665 C 332 152.968, 333.031 149.301, 320.694 148.892 L 313.500 148.654 313.193 152.827 L 312.885 157 340.500 157 L 368.115 157 367.807 152.750 L 367.500 148.500 360.842 148.847 C 348.787 149.475, 350 154.554, 350 103.433 L 350 59 331.500 59 L 313 59 313 63.500 M 526.405 106.120 C 524.028 108.765, 516.857 113.388, 506.635 118.865 C 496.096 124.513, 494.498 125.802, 492.073 130.610 C 485.479 143.682, 499.429 152.985, 513.532 144.921 C 527.224 137.092, 531 130.582, 531 114.804 C 531 103.212, 530.266 101.824, 526.405 106.120"></path><path fill="#e8762c" fill-rule="evenodd" d="M 265.001 15.123 C 261.816 16.393, 258 19.957, 258 21.660 C 258 22.381, 259.800 24.163, 262 25.619 C 268.488 29.912, 266.855 34.688, 258.288 36.473 C 253.128 37.548, 251.426 35.999, 254.073 32.635 C 255.258 31.128, 255.913 29.581, 255.528 29.197 C 255.143 28.814, 253.967 29.562, 252.914 30.861 C 249.531 35.033, 250.939 40, 255.504 40 C 258.267 40, 266.549 34.710, 267.984 32.029 C 269.096 29.953, 268.545 26, 267.145 26 C 266.749 26, 264.866 24.687, 262.962 23.082 C 259.028 19.767, 259.569 18.245, 265.083 17.117 C 266.880 16.749, 268.534 15.898, 268.759 15.224 C 269.238 13.786, 268.410 13.764, 265.001 15.123 M 549.805 18.250 C 548.575 20.587, 547.009 23.400, 546.324 24.500 C 542.664 30.379, 539.794 38.194, 540.891 39.291 C 542.351 40.751, 547.550 38.324, 550.520 34.794 C 553.338 31.444, 553.926 26, 551.469 26 C 549.213 26, 548.526 23.183, 550.301 21.213 C 551.905 19.433, 553.658 14, 552.629 14 C 552.305 14, 551.035 15.912, 549.805 18.250 M 336.827 19.401 C 335.409 21.748, 333.635 25.367, 332.885 27.441 C 331.586 31.033, 326.018 37, 323.965 37 C 322.767 37, 322.712 34.431, 323.862 32.184 C 328.285 23.539, 324.168 22.602, 316.457 30.500 C 309.213 37.920, 306.737 37.474, 312.361 29.762 C 315.356 25.656, 313.699 25.395, 310.582 29.482 C 309.098 31.427, 306.128 33.914, 303.982 35.009 C 296.541 38.805, 294.432 37.102, 299.495 31.387 C 302.370 28.143, 303.110 27.748, 303.970 29 C 304.886 30.333, 305.109 30.333, 305.985 29 C 309.635 23.439, 304.525 23.861, 298.958 29.580 C 294.107 34.564, 290.217 37, 287.109 37 C 283.705 37, 283.762 35.127, 287.210 33.668 C 291.371 31.908, 294.419 28.534, 293.653 26.537 C 292.827 24.387, 291.915 24.583, 286.900 27.989 C 282.579 30.926, 282.476 30.943, 281.128 28.989 C 280.373 27.895, 278.863 27, 277.771 27 C 276.403 27, 275.975 26.533, 276.393 25.500 C 276.727 24.675, 277.273 23.325, 277.607 22.500 C 277.941 21.675, 277.828 21.002, 277.357 21.005 C 276.886 21.007, 273.690 26.208, 270.255 32.562 C 264.075 43.993, 261.669 49.940, 263.743 48.659 C 264.313 48.307, 265.072 46.850, 265.430 45.421 C 266.205 42.335, 271.589 32.586, 273.305 31.162 C 273.968 30.611, 275.746 29.851, 277.256 29.472 C 281.676 28.363, 280.629 31.134, 275.446 34.265 C 272.941 35.778, 271.167 37.461, 271.503 38.004 C 272.266 39.240, 276.770 37.017, 279.407 34.102 C 282.021 31.214, 282.821 31.457, 283.187 35.250 C 283.565 39.171, 286.259 39.952, 290.981 37.510 C 293.960 35.969, 294.175 35.994, 295.854 38.069 L 297.612 40.239 301.766 38.119 C 306.603 35.652, 308 35.481, 308 37.360 C 308 39.605, 315.813 38.525, 318.615 35.892 L 321 33.651 321 36.267 C 321 39.881, 322.728 40.605, 325.388 38.105 C 328.018 35.635, 329 35.454, 329 37.441 C 329 39.744, 331.051 40.378, 332.810 38.618 C 334.301 37.127, 334.294 37, 332.714 37 C 331.771 37, 331 36.312, 331 35.471 C 331 33.810, 335.663 24.409, 339.004 19.336 C 340.150 17.596, 340.709 15.938, 340.246 15.652 C 339.784 15.366, 338.245 17.053, 336.827 19.401 M 404.297 17.572 C 399.326 24.689, 392.560 28.539, 389.495 25.995 C 387.828 24.613, 385.312 26.062, 381.942 30.346 C 378.222 35.076, 369 38.803, 369 35.577 C 369 33.008, 374.099 27.896, 376.349 28.208 C 377.703 28.396, 378.575 27.877, 378.799 26.750 C 379.342 24.020, 375.680 24.593, 372.544 27.729 C 368.844 31.428, 366.767 35.692, 367.516 38.050 C 368.323 40.593, 369.589 40.496, 374.844 37.493 L 379.187 35.010 380.964 37.204 C 382.672 39.314, 382.843 39.333, 385.336 37.700 C 386.762 36.765, 388.452 34.988, 389.090 33.750 C 390.979 30.087, 394.218 27, 396.174 27 C 398.583 27, 398.482 27.987, 395.500 33.596 C 394.125 36.182, 393.007 39.243, 393.016 40.399 C 393.025 41.592, 394.646 39.258, 396.766 35 C 399.014 30.486, 401.396 27.107, 402.750 26.513 C 405.050 25.504, 405.798 24, 404 24 C 402.151 24, 402.978 21.868, 406 18.846 C 409.405 15.441, 409.583 15, 407.547 15 C 406.747 15, 405.285 16.158, 404.297 17.572 M 346.292 19.230 C 345.020 21.386, 343.038 23.203, 341.553 23.576 C 338.797 24.268, 338.045 26, 340.500 26 C 342.509 26, 342.507 26.009, 338.500 33.299 C 336.575 36.801, 335.035 40.529, 335.077 41.583 C 335.121 42.683, 336.298 41.155, 337.837 38 C 342.642 28.154, 344.885 25.184, 348.038 24.492 C 351.445 23.743, 352.033 22, 348.878 22 C 347.136 22, 346.971 21.740, 347.960 20.548 C 348.623 19.749, 349.010 18.293, 348.821 17.311 C 348.560 15.953, 347.954 16.414, 346.292 19.230 M 490.281 21.359 C 488.662 24.691, 487.457 25.859, 485.161 26.318 C 483.510 26.648, 479.903 28.922, 477.146 31.371 C 472.504 35.493, 468.427 37.760, 467.436 36.769 C 467.209 36.542, 468.389 34.202, 470.058 31.569 C 474.159 25.103, 473.437 24.229, 467.489 28.457 C 461.424 32.769, 460.494 32.879, 462.474 29.050 C 464.218 25.678, 464.334 25, 463.171 25 C 462.715 25, 461.310 27.203, 460.049 29.895 C 458.055 34.152, 453.669 38.002, 452.334 36.667 C 452.110 36.443, 452.843 33.935, 453.963 31.093 C 456.459 24.760, 456.463 25, 453.868 25 C 450.750 25, 443 33.106, 443 36.368 C 443 39.496, 443.673 39.602, 447 37 C 450.164 34.525, 451 34.513, 451 36.941 C 451 39.848, 452.470 40.205, 455.294 37.984 C 456.684 36.890, 458.442 36.232, 459.199 36.523 C 459.957 36.814, 461.881 35.690, 463.475 34.026 C 467.310 30.023, 467.934 30.208, 466.663 34.968 C 465.339 39.927, 466.283 40.948, 470.144 38.732 C 471.979 37.679, 474.109 37.240, 475.587 37.611 C 477.064 37.982, 478.981 37.587, 480.484 36.603 L 482.953 34.985 482.320 38.148 C 481.868 40.410, 482.017 41.107, 482.844 40.596 C 483.480 40.203, 484 39.402, 484 38.816 C 484 37.122, 489.170 25.839, 491.697 22.018 C 494.120 18.354, 494.526 17, 493.199 17 C 492.759 17, 491.446 18.961, 490.281 21.359 M 506.981 19.550 C 506.424 21.014, 504.731 22.546, 503.006 23.148 C 499.856 24.246, 498.930 26, 501.500 26 C 503.580 26, 503.418 26.671, 500.071 31.912 C 497.536 35.882, 494.697 43.422, 496.272 42 C 496.577 41.725, 498.605 38.125, 500.779 34 C 503.940 28.005, 505.512 26.115, 508.616 24.582 C 512.379 22.723, 512.423 22.644, 510.010 22.039 C 508.324 21.616, 507.921 21.167, 508.760 20.648 C 510.255 19.724, 510.416 17, 508.975 17 C 508.412 17, 507.514 18.148, 506.981 19.550 M 410.212 22.435 C 408.402 25.394, 406.694 26.975, 405.077 27.185 C 402.379 27.536, 400.925 30, 403.417 30 C 405.543 30, 405.434 30.811, 402.421 37.392 C 401.002 40.490, 400.049 43.582, 400.302 44.263 C 400.555 44.943, 401.289 44.150, 401.933 42.500 C 404.835 35.064, 407.437 30.758, 409.632 29.758 C 412.632 28.391, 413.493 29.210, 411.996 32.007 C 410.507 34.790, 411.532 39, 413.698 39 C 414.611 39, 416.926 38.438, 418.842 37.750 C 421.629 36.750, 422.410 36.750, 422.746 37.750 C 423.386 39.654, 428.100 39.236, 431.863 36.942 C 435.889 34.488, 435.521 33.326, 431.399 35.476 C 428.067 37.213, 424 37.484, 424 35.969 C 424 35.401, 424.788 34.644, 425.750 34.286 C 431.445 32.167, 435.910 25, 431.535 25 C 429.636 25, 423.263 30.597, 422.529 32.910 C 421.540 36.024, 413.958 38.359, 412.499 35.998 C 412.158 35.447, 413.144 34.517, 414.690 33.932 C 416.235 33.346, 418.512 31.918, 419.750 30.759 C 423.834 26.933, 422.041 23.893, 417.183 26.406 C 414.665 27.708, 410 27.631, 410 26.288 C 410 24.906, 414.286 20.059, 415.076 20.547 C 415.584 20.861, 416 20.416, 416 19.559 C 416 16.516, 412.884 18.064, 410.212 22.435 M 572.687 25.805 C 571.209 27.347, 570.010 29.260, 570.022 30.055 C 570.037 30.998, 570.667 30.691, 571.835 29.172 C 574.677 25.479, 576.554 28.417, 574.894 33.959 C 573.119 39.885, 574.804 41.091, 579.137 36.995 C 582.198 34.102, 581.882 33.834, 577.500 35.607 C 575.533 36.403, 575.598 34.649, 577.701 30.218 C 578.948 27.589, 579.082 26.527, 578.201 26.234 C 577.540 26.013, 577 25.196, 577 24.417 C 577 22.271, 575.659 22.703, 572.687 25.805 M 354.367 28.758 C 349.928 33.852, 347.945 33.962, 350 29 C 351.627 25.073, 350.908 24.405, 347.892 27.039 C 346.413 28.331, 345.938 29.314, 346.648 29.614 C 347.383 29.924, 347.597 31.583, 347.244 34.218 L 346.691 38.337 350.374 35.528 L 354.057 32.719 353.051 35.366 C 349.993 43.408, 346.647 48, 343.845 48 C 341.840 48, 341.368 49.491, 343.044 50.527 C 345.012 51.744, 348.689 48.156, 351.446 42.329 C 352.963 39.123, 355.335 34.180, 356.717 31.346 C 360.208 24.186, 359.261 23.143, 354.367 28.758 M 509.400 28.400 C 503.356 34.444, 505.319 40.832, 512.397 38.153 C 515.037 37.154, 515.686 37.232, 516.748 38.678 C 517.896 40.241, 518.223 40.161, 520.803 37.689 C 524.280 34.358, 525 34.325, 525 37.500 C 525 40.553, 526.279 40.650, 530.153 37.891 C 533.651 35.400, 533.359 34.424, 529.625 36.125 C 526.112 37.726, 525.512 36.844, 527.500 33 C 528.406 31.248, 528.893 29.560, 528.582 29.249 C 528.272 28.938, 528.519 28.080, 529.131 27.342 C 530.010 26.282, 529.738 26, 527.834 26 C 526.323 26, 523.465 27.839, 520.174 30.929 C 515.174 35.623, 510.247 37.889, 508.024 36.515 C 506.385 35.502, 506.841 34, 508.788 34 C 511.728 34, 517.250 28.784, 516.463 26.750 C 515.439 24.103, 513.167 24.633, 509.400 28.400 M 560.089 27.579 C 555.024 31.841, 552.601 35.814, 554.022 37.527 C 555.060 38.777, 555.675 38.608, 558.366 36.338 L 561.500 33.692 561.835 36.096 C 562.393 40.105, 563.617 40.321, 567.137 37.030 L 570.500 33.886 567.157 35.517 C 562.700 37.691, 562.332 36.980, 564.864 31.095 C 566.039 28.364, 567 25.875, 567 25.565 C 567 24.064, 562.817 25.283, 560.089 27.579 M 287.750 29.392 C 286.788 30.123, 286 31.008, 286 31.360 C 286 32.569, 287.781 31.998, 290.139 30.033 C 292.863 27.764, 290.670 27.176, 287.750 29.392 M 318.927 30.255 C 315.361 33.367, 313.489 36, 314.843 36 C 316.220 36, 323 30.096, 323 28.896 C 323 27.426, 321.655 27.874, 318.927 30.255 M 384.103 30.855 C 381.623 34.338, 381.428 36, 383.500 36 C 385.636 36, 389.181 32.177, 388.811 30.271 C 388.279 27.528, 386.297 27.774, 384.103 30.855 M 415.500 30 C 413.170 32.575, 415.060 32.598, 418.139 30.033 C 419.933 28.539, 420.117 28.059, 418.905 28.033 C 418.028 28.015, 416.495 28.900, 415.500 30 M 427.131 29.342 C 426.519 30.080, 426.287 30.954, 426.616 31.283 C 427.320 31.987, 431 29.869, 431 28.759 C 431 27.502, 428.324 27.905, 427.131 29.342 M 447.104 31.535 C 443.778 35.322, 443.454 36, 444.965 36 C 446.253 36, 453 30.035, 453 28.896 C 453 26.882, 450.017 28.217, 447.104 31.535 M 510.573 29.521 C 509.513 30.323, 508.912 31.245, 509.237 31.571 C 510.028 32.361, 514 30.188, 514 28.965 C 514 27.621, 512.835 27.810, 510.573 29.521 M 545.082 31.368 C 541.426 37.282, 542.505 38.478, 548.102 34.716 C 552.399 31.827, 553.282 28, 549.651 28 C 547.905 28, 546.542 29.004, 545.082 31.368 M 558.042 31.605 C 556.301 33.588, 555.091 35.424, 555.353 35.686 C 556.236 36.569, 559.846 34.025, 561.999 31.002 C 565.159 26.564, 562.053 27.037, 558.042 31.605 M 480.250 30.989 C 476.075 33.535, 475.702 36.444, 479.748 34.906 C 484.432 33.125, 487.933 28.994, 484.750 29.004 C 484.063 29.006, 482.038 29.899, 480.250 30.989 M 520.901 32.106 C 518.071 35.135, 517.238 37.023, 518.750 36.978 C 519.719 36.949, 523.019 34.116, 525.423 31.250 C 528.536 27.538, 524.445 28.312, 520.901 32.106 M 132.653 51.529 C 112.232 55.787, 92.917 79.111, 89.350 103.821 L 87.769 114.772 93.534 125.636 C 100.796 139.322, 102.832 142.053, 109.562 147.134 C 112.553 149.393, 115.003 151.974, 115.006 152.870 C 115.017 156.099, 117.024 161.649, 118.916 163.680 C 121.319 166.258, 125.265 165.731, 129.414 162.278 C 131.450 160.584, 132.957 160.061, 134.414 160.544 C 135.561 160.924, 140.100 161.452, 144.500 161.718 C 151.682 162.151, 152.793 162.497, 155.369 165.100 C 158.809 168.578, 160.236 168.789, 159.813 165.756 C 159.542 163.815, 160.319 163.240, 165.555 161.506 C 184.134 155.351, 198.602 137.407, 202.110 116.166 C 206.293 90.836, 186.472 58.745, 164.678 55.560 C 161.989 55.168, 158.980 53.980, 157.876 52.876 C 155.225 50.225, 142.233 49.532, 132.653 51.529 M 141.500 58.698 C 121.686 61.325, 105.217 74.602, 99.953 92.190 L 97.951 98.879 100.026 110.647 C 103.311 129.283, 108.738 136.726, 124.380 144.057 C 134.544 148.820, 139.596 150.001, 145.181 148.922 C 147.557 148.463, 149.857 148.068, 150.293 148.044 C 152.049 147.947, 161 138.600, 161 136.863 C 161 134.210, 164.253 134.500, 167.779 137.468 L 170.712 139.935 172.955 137.548 C 174.188 136.235, 176.391 134.632, 177.849 133.987 C 181.675 132.292, 188.752 123.649, 189.907 119.259 C 191.218 114.275, 191.725 94.385, 190.648 90.148 L 189.796 86.796 191.935 88.935 C 193.111 90.111, 194.507 90.805, 195.036 90.477 C 195.619 90.117, 196 92.623, 196 96.816 C 196 106.519, 196.825 110, 199.125 110 C 202.619 110, 200.547 94.296, 195.751 84.424 C 193.133 79.035, 189.466 78.388, 189.546 83.329 L 189.591 86.159 187.631 83.329 C 183.380 77.195, 170.362 65.411, 165 62.843 C 160.658 60.764, 146.298 57.426, 144.808 58.150 C 144.639 58.232, 143.150 58.479, 141.500 58.698 M 196.667 112.667 C 196.300 113.033, 196 114.438, 196 115.789 C 196 117.859, 196.236 118.049, 197.500 117 C 198.325 116.315, 199 114.910, 199 113.878 C 199 111.991, 197.908 111.425, 196.667 112.667 M 191.089 127.250 C 190.183 129.660, 191.105 130.557, 193.533 129.626 C 195.490 128.875, 195.435 125, 193.468 125 C 192.625 125, 191.555 126.013, 191.089 127.250 M 187.725 133.752 C 185.157 136.589, 183.740 141.143, 185.030 142.413 C 186.568 143.928, 192 137.749, 192 134.484 C 192 131.575, 190.004 131.233, 187.725 133.752 M 163.345 139.543 C 163.019 140.392, 163.032 141.365, 163.372 141.706 C 164.341 142.674, 169.187 140.112, 168.497 138.996 C 167.541 137.448, 164.005 137.824, 163.345 139.543 M 180.667 158.667 C 179.570 159.763, 179.904 160.749, 181.590 161.396 C 183.916 162.289, 185.322 161.093, 183.926 159.411 C 182.641 157.863, 181.688 157.645, 180.667 158.667"></path></svg></span></a>
   <label for="nav-toggle" class="nav-burger"><span class="sr-only" data-i18n-en="Menu">Menu</span><svg class="ic-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg><svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg></label>
   <label for="nav-toggle" class="nav-scrim" aria-hidden="true"></label>
   <nav class="nav-links micro">
@@ -41,6 +96,29 @@
     <a href="sarajevska.en.html" data-href-en="sarajevska.en.html" data-i18n-en="Menu" aria-current="page">Menu</a>
     <a href="en.html#gde" data-href-en="en.html#gde" data-i18n-en="Find us">Find us</a>
   </nav>
+
+  <!-- THE TWO SITE CONTROLS (2026-08-15), hand-duplicated across the three pages and the
+       scaffold's template like the nav above them. Language first, register second, both
+       in the masthead because that is where a reader looks and because a sticky bar keeps
+       them in one place down a page this tall. The language pill MOVED here from the
+       footer rather than being copied into a second place.
+
+       They are a SIBLING of .nav-links and come after it: the drawer opens through
+       `.nav-cb:checked ~ .nav-links`, so wrapping the two together would kill the phone
+       nav silently. The anchor's hreflang and lang flip on the English render through
+       data-hreflang-en / data-lang-en, because its label is written in the language it
+       leads to and is therefore a foreign-language island inside the page. -->
+  <div class="nav-tools">
+    <a class="lang-toggle" href="sarajevska.html" hreflang="sr" lang="sr"
+       data-href-en="sarajevska.html" data-hreflang-en="sr" data-lang-en="sr"
+       data-slot="nav.lang">SR</a>
+    <button class="theme-switch" type="button" data-theme-switch>
+      <span class="sr-only theme-say" aria-live="polite" data-i18n-en="Theme: system. Change.">Theme: system. Change.</span>
+      <svg class="ic-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>
+      <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8a7.4 7.4 0 1 0 10.8 10.8z"/></svg>
+    </button>
+  </div>
 </header>
 
 <div class="menu-strip">
@@ -88,11 +166,15 @@
 </section>
 
 <section class="fam-group" id="kafa">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Coffee">Coffee</span>
     <h2 class="big" data-slot="sarajevska.coffee.heading">From espresso to filter</h2>
   </div>
-  <div class="families">
+  <div class="families art-field">
+    <div class="sec-marks" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -222,11 +304,15 @@
 </section>
 
 <section class="fam-group" id="caj">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Tea and chocolate">Tea and chocolate</span>
     <h2 class="big" data-slot="sarajevska.tea.heading">Hot and iced</h2>
   </div>
-  <div class="families">
+  <div class="families art-field">
+    <div class="sec-marks flip" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -327,11 +413,15 @@
 </section>
 
 <section class="fam-group" id="bez-alkohola">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Soft drinks">Soft drinks</span>
     <h2 class="big" data-slot="sarajevska.soft.heading">From the blender and the bottle</h2>
   </div>
-  <div class="families">
+  <div class="families art-field">
+    <div class="sec-marks" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -459,11 +549,15 @@
 </section>
 
 <section class="fam-group" id="alkohol">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Alcohol">Alcohol</span>
     <h2 class="big" data-slot="sarajevska.booze.heading">Cocktails, wine and rakija</h2>
   </div>
-  <div class="families">
+  <div class="families art-field">
+    <div class="sec-marks flip" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -638,11 +732,32 @@
 </section>
 
 <section class="fam-group" id="kuhinja">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Kitchen">Kitchen</span>
     <h2 class="big" data-slot="sarajevska.kitchen.heading">Breakfast, pizza and pasta</h2>
   </div>
-  <div class="families">
+
+  <!-- THE KITCHEN'S ONE ACTION (2026-08-15, goolio's ask). This shop is the only one with
+       a kitchen and the only one on Wolt, so the pill belongs to this SECTION and not to
+       the site's chrome: put it in the nav and Trg's page grows a delivery link for food
+       it does not cook.
+
+       BOTH PARTS ARE TEMPLATE-OWNED, and the note is the reason. Every price under it is a
+       counter price off this shop's till, and every price behind that link is a delivery
+       price running about a quarter higher: 117 rows of the export said so, which is what
+       started this whole batch. A chat edit that deleted the qualification would leave the
+       page offering two price lists as if they were one, so the qualification is not a
+       slot. Same rule as every other .napomena on the site. -->
+  <div class="fam-order">
+    <p class="napomena" data-i18n-en="Wolt prices are delivery prices and run higher than the counter prices below.">Wolt prices are delivery prices and run higher than the counter prices below.</p>
+    <a class="wolt" href="https://wolt.com/en/srb/belgrade/restaurant/soljica" target="_blank" rel="noopener" data-i18n-en="Order the kitchen on Wolt">Order the kitchen on Wolt</a>
+  </div>
+
+  <div class="families art-field">
+    <div class="sec-marks" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -788,11 +903,15 @@
 </section>
 
 <section class="fam-group" id="slatko">
-  <div class="sec-label">
+<div class="sec-label">
     <span class="micro" data-i18n-en="Sweet">Sweet</span>
     <h2 class="big" data-slot="sarajevska.sweet.heading">With your coffee</h2>
   </div>
-  <div class="families">
+  <div class="families art-field">
+    <div class="sec-marks flip" aria-hidden="true">
+      <svg class="sm-big" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+      <svg class="sm-small" aria-hidden="true" focusable="false"><use href="#coin-mark"></use></svg>
+    </div>
 
     <article class="fam">
       <header class="fam-head">
@@ -820,7 +939,8 @@
   <span class="foot-line" data-slot="footer.line">Šoljica · Specialty coffee and tea bar</span>
   <div class="foot-side">
     <a class="foot-ig" href="https://www.instagram.com/soljicacom/">Instagram</a>
-    <a class="lang-toggle" href="sarajevska.html" data-href-en="sarajevska.html" data-slot="footer.lang">SR</a>
+    <!-- The language pill left this row on 2026-08-15 for the masthead, where a language
+         selector belongs. The footer is the documented SECONDARY place for one. -->
   </div>
 </footer>
 
@@ -901,6 +1021,7 @@
 <!-- The phone drawer opens and closes without this file; it adds the close on an in-page
      anchor tap, Escape, and the resize past the breakpoint. See its own header. -->
 <script src="assets/nav.js" defer></script>
+<script src="assets/theme.js" defer></script>
 
 </body>
 </html>

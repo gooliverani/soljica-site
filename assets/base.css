@@ -30,8 +30,20 @@
 :root {
   color-scheme: light;
 
-  /* ---- families: the logotype's own, unchanged ---- */
-  --display: "Abril Fatface", Georgia, serif;  /* fat serif, ball terminals */
+  /* ---- families: the nearest free faces to the logotype's own ----
+     PRATA REPLACED ABRIL FATFACE ON 2026-08-15 (goolio's pick, set against the mark
+     itself in the design system's explorations/logo-fonts.html: Abril read too sharp
+     and too heavy beside the logotype). PRATA SHIPS ONE WEIGHT AND HAS NO BOLD CUT.
+     Nothing may ask it for 600 or 700: the browser synthesises one and smears the
+     stems. A heading that needs more presence takes a larger step of the scale.
+
+     The boundary between the two text faces, and it moved the same day: PROSE AND
+     NAMES ARE PRATA, LABELS AND NUMBERS ARE ARCHIVO. So --display now carries the
+     intros, the notes, the footnotes, the row names and the prices as well as the
+     headings, and --body is left with the tracked uppercase micro labels and the
+     data lines beside them (addresses, opening hours), which a customer scans
+     rather than reads. The trap that comes with it is .emph below. */
+  --display: "Prata", Georgia, serif;          /* soft high-contrast serif, ONE weight */
   --script: "Kaushan Script", cursive;         /* the logo's brush script */
   --body: "Archivo", system-ui, sans-serif;
 
@@ -60,8 +72,28 @@
   --band-floor:  var(--ink-void);    /* the cine hero's bottom */
   --text:        var(--ink);
   --on-band:     var(--milk);
+  /* TWO ACCENT ROLES, AND THE SPLIT IS THE WHOLE ANSWER TO "the page should print the
+     same orange the logotype does" (goolio, 2026-08-15). --accent IS the mark's own
+     #e8762c and it carries the script phrase, the underlines, the rules, the focus
+     ring and the filled pill. --accent-text is the deeper step and it carries anything
+     a reader has to READ: a link in running copy, the active label in the jump index.
+     MEASURED, because the design system's own note asks for exactly this and the repo
+     is where it has to be true: ember on cream is 2.6:1, which fails AA for body text
+     and fails it for large text too; ember-deep on cream is 4.9:1 and passes. Flipping
+     --accent-text to the bright ember would have printed the right orange and made two
+     real links unreadable, so the design system's rule is honoured by ROUTING rather
+     than by remapping. Dark keeps its lifted step; the two are never flattened to one. */
   --accent:      var(--ember);
   --accent-text: var(--ember-deep);
+  /* THE HOVER STEP, AND ON CREAM IT IS A COMPROMISE THAT HAD TO BE MEASURED (2026-08-16,
+     L3). goolio asked the Wolt lettering to go "lighter" on hover, and on a cream ground
+     lighter IS lower contrast: there is no way around that, only a way to bound it.
+     Measured on this ground with the browser's own gamut mapping: --accent-text is 4.80:1,
+     the bright ember is 2.51:1 (which fails AA even for large text, the reason the routing
+     above exists), and this 70/30 step is 3.92:1. That clears AA for LARGE text and nothing
+     else, so `.wolt`'s font-size floor of 24px is load-bearing, not taste. Dark has room to
+     move the other way and takes a ramp token. */
+  --accent-lift: color-mix(in oklch, var(--accent-text) 70%, var(--accent));
   --on-accent:   var(--ink-abyss);
   --coin-plate:  var(--ink-void);    /* the Š-coin's disc: painted by CSS, so it can leave in dark */
 
@@ -108,7 +140,7 @@
   --dur: 300ms;
 }
 
-/* Dark. Seven remaps, no new colours: every value here is a ramp token already
+/* Dark. Eight remaps, no new colours: every value here is a ramp token already
    declared above, or `transparent`. Guarded so an explicit light choice still wins. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -118,6 +150,7 @@
     --band:        var(--ink-lift);
     --text:        var(--cream);
     --accent-text: var(--ember-lift);
+    --accent-lift: var(--crema);   /* on ink, "lighter" is free: 10.51:1 -> 13.93:1 */
     --on-accent:   var(--ink-void);
     --coin-plate:  transparent;   /* an ink disc on an ink page is a disc nobody can see */
   }
@@ -129,6 +162,7 @@
   --band:        var(--ink-lift);
   --text:        var(--cream);
   --accent-text: var(--ember-lift);
+  --accent-lift: var(--crema);
   --on-accent:   var(--ink-void);
   --coin-plate:  transparent;
 }
@@ -145,6 +179,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
+/* A THIRD FACE WAS ON THIS SITE UNTIL 2026-08-16 AND ONLY LUCK KEPT IT INVISIBLE. Form
+   controls do not inherit the document's font, so the theme switch's label rendered in the
+   UA's own Arial: the L1 audit walked the three pages and found it, sitting between Prata
+   and Archivo. It shows nobody today only because that label is .sr-only and clipped, which
+   makes it a trap rather than a bug: the first button here to carry visible text would have
+   shipped in a face this design system never chose. */
+button, input, select, textarea { font: inherit; }
 ::selection { background: var(--accent); color: var(--on-accent); }
 img { max-width: 100%; display: block; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -155,6 +196,14 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
 }
 .script { font-family: var(--script); font-weight: 400; }
+/* THE TRAP THAT CAME WITH MOVING PROSE INTO PRATA. Prata ships one weight, so every
+   <b>, <strong> and font-weight: 600 nested in serif prose now asks for a cut that does
+   not exist and gets a synthesised one. Emphasis inside --display text takes COLOUR,
+   never weight: .emph lifts a phrase to --text against surrounding --text-soft/faint
+   and leaves the weight alone. If a paragraph genuinely needs bold, that paragraph
+   belongs in --body. */
+.emph { font-weight: inherit; color: var(--text); }
+.band .emph { color: var(--on-band); }
 .sr-only {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
@@ -172,10 +221,20 @@ img { max-width: 100%; display: block; }
   background: var(--ground);
   border-bottom: 1px solid var(--rule);
 }
-.nav-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
-.nav-mark .coin { width: 32px; }
+/* THE MARK IS THE FULL LOGOTYPE, AND IT IS INLINE SVG (D1, 2026-08-16).
+   goolio, 2026-08-15: "replace that coin Š logo with the real one Šoljica everywhere."
+   The traced logotype paints its letterforms with currentColor, which is the whole reason
+   it is inlined in the markup rather than pointed at with an <img>: an image cannot inherit
+   a colour, so the mark would be black on cream and invisible on ink. `color` is declared
+   here rather than left to inherit, so a colour set on .topbar later cannot repaint the
+   brand by accident. 132x46 is the design system's smallest tested size; below about 110px
+   the ember detail inside the `o` closes up, which is why this never shrinks with the bar. */
+.nav-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; color: var(--text); }
+.nav-mark .wordmark-slot { display: block; width: 132px; }
+.nav-mark svg { display: block; width: 100%; height: auto; }
 
-/* The Š-coin, assembled rather than baked. The disc is a CSS circle in
+/* The Š-coin, assembled rather than baked, and STILL IN USE: the footer keeps it, and it
+   stays the mark for any slot that has to be square. The disc is a CSS circle in
    --coin-plate (ink on cream, `transparent` in dark, where an ink disc on an
    ink page is a disc nobody can see), and the mark on top is
    assets/monogram-mark.svg, which is the traced monogram with its own disc
@@ -189,7 +248,12 @@ img { max-width: 100%; display: block; }
   border-radius: 50%; background: var(--coin-plate);
 }
 .coin img { position: relative; width: 100%; height: auto; }  /* height:auto or the width/height attributes squash the mark against the plate */
-.nav-links { display: flex; gap: clamp(1rem, 2.6vw, 2.4rem); }
+/* margin-left: auto, with the bar still on space-between. Three in-flow children and
+   space-between would centre the nav; the auto margin eats all the free space instead, so
+   the mark holds the left and the nav and the tools travel together on the right. The nav
+   could NOT simply be wrapped with the tools in one div: the drawer is reached by
+   `.nav-cb:checked ~ .nav-links`, so .nav-links has to stay a SIBLING of the checkbox. */
+.nav-links { display: flex; gap: clamp(1rem, 2.6vw, 2.4rem); margin-left: auto; }
 .nav-links a {
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 44px; min-width: 44px;   /* BOTH axes: an earlier gate passed targets 44 tall and 32 wide, and the short labels here ("Karta", EN "Shop") are exactly that shape */
@@ -198,6 +262,70 @@ img { max-width: 100%; display: block; }
   transition: color var(--dur) var(--ease);
 }
 .nav-links a:hover { color: var(--accent-text); }
+
+/* ---------- the two site controls: which language, which register (2026-08-15) ----------
+   THEY LIVE IN THE MASTHEAD AND THAT IS THE STANDARD, not a preference. A language
+   selector belongs in the top corner of a sticky header, where it stays in one place as
+   the page scrolls; the footer is the documented SECONDARY place and this site had only
+   the secondary one. The theme control sits beside it because both answer "how do I read
+   this page", which is a different question from the four nav links about what is on it.
+   They are a SIBLING of .nav-links rather than a child, so the drawer selector still
+   reaches the nav, and they stay in the bar at phone width while the nav leaves it: a
+   control folded into a burger is one a reader has to go looking for.
+
+   ONE CONTROL PER JOB, and the site had two of one and none of the other. The footer's
+   language pill MOVED here rather than being duplicated; two controls doing one job is
+   how a chat edit renames one of them and the two start disagreeing. */
+.nav-tools { display: flex; align-items: center; gap: clamp(0.4rem, 1.4vw, 0.9rem); flex: 0 0 auto; }
+
+/* The pill is the footer's own, unchanged, because it IS the same control in a new place.
+   THE LABEL IS THE TWO-LETTER CODE OF THE TARGET LANGUAGE (goolio, 2026-08-16): "EN" on the
+   Serbian page, "SR" on the English one. It was the target language written out in the target
+   language ("English" / "Srpski") until then. hreflang + lang on the anchor is the
+   technically-correct half either way: those two attributes are what tell a browser and a
+   screen reader that this one string is not in the language the rest of the page is.
+   MIN-WIDTH CAME WITH THE SHORTER LABEL. "English" was wide enough to clear 44px on its own;
+   two letters inside the narrow bar's 12px padding is about 42px, and this site gates on 44
+   in BOTH axes. Held here rather than by adding padding back, so the pill keeps the width it
+   was given at 390px. */
+.lang-toggle {
+  border: 1.5px solid var(--rule-firm); background: none; color: var(--text);
+  font: 600 var(--t-micro) var(--body); letter-spacing: 0.16em;
+  padding: 11px 18px; border-radius: var(--r-pill); cursor: pointer;
+  min-height: 44px; min-width: 44px;
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+  white-space: nowrap;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent-text); }
+
+/* THE THEME CONTROL IS THE ONE THING ON THIS SITE THAT MAY NOT EXIST WITHOUT JS, and it
+   is hidden until a script says otherwise. The drawer beside it is a CSS checkbox for
+   exactly the opposite reason: a nav that needs JS is a nav that can fail to exist. A
+   theme button that needs JS and fails is a button that does nothing when tapped, which
+   is worse than an absent one, so `html.js-theme` (set by the inline head script, before
+   first paint) is what reveals it.
+
+   THREE STATES, NOT TWO, and the reason is that the third one is unrecoverable otherwise.
+   The stylesheet already resolves a complete palette for each: bare :root is light, the
+   guarded media query is "follow the system", and :root[data-theme] is an explicit choice
+   that outranks both. A two-way toggle would spend the system state on the first tap and
+   give no way back to it. The icon shows the state the page is IN; the hidden span names
+   it, and it is a span rather than an aria-label because the EN render swaps leaf text
+   and cannot reach an attribute. */
+.theme-switch { display: none; }
+.js-theme .theme-switch {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border: 0; padding: 0; background: none; cursor: pointer;
+  border-radius: 2px; color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+.theme-switch:hover { color: var(--accent-text); }
+.theme-switch svg { width: 22px; height: 22px; display: none; }
+[data-theme-state="system"] .theme-switch .ic-auto,
+[data-theme-state="light"]  .theme-switch .ic-sun,
+[data-theme-state="dark"]   .theme-switch .ic-moon { display: block; }
 
 /* ---------- the phone drawer, and it is a CSS CHECKBOX rather than a script ----------
    Ported from the Tilltrend site's own nav (goolio asked for that comparison on
@@ -245,7 +373,9 @@ section { padding: var(--band-y) var(--gutter); }
 .sec-label .micro { color: var(--text-faint); }
 .uvod {
   max-width: var(--measure); margin: 0 auto clamp(2.8rem, 5vw, 4.4rem);
-  text-align: center; font-size: var(--t-lead); line-height: 1.5;
+  text-align: center;
+  font-family: var(--display);   /* prose is Prata (2026-08-15) */
+  font-size: var(--t-lead); line-height: 1.55;
   color: var(--text-soft); text-wrap: pretty;
 }
 /* ---------- napomena: the provisional marker (T6, spec criterion 11) ----------
@@ -256,9 +386,179 @@ section { padding: var(--band-y) var(--gutter); }
    once the owner confirms a figure is a code edit, not a chat edit. */
 .napomena {
   max-width: 60ch; margin: clamp(1.8rem, 3vw, 2.6rem) auto 0;
-  text-align: center; font-size: var(--t-fine); line-height: 1.5;
+  text-align: center;
+  font-family: var(--display);   /* a footnote is prose, so it is Prata (2026-08-15) */
+  font-size: var(--t-fine); line-height: 1.55;
   color: var(--text-faint); text-wrap: pretty;
 }
+
+/* ---------- section marks: the Š-coin pair, carried out of the hero (L4a, 2026-08-16) ------
+   goolio: "we should add those drawings of logo-ring.svg and monogram-mark.svg a litle bit
+   on every page....to bring life to site, but do it wisely and with a taste." Then, on the
+   first version: "Make them all like Š coins in hero page. One bigger, one smaller and in
+   corners."
+
+   SO THIS IS THE HERO'S OWN DEVICE, NOT A NEW ONE, AND THE FIRST VERSION'S RING IS GONE.
+   `.hero-marks` has carried exactly this since D2: the same file at 4.5%, a big mark bleeding
+   off one corner and a smaller one off the opposite corner, clipped by a box of its own. What
+   changed is that it is no longer only the hero's. The numbers here are the hero's scaled
+   down, keeping its 620:420 ratio, because a section is not a full viewport.
+   assets/logo-ring-tight.svg was DELETED with the ring rather than shelved: an idle asset in
+   this repo is what put the withdrawn drawings back on the site.
+
+   THIS IS NOT THE 26 WITHDRAWN DRAWINGS AND MUST NOT BECOME THEM. assets/drawings/ is
+   unreferenced BY DECISION (goolio, 2026-08-15: "they are not complete and doesn't fit into
+   site ambient"). The only file in scope is assets/monogram-mark.svg, which is the mark the
+   hero and the footer already use.
+
+   IT IS AN <img> IN THE MARKUP, NOT A MASK, AND THAT IS THREE CONSTRAINTS AGREEING.
+   (1) cms/publish.mjs finds the files a build must copy by scanning the HTML, and a test
+   forbids this stylesheet from naming an asset in a url() of its own, so the reference has
+   to live in the markup either way. (2) The documented alternative, `--art:url(...)` set in
+   the markup and read from here, is the trap the withdrawn drawings paid for: a relative
+   url() inside a custom property resolves against the stylesheet that READS it, so it
+   resolved to assets/assets/ and 404'd, and an element whose mask loads nothing paints
+   nothing at all. (3) The mask-over-currentColor rule exists so art can take the page's ink
+   in both registers; this art must NOT, because it is the mark's ember, which D1 already
+   settled as the one colour that does not follow the register.
+
+   THE PATTERN IS ONE SENTENCE: THE PAIR TURNS OVER WHEN THE PAGE TURNS DARK. A cream section
+   takes the hero's own orientation, big mark off the top left and small off the bottom right;
+   an ink band takes it mirrored. It is locked to the one rhythm a reader can actually see on
+   this page, the alternation of cream and band, so the flip lands on a real boundary instead
+   of on a count nobody can perceive. It also solves the failure L4b has to survive: two
+   adjacent sections can never wear the same arrangement, so a long page does not turn into
+   wallpaper. What it deliberately does NOT do is pretend to encode data. "Two coins for two
+   shops" was available and is a lie: the site names three locations and these marks are not
+   per shop, and a decoration wearing a fact it does not carry is the same defect as a price
+   nobody can source.
+
+   z-index: -1 WITH isolation ON THE FIELD, so the pair paints above the section's own
+   background and below every piece of its content. Without the isolate a negative child
+   escapes to the root stacking context and the band's background paints over it. The wrapper
+   clips its own overflow exactly as .hero-marks does, or a corner mark bleeds into the
+   section above and below. */
+.art-field { position: relative; isolation: isolate; }
+.sec-marks {
+  position: absolute; inset: 0; z-index: -1;
+  overflow: hidden; pointer-events: none;
+}
+/* THE MARK TAKES THE SECTION'S OWN INK, AND IT HAS TO BE INLINE SVG TO DO IT.
+   assets/monogram-mark.svg is filled #faf7f2, a near-WHITE mark drawn for the dark hero. As
+   an <img> it is therefore invisible on cream at ANY opacity, which was measured the long
+   way: 0.06, 0.09, 0.12, 0.15 and 0.18 all rendered flat cream side by side, while the same
+   file at 0.036 read clearly on the band. An <img> cannot inherit a colour, so the fix is
+   the one CLAUDE.md already states for section art: currentColor. assets/monogram-tokenized.svg
+   is that file with its single fill swapped and every path byte-identical, inlined once as a
+   <symbol> per page and referenced with <use>.
+   Nothing sets `color` here on purpose: the mark inherits it from the section, so a cream
+   section draws it in ink and a band draws it in --on-band, with no register logic at all. */
+.sec-marks svg {
+  position: absolute;
+  color: inherit; fill: currentColor;
+  opacity: var(--mark-alpha);
+  aspect-ratio: 259 / 251;   /* the monogram's own viewBox: an inline svg has no intrinsic size */
+}
+/* THE ALPHA IS PER GROUND, AND COPYING THE HERO'S 0.045 ACROSS WAS WRONG TWICE OVER.
+   The hero sits on ink, and ink is where a light mark at 4.5% belongs; on cream the mark is
+   now dark rather than light, so it is a different measurement entirely and not a translation
+   of the hero's. Each value below was picked by rendering the real mark on the real ground
+   and comparing it against the band, which is the placement goolio has already seen and
+   accepted the weight of.
+
+   TWO EARLIER VERSIONS OF THIS COMMENT CARRIED NUMBERS THAT WERE NOT MEASUREMENTS. The first
+   claimed one alpha suited every ground, "a spread of 0.012": that came from a probe that read
+   getComputedStyle's `oklch(0.967 0.014 84)` and used the three numbers as sRGB channels, so
+   every ground on the site collapsed to the same near-black and of course they agreed. The
+   second quoted CIELAB dE against each real ground, which was arithmetically right and still
+   described the wrong thing, because it composited an EMBER mark that does not exist: the file
+   is near-white. Resolve a colour by painting it into a canvas and reading the pixel back, and
+   check what colour the asset actually is before modelling anything about it.
+
+   THE TARGET IS THE HERO'S OWN COST, WHICH IS THE ONE NUMBER ON THIS SITE NOBODY HAS TO
+   ARGUE FOR: its pair has been on the page since D2 and goolio has looked at it and asked
+   for more of it. Measured by tools/section-marks-gate.html, the hero's marks cost the text
+   over them at most 7.6% of its contrast (the tagline, 9.40:1 to 8.68:1). Each value below
+   was scaled from a measured run to land on that, per ground, because the cost is linear in
+   the alpha and every ground started somewhere different: cream was 14.1% at 0.075, the
+   light-register band 12.3% at 0.055, the dark page 9.4% and the dark band 14.5%.
+   It matters beyond taste in one place: --text-faint on the dark page is already 4.48:1, and
+   at the old alpha a mark under "250 g" took it to 4.06:1. */
+.sec-marks       { --mark-alpha: 0.040; }   /* ink on cream */
+.sec-marks.flip  { --mark-alpha: 0.034; }   /* --on-band on the band */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .sec-marks      { --mark-alpha: 0.044; }
+  :root:not([data-theme="light"]) .sec-marks.flip { --mark-alpha: 0.029; }
+}
+:root[data-theme="dark"] .sec-marks      { --mark-alpha: 0.044; }
+:root[data-theme="dark"] .sec-marks.flip { --mark-alpha: 0.029; }
+/* Cream: the hero's orientation, big off the top left and small off the bottom right.
+   The sizes are the hero's 620:420 ratio scaled down, because a section is not a viewport. */
+.sec-marks .sm-big   { width: 460px; left: -120px; top: -110px; }
+.sec-marks .sm-small { width: 310px; right: -70px; bottom: -70px; }
+/* The defs block that holds the one copy of the drawing. Never painted, never measured. */
+.mark-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* Ink: the same pair turned over. One word in the markup states which ground a section is,
+   because that is the page's business and not this file's. */
+.sec-marks.flip .sm-big   { left: auto; top: auto; right: -120px; bottom: -110px; }
+.sec-marks.flip .sm-small { right: auto; bottom: auto; left: -70px; top: -70px; }
+/* OFF below the breakpoint the page already changes at. A 460px mark bleeding off a 390px
+   screen is not a corner accent, it is a wash across the whole column, and the hero's pair
+   works there only because the hero is empty apart from one centred lockup. A phone
+   treatment is a separate decision, not this one shrunk. */
+@media (max-width: 900px) {
+  .sec-marks { display: none; }
+}
+
+/* ---------- the Wolt link: the site's ONE commercial action, and it is LETTERING ----------
+   It was `.spot .wolt` inside index.html from the rebuild, which was correct while the
+   home page's locations band was the only place it appeared. sarajevska.html#kuhinja got
+   the second one on 2026-08-15 (goolio's ask: the food menu needs a way to order it), and
+   a second copy of it is exactly what this file exists to prevent. So the SHAPE lives here
+   and each context keeps only what it adds.
+
+   ONLY SARAJEVSKA IS ON WOLT, which is why this is never site chrome and never appears in
+   the nav: it is an action belonging to one named shop, and Trg's page must not grow one.
+
+   IT STOPPED BEING A PILL ON 2026-08-16 (batch L's L3). goolio: "can we make button for
+   'Poruči dostavu preko Wolta' to be just letters in Kaushan font as frases and colors same
+   as rest Kaushan fonts. On hover to be lighter." So: no ground, no border, no radius, no
+   padding, set in the script face at a phrase size, in the accent role its ground allows,
+   one step lighter on hover. Three things about that are not free.
+
+   KAUSHAN SHIPS ONE CUT, exactly like Prata, so `font-weight: 400` is declared here and
+   re-declared in the one context that would otherwise win a 600 off it (`.spot a`). A
+   synthesised bold on a brush script smears the strokes together.
+
+   THE TAP TARGET IS THE RISK AND PADDING CANNOT PAY FOR IT any more: the phrase is now
+   letterforms with nothing around them, so a 44px box has to be grown invisibly, the way
+   .slogan-link and .route-link already do it. Measure it with elementFromPoint, never
+   getBoundingClientRect, which still reports the letterforms' own ~30px box.
+
+   THE 24px FLOOR IS LOAD-BEARING, not a taste call. The hover step on cream is 3.92:1,
+   which is AA for large text and nothing else, so this may never be set smaller than 24px
+   (1.5rem) without the hover colour being re-argued. See --accent-lift.
+
+   THE CEILING WENT 2rem TO 2.6rem THE SAME DAY, and the reason is worth keeping because it
+   was a misread of goolio's own ask. He sent a screenshot of the slogan phrase with "I must
+   have told you wrong font". It is not a different font: that phrase is this face, measured
+   and rendered side by side. What differs is SIZE, and Kaushan at 32px is a thin, quiet
+   thing where the same face at 62px is the confident brush he was pointing at. So the first
+   version shipped the right family at a size that hid it. The FLOOR could not follow it up:
+   at 390px the Sarajevska phrase is already 331px of a 350px column at 24px, so the phone
+   keeps 24 and the clamp spends the room a desktop actually has. */
+.wolt {
+  display: inline-block; position: relative;
+  font-family: var(--script); font-weight: 400;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem); line-height: 1.25;
+  color: var(--accent-text); text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.wolt::after {
+  content: ""; position: absolute; left: 0; right: 0;
+  top: 50%; height: 44px; transform: translateY(-50%);
+}
+.wolt:hover { color: var(--accent-lift); }
 
 /* ---------- footer: light, and short. One coffee bar, not a chain ---------- */
 .site-foot {
@@ -271,7 +571,10 @@ section { padding: var(--band-y) var(--gutter); }
 }
 .foot-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 .foot-mark .coin { width: 40px; }
-.foot-line { color: var(--text-soft); }
+/* The site's NAME and its strapline, so Prata (2026-08-16, L1). It splits the footer along
+   the boundary rather than across it: the left side is the name, the right side is controls
+   (the Instagram link and the language pill), and controls keep Archivo. */
+.foot-line { font-family: var(--display); color: var(--text-soft); }
 .foot-side { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 1.8rem); }
 .foot-ig {
   display: inline-flex; align-items: center; min-height: 44px;
@@ -279,14 +582,9 @@ section { padding: var(--band-y) var(--gutter); }
   transition: color var(--dur) var(--ease);
 }
 .foot-ig:hover { color: var(--accent-text); }
-.lang-toggle {
-  border: 1.5px solid var(--rule-firm); background: none; color: var(--text);
-  font: 600 var(--t-micro) var(--body); letter-spacing: 0.16em;
-  padding: 11px 18px; border-radius: var(--r-pill); cursor: pointer; min-height: 44px;
-  text-decoration: none; display: inline-flex; align-items: center;
-  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.lang-toggle:hover { border-color: var(--accent); color: var(--accent-text); }
+/* .lang-toggle used to be declared here, because the language pill used to live in the
+   footer and nowhere else. It moved into the masthead on 2026-08-15 and its rule moved
+   with it, up beside .nav-tools. Nothing in the footer sets it any more. */
 
 /* ---------- responsive: the chrome's own rules only ----------
    Each page keeps the media-query rules for its own components. These are here
@@ -302,9 +600,25 @@ section { padding: var(--band-y) var(--gutter); }
      tracking back, because a drawer has room for them. */
   .site-foot { justify-content: center; text-align: center; }
 
+  /* THE GAP PAYS FOR THE MARK (D1, 2026-08-16). The bar was carrying a 32px coin and had
+     92px of slack at 390px; the logotype spends 88 of them, which leaves a bar that fits
+     and cannot survive one longer word in the language pill. 1rem to 0.5rem buys 16px back
+     and changes nothing a reader can see, because the tools' auto margin already eats every
+     pixel of free space before the gap is reached: the gap only decides how close the three
+     may get once there is no free space left, which is exactly the case being bought for. */
+  .topbar { gap: 0.5rem; }
+
+  /* The bar keeps its two controls and loses its four links. Order matters twice here:
+     the burger is sent LAST so it holds the right edge (it sits before .nav-links in the
+     markup, and that order is fixed by the drawer selector), and the auto margin moves
+     off the burger and onto the tools, or two auto margins would split the free space
+     and strand the tools mid-bar. */
+  .nav-tools { margin-left: auto; gap: 0.2rem; }
+  .lang-toggle { padding: 11px 12px; letter-spacing: 0.1em; }
+
   .nav-burger {
     display: inline-flex; align-items: center; justify-content: center;
-    flex: none; margin-left: auto;
+    flex: none; order: 1; margin-left: 0;
     width: 44px; height: 44px;   /* 44, not the 42 the ported design used: this site gates on it */
     margin-right: -10px;         /* optical: pulls the icon's own padding back to the gutter line */
     border-radius: 2px; color: var(--text); cursor: pointer;
@@ -362,7 +676,11 @@ section { padding: var(--band-y) var(--gutter); }
   body.nav-open { overflow: hidden; }
 }
 @media (pointer: coarse) {
-  .lang-toggle { padding: 14px 24px; }
+  /* BLOCK AXIS ONLY. This used to set both axes, which was harmless while the pill sat
+     alone in a footer. In the masthead it is not: this query comes after the 560px block
+     in the file, so a horizontal value here would outrank the phone one at equal
+     specificity and give the pill back the 24px of width the narrow bar just took off it. */
+  .lang-toggle { padding-block: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -461,7 +779,7 @@ section { padding: var(--band-y) var(--gutter); }
   }
   /* the two lines the printed menu sets under a family: the blend's origins and
      its one tasting note, and the single-origin "ask us" line */
-  .fam-note { margin-top: 0.4rem; font-size: var(--t-fine); line-height: 1.45; color: var(--text-faint); text-wrap: pretty; }
+  .fam-note { margin-top: 0.4rem; font-family: var(--display); font-size: var(--t-fine); line-height: 1.5; color: var(--text-faint); text-wrap: pretty; }
 
   .rows { display: grid; gap: clamp(0.5rem, 0.9vw, 0.8rem); }
   .row {
@@ -471,10 +789,21 @@ section { padding: var(--band-y) var(--gutter); }
   /* --t-body, not the --t-fine the price uses: these names ARE this page's reading text,
      and the standing mobile gate wants body text at 16px or more. A denser list would have
      been easy and would have failed the rule the site holds every page to. */
-  .row-name { font-size: var(--t-body); line-height: 1.35; text-wrap: pretty; }
+  .row-name { font-family: var(--display); font-size: var(--t-body); line-height: 1.35; text-wrap: pretty; }
+  /* PRICES ARE PRATA TOO (2026-08-15), and this rule is where the cost of that is paid.
+     What it is: Prata has NO tabular figures. Measured at 15px in the design system's
+     own explorations/price-fonts.html, its ten digits come in nine widths, so 220 / 260
+     / 390 set at 33.88 / 34.50 / 34.63px. What holds the column is text-align: right
+     plus min-width: 7ch, so the RIGHT edge is exact and what moves by up to 0.75px is
+     each number's left edge and the gap after the name, which no reader is scanning.
+     font-variant-numeric: tabular-nums is GONE rather than left in place: it does
+     nothing in a face without the feature, and a declaration that cannot be honoured
+     reads as a guarantee this type cannot keep. font-weight: 600 is gone for the harder
+     reason: Prata has one cut, so 600 was a browser-synthesised bold on 573 prices. */
   .row-price {
-    font-weight: 600; font-size: var(--t-fine); white-space: nowrap;
-    color: var(--text-soft); font-variant-numeric: tabular-nums;
+    font-family: var(--display); font-size: var(--t-fine); white-space: nowrap;
+    color: var(--text-soft);
+    min-width: 7ch; text-align: right;
   }
 
   /* The families whose every row has the book's printed ingredient line. Name and line
@@ -482,7 +811,7 @@ section { padding: var(--band-y) var(--gutter); }
      on the page. A family where one row lacks the line carries it on none of them: the
      Guardian reads a list's fields off item 0 and then forbids an empty one. */
   .row-main { display: grid; gap: 0.15rem; min-width: 0; }
-  .row-desc { font-size: var(--t-fine); line-height: 1.4; color: var(--text-faint); text-wrap: pretty; }
+  .row-desc { font-family: var(--display); font-size: var(--t-fine); line-height: 1.45; color: var(--text-faint); text-wrap: pretty; }
 
   /* ---------- the sticky strip: which shop, and where in this shop's menu ----------
      TWO controls in ONE row (T12), and the row is the whole reason for the shape. T10
@@ -581,6 +910,19 @@ section { padding: var(--band-y) var(--gutter); }
 
   /* the note now carries the air under the intro, so the intro stops carrying it twice */
   .menu-head .uvod { margin-bottom: 0; }
+
+  /* ---------- the kitchen's own action (2026-08-15) ----------
+     The one section on the one page whose food can be delivered, so the pill sits INSIDE
+     that section rather than in the page chrome: Trg has no kitchen and must never render
+     this. Its note is template-owned like every .napomena, and it says the thing the whole
+     POS batch was fought over: the numbers on Wolt are DELIVERY numbers and they run about
+     a quarter over the counter prices printed six rows below it. A page that links a
+     delivery menu without saying that is a page quoting two price lists as one. */
+  .fam-order {
+    display: grid; justify-items: center;
+    margin: calc(-1 * clamp(1.4rem, 3vw, 2.4rem)) auto clamp(2.4rem, 4vw, 3.4rem);
+  }
+  .fam-order .napomena { margin-top: 0; margin-bottom: 1.1rem; }
 
   @media (max-width: 900px) {
     /* One column. The families are short enough that a phone reads them as a
