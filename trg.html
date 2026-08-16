@@ -81,6 +81,28 @@
     <a href="index.html#jelovnik" data-href-en="en.html#jelovnik" data-i18n-en="Food">Jelovnik</a>
     <a href="trg.html" data-href-en="trg.en.html" data-i18n-en="Menu" aria-current="page">Karta</a>
     <a href="index.html#gde" data-href-en="en.html#gde" data-i18n-en="Find us">Gde smo</a>
+
+    <!-- THE SECTION INDEX'S PHONE HOME (M1, 2026-08-16). It is INSIDE .nav-links, not a
+         sibling of it, for two reasons that both matter: the drawer is what
+         `.nav-cb:checked ~ .nav-links` reveals, so anything meant to travel with the drawer
+         has to be a child of it; and assets/nav.js closes the drawer through a delegated
+         `.nav-links a` match, so these anchors get the close-on-tap for free and that file
+         needed no edit at all.
+
+         It is a SECOND COPY of .menu-index below, and cms/pages.test.mjs refuses to let the
+         two disagree. One copy cannot serve both: the drawer is nested in .topbar and the
+         strip is .topbar's sibling. Same answer the masthead already uses.
+
+         Hidden above 560px and the strip's copy hidden below it, in CSS alone, so a phone
+         whose assets/nav.js never arrives still reaches every section. -->
+    <nav class="nav-sections" aria-labelledby="drawerIndexLabel">
+      <span class="nav-sections-label micro" id="drawerIndexLabel" data-i18n-en="On this page">Na ovoj strani</span>
+      <a href="#kafa" data-i18n-en="Coffee">Kafa</a>
+      <a href="#caj" data-i18n-en="Tea and chocolate">Čaj i čokolada</a>
+      <a href="#bez-alkohola" data-i18n-en="Soft drinks">Bez alkohola</a>
+      <a href="#alkohol" data-i18n-en="Alcohol">Alkohol</a>
+      <a href="#slatko" data-i18n-en="Sweet">Slatko</a>
+    </nav>
   </nav>
 
   <!-- THE TWO SITE CONTROLS (2026-08-15), hand-duplicated across the three pages and the
@@ -799,14 +821,27 @@
   const strip = document.querySelector('.menu-strip');
   if (!bar || !strip) return;
 
-  const links = Array.from(bar.querySelectorAll('a'));
+  /* M1 (2026-08-16): the index exists TWICE, once in the strip and once in the drawer,
+     because no single element can be in both places. The spy marks BOTH copies, so a phone
+     that opens the drawer is told where it already is and not only where it could go, which
+     is the one thing moving the index off the strip would otherwise have cost.
+
+     The STRIP copy stays canonical: the section list is read off it, and the drawer twin is
+     found by matching href. A drawer row the strip does not have is therefore never marked
+     rather than throwing, and the test that keeps the two lists identical is the thing that
+     stops that case from ever arising. */
+  const drawer = document.querySelector('.nav-sections');
   const sections = [];
-  const linkOf = new Map();
-  for (const a of links) {
-    const sec = document.getElementById(a.getAttribute('href').slice(1));
+  const linksOf = new Map();
+  for (const a of bar.querySelectorAll('a')) {
+    const id = a.getAttribute('href').slice(1);
+    const sec = document.getElementById(id);
     if (!sec) continue;
     sections.push(sec);
-    linkOf.set(sec, a);
+    const pair = [a];
+    const twin = drawer && drawer.querySelector('a[href="#' + id + '"]');
+    if (twin) pair.push(twin);
+    linksOf.set(sec, pair);
   }
 
   /* one row on a desktop, one scrolling row on a phone, and a taller one if a language
@@ -815,15 +850,18 @@
   measure();
 
   let current = null;
-  function mark(a) {
-    if (a === current) return;
-    if (current) current.removeAttribute('aria-current');
-    current = a;
-    if (!a) return;
-    a.setAttribute('aria-current', 'location');
+  function mark(pair) {
+    if (pair === current) return;
+    if (current) for (const a of current) a.removeAttribute('aria-current');
+    current = pair;
+    if (!pair) return;
+    for (const a of pair) a.setAttribute('aria-current', 'location');
     /* scrollLeft by hand, not scrollIntoView: that one walks up the ancestors and would
-       scroll the PAGE while the page is what is doing the scrolling */
-    const centered = a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2;
+       scroll the PAGE while the page is what is doing the scrolling. Below 560px the strip
+       copy is display:none, so every measurement here reads 0 and the assignment is a
+       harmless no-op; the drawer copy is a column and has nothing to centre. */
+    const lead = pair[0];
+    const centered = lead.offsetLeft - (bar.clientWidth - lead.offsetWidth) / 2;
     bar.scrollLeft = Math.max(0, centered);
   }
 
@@ -841,7 +879,7 @@
     if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) {
       active = sections[sections.length - 1];
     }
-    mark(active ? linkOf.get(active) : null);
+    mark(active ? linksOf.get(active) : null);
   }
   function onScroll() {
     if (queued) return;

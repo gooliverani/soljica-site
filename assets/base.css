@@ -263,6 +263,31 @@ img { max-width: 100%; display: block; }
 }
 .nav-links a:hover { color: var(--accent-text); }
 
+/* ---------- the menu pages' section index, as it appears INSIDE the drawer (M1, 2026-08-16)
+   goolio, on seeing the live site at 390px: "That hero line: TRG SARAJEVSKA KAFA... should go
+   to hamburger menu on mobile. Looks crawded on phone."
+
+   HALF of the strip moves and half stays, and the split is the decision. The bar switcher is
+   shop IDENTITY, not navigation: the two tills disagree on 14 products, which is the whole
+   reason there are two menu pages, so the other shop may not be folded into a burger. The
+   section index is what could not fit: six labels including "Čaj i čokolada" have never fitted
+   a 390px row, so it was always a sideways scroller, and the auto-centring script parked a
+   word mid-glyph at the left edge ("ALKOHOL" rendering as ")HOL") which reads as broken
+   rather than as scrollable.
+
+   IT IS A SECOND COPY OF THE LIST AND THAT IS DELIBERATE, because one copy is not reachable
+   here: the drawer is .nav-links, nested inside .topbar, and the strip is .topbar's SIBLING,
+   so no selector and no cascade can put one element in both places. The repo's own answer to
+   that is the masthead's: hand-duplicate, and let a test refuse to let the copies disagree.
+   cms/pages.test.mjs pins that the drawer list and the strip index name the same anchors in
+   the same order, with the same labels and the same data-i18n-en, over both menu pages AND
+   the scaffold's template.
+
+   NO JAVASCRIPT IS INVOLVED IN THE SWAP. It is display:none in one direction and the other,
+   so a phone with a failed assets/nav.js still reaches every section through a drawer that
+   opens on a CSS checkbox. That is the same call the drawer itself was built on. */
+.nav-sections { display: none; }
+
 /* ---------- the two site controls: which language, which register (2026-08-15) ----------
    THEY LIVE IN THE MASTHEAD AND THAT IS THE STANDARD, not a preference. A language
    selector belongs in the top corner of a sticky header, where it stays in one place as
@@ -658,6 +683,27 @@ section { padding: var(--band-y) var(--gutter); }
   }
   .topbar .nav-links a[aria-current="page"] { color: var(--accent-text); }
 
+  /* The section index, once it is in the drawer (M1). It sits UNDER the four site links
+     behind a rule, because they answer different questions: the site links say what else
+     exists, these say where you are on the page you are already reading. Its anchors take
+     the drawer's own 48px rows from `.topbar .nav-links a` above, so a section row and a
+     site row are the same target and neither had to be sized twice.
+
+     aria-current="location" is what the page's own scrollspy sets, and it is a DIFFERENT
+     value from the "page" the site links carry: one means "this is the document you are
+     in", the other "this is the part of it you are looking at". Both route to the same
+     --accent-text, which is the 4.9:1 role, because in the drawer they sit on cream. */
+  .nav-sections {
+    display: flex; flex-direction: column; gap: 0.2rem;
+    margin-top: 0.9rem; padding-top: 0.7rem;
+    border-top: 1px solid var(--rule);
+  }
+  .nav-sections .nav-sections-label {
+    padding: 0 0.7rem 0.35rem;
+    color: var(--text-faint);
+  }
+  .topbar .nav-sections a[aria-current="location"] { color: var(--accent-text); }
+
   .nav-scrim {
     display: block; position: fixed; inset: 0; z-index: 1;
     background: rgb(0 0 0 / 0.42);
@@ -930,27 +976,26 @@ section { padding: var(--band-y) var(--gutter); }
     .families { columns: 1; }
   }
   @media (max-width: 560px) {
-    /* One row that scrolls sideways rather than two rows that stack, and the reason is
-       vertical: two rows of 44px targets plus the 56px nav is 144px of chrome pinned to a
-       844px phone. The bar clips its own overflow, so the PAGE still does not scroll
-       sideways, and the script keeps the active family scrolled into view, which is what
-       stops a hidden label being a lost one. Tracking gives way first, as it does in the
-       nav one line above: 0.2em is 2.4px of air per character and there are 43 of them.
+    /* THE INDEX LEAVES THIS ROW AT PHONE WIDTH (M1, 2026-08-16) and the switcher keeps it
+       alone. It moves into the drawer, where .nav-sections renders it as a vertical list;
+       see that rule for why the list is duplicated rather than shared.
 
-       T12 put the switcher in front of that row and it is the index that pays: the
-       switcher is PINNED (flex: 0 0 auto, set above) and the index takes what is left,
-       so the way to the other shop cannot scroll out of reach while the way to a family
-       can, which is the right way round because the index auto-centres its active label
-       and the switcher has nothing to centre. */
+       WHAT THIS REPLACES, because the reasoning is worth keeping. From T12 the strip was
+       one nowrap row: a PINNED switcher (flex: 0 0 auto, set above) and an index taking
+       what was left and scrolling sideways inside it, on the argument that two 44px rows
+       plus the 56px nav is 144px of chrome on an 844px phone. The vertical argument still
+       holds and this change does not spend a pixel against it: the row stays 44px, it just
+       carries one control instead of two. What failed was the horizontal half. Six labels
+       never fitted, so the index was always a drag-to-read scroller, and the auto-centring
+       in the page's own script parked whichever label was active against the left edge
+       mid-word, so a phone read "ALKOHOL" as ")HOL". A control that has to be dragged to be
+       read, and looks damaged while you are not dragging it, is worse than the same six
+       labels listed where all six are visible at once.
+
+       The index is hidden rather than removed: the scrollspy still marks it, the desktop
+       row above is untouched, and nothing about the 561px-and-up layout moved. */
     .menu-strip { flex-wrap: nowrap; justify-content: flex-start; gap: 0 0.5rem; }
-    .menu-index {
-      flex: 1 1 auto; min-width: 0;
-      flex-wrap: nowrap; justify-content: flex-start;
-      overflow-x: auto; scrollbar-width: none;
-      gap: 0 1.1rem;
-    }
-    .menu-index::-webkit-scrollbar { display: none; }
-    .menu-index a { letter-spacing: 0.06em; }
+    .menu-index { display: none; }
     .bar-switch { letter-spacing: 0.06em; }
     .bar-switch a { padding: 0 0.1rem; }
     .bar-switch a > span { padding: 0.42em 0.6em; }
