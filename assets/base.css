@@ -702,6 +702,30 @@ section { padding: var(--band-y) var(--gutter); }
     padding: 0 0.7rem 0.35rem;
     color: var(--text-faint);
   }
+  /* SENTENCE CASE FOR THE SECTION ROWS, goolio's call on seeing M1 shipped (2026-08-16). They
+     went out in the drawer's tracked capitals, inherited from `.micro` on .nav-links, which
+     matched the four site links above them; he chose the sketch's sentence case instead. The
+     hierarchy is better for it: the four site links and the NA OVOJ STRANI label stay labels,
+     and these read as the names they are.
+
+     IT IS NOT THE ONE DECLARATION IT LOOKS LIKE, AND THE REASON IS THE 390px GATE. A .micro
+     label is 12px, and the gate exempts small text only when it is TRACKED AND UPPERCASE,
+     which is precisely the signal sentence case throws away. Dropping text-transform alone
+     would have left six 12px reading-size rows failing the standing rule, and the gate could
+     not have told anyone, because it cannot see inside a closed drawer. So the size goes to
+     reading size in the same rule that takes the capitals off.
+
+     The face is --display on the .rail-door precedent: a destination NAME on a reading-size
+     link takes Prata, where a data line under a heading stays Archivo. **font-weight: 400 is
+     load-bearing, not tidiness**: Prata ships ONE cut, `.micro` above asks for 600, and an
+     inherited 600 here would have the browser synthesise a bold and smear the stems. */
+  .nav-sections a {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: normal;
+    text-transform: none;
+  }
   .topbar .nav-sections a[aria-current="location"] { color: var(--accent-text); }
 
   .nav-scrim {
