@@ -634,10 +634,34 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ---------- ritual: ONE full-bleed photo carries the statement, locations, and footer ---------- */
+  /* THE CROP IS PINNED TO THE WOOD GRAIN, AND `cover` COULD NOT DO THAT (2026-08-16).
+     This read `center 8% / cover`, whose comment said it kept the tin's lid out of frame
+     because "a big dark disc behind the words reads as the ring motif this project retired".
+     IT DID NOT. Measured, the lid was behind the text at EVERY width and got worse as the
+     viewport narrowed, because a section is sized by its CONTENT, so this band's aspect runs
+     1.39 at 1440, 1.20 at 1024, 0.85 at 900, 0.59 at 640 and 0.33 at 390. Below the SOURCE's
+     own 0.75 the crop stops being width-limited and becomes height-limited, at which point
+     the vertical half of `background-position` is inert: measured, y still governed at 900
+     (18.58) and was dead at 640 and 390 (0). The rule meant to control the disc switched
+     itself off exactly where it was needed, and no crop of THIS source escapes it anyway,
+     the tin being horizontally centred while the narrow crop is a full-height vertical strip.
+     `auto 345%` sizes the image off the BOX HEIGHT instead, so the visible slice of the
+     source is always at most 2048/3.45 = 594px tall; anchored `top`, that is always inside
+     the 620px of pure wood grain above the tin. One rule, no breakpoints, and it holds at
+     any content height rather than at the five widths anyone thought to check.
+     IT IS ALSO A CONTRAST FIX AND THAT WAS NOT THE INTENT. The lid carries a specular rim
+     of pure white; under the scrim that composited to rgb(71,69,67), where `--accent` read
+     3.46:1, BELOW AA for normal text, on the band whose accent this file records at 7.18:1.
+     That figure was measured against the flat ground and never against the photograph the
+     text actually sits on. Worst case now: 6.91:1 at 1440 and 900, 7.07:1 at 390, with
+     `--on-band` going 9.16:1 to 18.27:1. Upscale is 1.73x to 1.94x, which is invisible on
+     out-of-focus grain under a firm scrim.
+     WHAT THIS SLOT NEEDS FROM A REAL FRAME, once shot 02 arrives: no centred subject. A
+     band behind text wants texture, and a product shot cannot be cropped into one. */
   .ritual {
     background:
       linear-gradient(0deg, var(--scrim-firm), var(--scrim-firm)),
-      url("assets/tin.webp") center 8% / cover no-repeat,   /* the top of the frame: dark wood grain. Lower crops centre the tin's lid, and a big dark disc behind the words reads as the ring motif this project retired */
+      url("assets/tin.webp") center top / auto 345% no-repeat,
       var(--band-deep);
     color: var(--on-band);
   }
