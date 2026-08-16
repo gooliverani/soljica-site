@@ -612,7 +612,19 @@
   }
   .slogan-link:hover { color: var(--accent-text); }
   .slogan-media { position: relative; margin-right: calc(-1 * var(--gutter)); } /* photo runs full-bleed to the edge */
-  .slogan .tile-photo { min-height: 660px; border-radius: 0; }
+  /* THE FRAME IS 4:5 AND NOT A HEIGHT (2026-08-16, goolio's call on build order 4a).
+     It was min-height: 660px and nothing else, so the height never moved and the width
+     always did: measured 0.95 at 1440, 1.27 at 900, 0.90 at 640 and 0.54 at 390. One of
+     those is LANDSCAPE, and docs/shot-list.md rule 5 tells the owner not to shoot one
+     ("Upright, 4:5. The site's tiles are 4:5 and crop to fill; a landscape frame loses
+     its own subject"). So the slot was asking him for the one frame its own brief
+     forbids, and NO single photograph satisfies all four of its shapes. The generated
+     file in there survived that only because it is a re-rollable render of one object on
+     an empty ground, which is exactly the property 4a is removing from this site.
+     A shape, not a number, is therefore what makes the brief answerable. 4:5 is also
+     what .rail-shot and .shot-slot already declare, so this stops being the one
+     photographic frame on the site with no aspect at all. */
+  .slogan .tile-photo { aspect-ratio: 4 / 5; min-height: 0; border-radius: 0; }
   .stamp {
     position: absolute; top: -48px; left: -48px; width: 128px; height: 128px;
     color: var(--text);
@@ -747,6 +759,14 @@
     .mix-list { grid-template-columns: 1fr 1fr; }
     .t-latte { display: none; }
     .slogan, .ritual-head, .menu-cols { grid-template-columns: 1fr; }
+    /* Stacked, the media has the whole column, and a 4:5 frame at 840px wide is 1050px
+       tall: a wall rather than a picture. It stops bleeding and takes a cap instead, so
+       the photograph stays a tile the words sit above rather than a screen of its own.
+       The radius comes back with it, `border-radius: 0` above having been the bleed's
+       partner and not a separate decision. Below 560 the column is already narrower than
+       the cap, so the phone is governed by the aspect alone. */
+    .slogan-media { margin-right: 0; max-width: 480px; }
+    .slogan .tile-photo { border-radius: var(--r-tile); }
     /* stacked, a left rule points at nothing: the bar route sits UNDER the kitchen route,
        so its divider has to be the edge it actually meets */
     .menu-route {
