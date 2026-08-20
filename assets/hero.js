@@ -193,14 +193,40 @@
        Nothing here is a bug in the sense of being wrong; it just reads as a mark that arrives
        and then will not settle, which is what he saw twice.
 
-       Smoothstep is symmetric, so the mark does not look arrived until it nearly is. And the
-       whole travel is remapped to finish at MOTION_END of the range, so the last quarter is a
-       genuine HOLD: the transform at u = 0.8 is byte-identical to the transform at u = 1, and
-       only then does the handover swap in the masthead's sticky copy. "Arrives, stops, then
-       locks" is three separate things and this is the middle one. */
-    const MOTION_END = 0.75;
+       Smoothstep is symmetric, so the mark does not look arrived until it nearly is.
+
+       THE HOLD THAT USED TO FOLLOW IT IS GONE, AND THE PARAGRAPH THAT WAS HERE DESCRIBED IT
+       WRONGLY (2026-08-20, goolio: "fix the lag, hand over at MOTION_END"). The travel used to
+       be remapped to finish at MOTION_END = 0.75 of the range so that the last quarter was a
+       "hold" in which "the transform at u = 0.8 is byte-identical to the transform at u = 1".
+       That last clause was false, and it is the whole defect. What held was the mark's POSITION
+       on screen; the transform had to keep GROWING through that quarter, counter-translating
+       1:1 against a page still scrolling under it, or the lockup would have scrolled away
+       before the handover.
+
+       A transform doing 1:1 compensation turns any fraction of a frame of skew between the
+       scroll offset the compositor presents and the offset it samples this timeline at straight
+       into visible displacement. Measured in PRESENTED PIXELS on 2026-08-20 with
+       tools/hero-motion-capture.ps1: the mark lifted 4px through a 25px wheel step, 14px at the
+       fastest part of one 100px notch (about one frame of scroll at 60fps), and dropped back to
+       0px the instant the scroll stopped. Nothing in this repo could see it and that is
+       structural rather than an oversight: getBoundingClientRect on the travelling copy and on
+       the masthead's static one read 0.00px apart the whole time, and neither is wrong, because
+       the displacement has no existence in layout. It is the identical blind spot that hid the
+       original main-thread jump, which is why four rounds of goolio's eyes went past it.
+
+       So the range now ENDS where the motion ends, and the handover happens there. The hold is
+       not shortened, it is deleted: there is no window left in which a transform is holding
+       anything still, so there is nothing left to be out of step with. "Arrives, stops, locks"
+       still reads as three things, because what stops and locks is the masthead's own sticky
+       copy sitting where the travelling one arrived, which is what a sticky element does for
+       free and what a counter-translation was only ever imitating. FLIGHT_SHARE is the old
+       MOTION_END under an honest name: it no longer remaps anything, it shortens the published
+       range so that 100% of the animation is 100% of the travel. Its value is unchanged, so the
+       motion covers exactly the same scroll distance it did before. */
+    const FLIGHT_SHARE = 0.75;
     const ease = (u) => {
-      const t = u <= 0 ? 0 : u >= MOTION_END ? 1 : u / MOTION_END;
+      const t = u <= 0 ? 0 : u >= 1 ? 1 : u;
       return t * t * (3 - 2 * t);
     };
 
@@ -269,6 +295,10 @@
         navCx: nr.left + nr.width / 2,
         navCy: nr.top + nr.height / 2,
         navBottom: nr.bottom,
+        /* THE FLIGHT'S OWN LENGTH, which is what the published range now ends at. `track` stays
+           the sequence's window because --say-from / --say-to are fractions of it and the
+           tagline's timing is not what changed; only the mark's animation got shorter. */
+        flight: track * FLIGHT_SHARE,
       };
     }
 
@@ -298,7 +328,7 @@
       const s = 1 + (m.sEnd - 1) * k;
       const markCx = m.startCx + (m.navCx - m.startCx) * k;
       const markCy = m.startCy + (m.navCy - m.startCy) * k;
-      const lockCyVp = m.lockCyDoc - (m.y0 + u * m.track);
+      const lockCyVp = m.lockCyDoc - (m.y0 + u * m.flight);
       return {
         s,
         markCy,
@@ -353,12 +383,21 @@
            the interpolation this branch exists to avoid returns by the other door. */
         put(100, 'color:var(--on-band);');
       } else {
-        /* The blend is a sixth of the travel wide and it has to END by the handover, so a late
-           crossing pulls the window back rather than squeezing it: a mark still cream when the
-           masthead's own copy swaps in is a cream mark on a cream bar. Below 5/6 this is
-           `from = cross` and the emitted numbers are the shipped ones, which is every case the
-           geometry reaches today. */
-        const from = Math.min(cross, 1 - BLEND);
+        /* THE BLEND IS CENTRED ON THE CROSSING, AND IT USED TO START THERE (2026-08-20). It has
+           to END by the handover, because a mark still cream when the masthead's own copy swaps
+           in is a cream mark on a cream bar; it used to have the whole hold to finish in, and
+           deleting the hold took that room away. Measured on the shipped geometry, the crossing
+           now lands past 5/6 of the range, so `from = cross` would have pinned the window to
+           its last legal sixth and landed the ink change exactly on the swap. The suite caught
+           it, which is what that assertion is for.
+
+           Centring it is the better answer rather than the cheaper one: starting AT the crossing
+           always meant the mark was still fully cream at the moment its centre passed the bar's
+           lower edge, which is the least legible frame in the whole flight and was measured at
+           1.05:1 in the review gallery. Centred, that frame is mid-blend instead, and the ink is
+           already moving before any meaningful part of the mark is over cream. The clamps keep
+           it inside the range at both ends. */
+        const from = Math.max(0, Math.min(cross - BLEND / 2, 1 - BLEND));
         put(from * 100, 'color:var(--on-band);');
         put((from + BLEND) * 100, 'color:var(--text);');
         /* AND AGAIN AT THE HANDOVER, for the reason the no-cross branch below already states.
@@ -401,7 +440,7 @@
       }
       flightSheet.textContent = buildFlight(m);
       doc.style.setProperty('--fly-from', m.y0.toFixed(2) + 'px');
-      doc.style.setProperty('--fly-to', (m.y0 + m.track).toFixed(2) + 'px');
+      doc.style.setProperty('--fly-to', (m.y0 + m.flight).toFixed(2) + 'px');
       /* The line and its actions leave first, so what travels the last stretch is the mark
          alone. Their range starts a little into the flight rather than at 0: an animation in
          range at the top of the page would overrule "hidden until phase 1 has landed" and put
