@@ -243,9 +243,29 @@
            centre. Read off untransformed boxes, the arithmetic is exact at both ends. */
         ox,
         oy,
-        // where the mark's own centre sits, on screen, before any of this starts
+        /* WHERE THE MARK'S OWN CENTRE SITS, ON SCREEN, WHEN THE FLIGHT STARTS. That is a
+           position at scroll y0, and it MUST NOT be read as a raw viewport box, which is a
+           position at whatever the scroll happens to be when this runs. `y0` and `lockCyDoc`
+           one field up both add `sy` for exactly this reason; this line did not, and the
+           asymmetry cost two defects that no gate here could see, because BOTH LEAVE THE
+           LANDING EXACT: `ease` saturates at MOTION_END, so at u = 1 markCy is navCy whatever
+           startCy said, and dx/dy measured 0.00 against the slot through both of them.
+             At load, sy is 0 while the flight starts at y0, so the mark was pinned to its
+           scroll-0 position for the first y0 px of scrolling: measured 1920x901, the lockup
+           rendered translateY(+56px) below where the stylesheet puts it, so the static hero
+           and this one disagreed by 56px at rest, which D2's "opt-in on top of the static
+           hero" forbids.
+             Worse, `relay` re-measures on a resize, on a late fonts.ready and on any observed
+           reflow, and a visitor is usually SCROLLED when those fire (a phone collapsing its
+           URL bar fires resize mid-hero every time). Measured by firing one relay at u = 0.5:
+           the whole path moved, 246px at u = 0, 182px at 0.25, 64px at 0.5, and the colour
+           crossing slid 64.58% to 54.17% with it.
+             Subtracting hr.top makes it the mark's centre relative to the hero's own top,
+           which is what "when the flight starts" means and is invariant under scroll, since
+           lr.top and hr.top move together. startCx needs no such correction: there is no
+           horizontal scroll here and the hero is full width. */
         startCx: lr.left + lr.width / 2 + ox,
-        startCy: lr.top + lr.height / 2 + oy,
+        startCy: lr.top + lr.height / 2 - hr.top + oy,
         navCx: nr.left + nr.width / 2,
         navCy: nr.top + nr.height / 2,
         navBottom: nr.bottom,
