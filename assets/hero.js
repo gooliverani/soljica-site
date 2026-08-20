@@ -108,6 +108,24 @@
     for (const p of ['--fly-from', '--fly-to', '--say-from', '--say-to']) doc.style.removeProperty(p);
   };
 
+  /** THE SAME LANDING, FOR THE CODE THAT RUNS LATER. The try below covers SETUP and only
+   *  setup. relay's body runs inside a requestAnimationFrame callback reached from the
+   *  observer, from fonts.ready and from a resize, and the animationend handler runs whenever
+   *  phase 1 lands, so an exception in any of them escapes the try that was written to catch
+   *  it. Until 2026-08-19 one did: both opt-ins stayed set with nothing left to take them off,
+   *  and since a measurement clears .hero-lock's own animation-name and transform before
+   *  reading its box, a throw between clearing and restoring left the flight switched OFF
+   *  while the classes that hide the masthead's mark stayed ON. That is the half-played
+   *  sequence above, reached by the one route the try could not see.
+   *  So nothing here is handed to the platform raw, and the test is where the code RUNS FROM
+   *  rather than whether today's body looks like it could throw: reasoning body by body is
+   *  exactly how the gap was argued into existence. Twice around relay for the same reason:
+   *  the outer call covers scheduling the frame, the inner one covers the frame itself, and
+   *  those are two different tasks. */
+  const guard = (fn) => (...args) => {
+    try { return fn(...args); } catch (e) { fail(); }
+  };
+
   if (!hero || !lock || !wm || !coin || !navSlot) return fail();
 
   try {
@@ -287,17 +305,53 @@
         at.set(key, (at.get(key) || '') + decl);
       };
 
-      let cross = 1;
+      /* -1 IS THE SENTINEL BECAUSE 1 IS A LEGAL ANSWER. A `cross` of 1 meaning "not found
+         yet" cannot be told apart from a crossing found at the last sample, and both of them
+         then emit the band colour at 0% and both colours at 100%, where the later declaration
+         wins: the ink interpolates across the WHOLE travel and the mark spends the middle of
+         the flight in a colour matching neither the band it is leaving nor the bar it is
+         entering. One of the two is unreachable and the other is not. The ease saturates at
+         MOTION_END, so from u = 0.75 the mark's centre sits on the slot's centre, half the
+         slot's height above its bottom edge, and the crossing is always found by then: 20000
+         randomised geometries produced the whole-flight drift only if the slot measured
+         ZERO high, where the centre and the bottom edge are the same line and a mark approaching from below can never
+         cross it. */
+      const BLEND = 1 / 6;
+      let cross = -1;
       for (let i = 0; i <= FLIGHT_STOPS; i++) {
         const u = i / FLIGHT_STOPS;
         const f = sample(m, u);
-        if (cross === 1 && f.markCy < m.navBottom) cross = u;
+        if (cross < 0 && f.markCy < m.navBottom) cross = u;
         put(u * 100, `transform:translate(${f.tx.toFixed(2)}px,${f.ty.toFixed(2)}px) scale(${f.s.toFixed(5)});`);
       }
 
       put(0, 'color:var(--on-band);visibility:visible;');
-      put(cross * 100, 'color:var(--on-band);');
-      put(Math.min(cross + 1 / 6, 1) * 100, 'color:var(--text);');
+      if (cross < 0) {
+        /* The mark never reached the bar, so it never leaves the band's ink: one colour for the
+           whole flight, and the swap at the end is the only change. It has to be said at 100%
+           as well as at 0%, or the missing stop is filled in with the element's own colour and
+           the interpolation this branch exists to avoid returns by the other door. */
+        put(100, 'color:var(--on-band);');
+      } else {
+        /* The blend is a sixth of the travel wide and it has to END by the handover, so a late
+           crossing pulls the window back rather than squeezing it: a mark still cream when the
+           masthead's own copy swaps in is a cream mark on a cream bar. Below 5/6 this is
+           `from = cross` and the emitted numbers are the shipped ones, which is every case the
+           geometry reaches today. */
+        const from = Math.min(cross, 1 - BLEND);
+        put(from * 100, 'color:var(--on-band);');
+        put((from + BLEND) * 100, 'color:var(--text);');
+        /* AND AGAIN AT THE HANDOVER, for the reason the no-cross branch below already states.
+           With no colour stop at 100% the browser builds the missing to-keyframe from the
+           element's own colour, which .hero sets to var(--on-band), so the mark washed straight
+           back to cream over the last fifth of the travel and landed invisible on the cream bar.
+           Measured in Chrome on the shipped geometry, reading the letterform fill back off a
+           canvas: rgb(28,19,12) at 79.17% of the travel, rgb(135,129,123) at 90%, and
+           rgb(251,248,244) at 99.9%. THE SUITE CANNOT SEE THIS: the stub DOM reads the
+           keyframe text as a string, so it models "the last declaration wins" and not the
+           browser's implicit to-keyframe. */
+        put(100, 'color:var(--text);');
+      }
       /* THE HANDOVER IS A SWAP, NOT A REVEAL. The travelling mark and the masthead's static
          copy are the same mark at the same size in the same place at the end of the flight,
          so there is nothing to cross-fade and nothing to give the swap away. It has to happen
@@ -357,10 +411,10 @@
        relaying is not free; and re-entrant relays are harmless anyway, since measuring clears
        the transform and a transform never changed a layout. */
     let pending = false;
-    const relay = () => {
+    const relay = guard(() => {
       if (pending) return;
       pending = true;
-      requestAnimationFrame(() => {
+      requestAnimationFrame(guard(() => {
         pending = false;
         /* PHASE 1 IS RE-AIMED TOO, AND LEAVING IT OUT WAS THE BUG BEHIND "Š coin not going into
            O of šoljica". The dock was measured once, at load, and webfonts had not arrived. The
@@ -371,9 +425,17 @@
            to be. Re-aiming under a running animation is free here, because the keyframes read
            --dock-x/y/s live. After it has landed there is nothing left to aim. */
         if (!hero.classList.contains('hero-arrived')) measureDock();
+        /* A NULL RE-MEASURE IS DELIBERATELY NOT A FAILURE HERE, where at setup it is one.
+           There `!layFlight()` lands on the static hero because there is nothing else to fall
+           back on; here the path measured a moment ago is still a coherent one, and a box that
+           reads zero wide in the middle of a resize is ordinary enough that tearing the whole
+           sequence down for it would cost more than the stale path does. The next relay
+           re-measures. A condition that PERSISTS leaves the mark landing near the slot instead
+           of on it, which is the lesser of the two and is why this is a decision rather than an
+           oversight. */
         if (flies) layFlight();
-      });
-    };
+      }));
+    });
     if (typeof ResizeObserver === 'function') {
       const ro = new ResizeObserver(relay);
       ro.observe(hero);
@@ -420,7 +482,7 @@
       hero.classList.add('hero-skip', 'hero-arrived');
     } else {
       hero.classList.add('hero-play');
-      coin.addEventListener('animationend', () => hero.classList.add('hero-arrived'), { once: true });
+      coin.addEventListener('animationend', guard(() => hero.classList.add('hero-arrived')), { once: true });
     }
   } catch (e) {
     fail();

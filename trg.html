@@ -887,8 +887,47 @@
     requestAnimationFrame(spy);
   }
 
+  /* MEASURING ONCE IS MEASURING TOO EARLY, and assets/hero.js paid for this lesson first:
+     "webfonts move this layout without ever resizing the window". This script sits at the
+     foot of the body, so it runs as soon as the head's stylesheet has arrived and long
+     before Prata and Archivo do. Both .menu-strip and .menu-index are flex-wrap: wrap, so
+     how many rows the strip occupies is decided by how wide the labels are, and Archivo
+     sets this row's tracked capitals wider than the system-ui fallback the first
+     measurement sees. Measured on this box with the font stylesheet held back 700ms:
+     trg.html at 561px declared 88px and settled at 131px, and at 800px declared 45px and
+     settled at 88px; sarajevska.html was the same 43px short at 640px and at 900px. The
+     property kept its pre-font number, scroll-margin-top came out 43px light, and a tap on
+     a jump-index entry parked the family heading behind the strip it was meant to clear.
+
+     A resize listener cannot see that, because nothing resizes. The observer asks the only
+     question that matters, which is whether the box this was measured from is still the box
+     on the screen, and .menu-strip is that box in full: below 560px .menu-index goes
+     display:none and the strip stays, still sticky, still carrying the bar switcher, so the
+     right value there is the switcher's own row (45px, measured on both pages at 390) and
+     never 0. Debounced onto a frame because a ResizeObserver fires once per observed
+     element, and a re-entrant relay is harmless anyway: this reads a height and writes a
+     property that feeds scroll-margin-top and nothing else, and scroll-margin-top lays out
+     no box.
+
+     onScroll rides along for the same reason the resize listener always carried it: the
+     spy's line is the strip's own bottom edge, so a strip that has just grown a row has
+     moved every section relative to that line, and the mark would otherwise stay on
+     whichever family was under the old one. */
+  let relaying = false;
+  const relay = () => {
+    if (relaying) return;
+    relaying = true;
+    requestAnimationFrame(() => {
+      relaying = false;
+      measure();
+      onScroll();
+    });
+  };
+  if (typeof ResizeObserver === 'function') new ResizeObserver(relay).observe(strip);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relay, () => {});
+
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', () => { measure(); onScroll(); });
+  addEventListener('resize', relay);
   spy();
 })();
 </script>
